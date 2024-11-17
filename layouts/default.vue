@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-slate-300 h-screen">
+  <div class="bg-slate-300">
     <!-- Navbar -->
     <div class="flex justify-between items-center bg-slate-100 px-6 py-3">
       <div class="flex gap-3">

@@ -9,7 +9,13 @@
         class="space-y-4 w-[500px]"
         @submit="onSubmit"
       >
-        <img id="image-preview" src="" alt="Image Preview" />
+        <img
+          v-show="fileUploaded"
+          id="image-preview"
+          src=""
+          alt="Image Preview"
+          :style="{ width: '100%', height: '300px' }"
+        />
 
         <!-- Thumbnail -->
         <UInput
@@ -73,6 +79,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
   console.log(event.data)
 }
 
+const fileUploaded = ref(false)
 function onUpload(event: Event) {
   const imageInput = document.getElementById('image-input') as HTMLInputElement
   const imagePreview = document.getElementById(
@@ -91,10 +98,14 @@ function onUpload(event: Event) {
     reader.onload = (event) => {
       console.log('event: ', event)
       imagePreview.src = event?.target?.result as string
+      fileUploaded.value = true
+
+      console.log('image: ', imagePreview.src)
     }
 
     reader.readAsDataURL(file)
   } else {
+    fileUploaded.value = false
     // handle the case where no files are selected
   }
 }
