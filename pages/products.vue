@@ -1,6 +1,6 @@
 <template>
   <div class="p-6">
-    <h2 class="pb-6">{{ product_header_title }}</h2>
+    <AppPageTitle :title="product_header_title" />
 
     <ClientOnly>
       <UForm
@@ -35,7 +35,7 @@
         <UFormGroup label="Supplier Price" name="supplier_price">
           <UInput v-model="state.supplier_price" size="xl" />
         </UFormGroup>
-        <UFormGroup label="Mark-up" name="mark_up">
+        <UFormGroup label="Mark-up (%)" name="mark_up">
           <UInput v-model="state.mark_up" size="xl" />
         </UFormGroup>
         <UFormGroup label="Final Price" name="price">
@@ -70,7 +70,7 @@ const state = reactive({
   product_name: '',
   description: '',
   supplier_price: 0,
-  mark_up: '',
+  mark_up: '%',
   price: 0
 })
 

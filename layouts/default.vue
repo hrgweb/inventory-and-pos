@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-slate-300">
+  <div class="bg-slate-300 text-slate-800">
     <!-- Navbar -->
     <div class="flex justify-between items-center bg-slate-100 px-6 py-3">
       <div class="flex gap-3">
@@ -22,7 +22,15 @@
       </div>
     </div>
 
-    <slot />
+    <div class="flex justify-center m-auto sm:w-full md:w-full lg:w-[1200px]">
+      <div class="sidebar w-[300px] shrink-0">
+        <AppNavigation />
+      </div>
+
+      <div class="content flex-1 bg-white">
+        <slot />
+      </div>
+    </div>
   </div>
 </template>
 
