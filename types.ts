@@ -1,4 +1,4 @@
-export interface NavigationOptions {
+export interface INavigationOptions {
   name: string
   label: string
   icon: string
@@ -6,3 +6,16 @@ export interface NavigationOptions {
 }
 
 export type ProductHeaderTitle = 'New Product' | 'Update Product'
+
+export interface IProduct {
+  id: number
+  product_name: string
+  description: string
+  supplier_price: number
+  mark_up: number | string
+  price: number
+  thumbnail?: string
+  image: File | null
+}
+
+export type ProductSortBy = 'Latest Added' | 'Product Name'

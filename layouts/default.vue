@@ -35,7 +35,7 @@
 </template>
 
 <script setup lang="ts">
-import type { NavigationOptions } from '~/types'
+import type { INavigationOptions } from '~/types'
 import UserMenu from '~/components/UserMenu.vue'
 
 const nav_options = [
@@ -63,7 +63,7 @@ const nav_options = [
     icon: '',
     to: '/barcode'
   }
-] as NavigationOptions[]
+] as INavigationOptions[]
 
 const search = ref('')
 

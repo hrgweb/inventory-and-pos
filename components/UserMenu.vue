@@ -14,7 +14,7 @@
 </template>
 
 <script setup lang="ts">
-import type { NavigationOptions } from '~/types'
+import type { INavigationOptions } from '~/types'
 
 const nav_options = [
   {
@@ -29,7 +29,7 @@ const nav_options = [
     icon: '',
     to: '/logout'
   }
-] as NavigationOptions[]
+] as INavigationOptions[]
 
 withDefaults(
   defineProps<{
