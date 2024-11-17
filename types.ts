@@ -19,3 +19,9 @@ export interface IProduct {
 }
 
 export type ProductSortBy = 'Latest Added' | 'Product Name'
+
+export interface IProductCategory {
+  id: number
+  name: string
+  description?: string
+}
