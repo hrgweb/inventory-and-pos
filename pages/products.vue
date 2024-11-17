@@ -1,6 +1,6 @@
 <template>
   <div class="p-6">
-    <AppPageTitle :title="product_header_title" />
+    <AppPageTitle :title="page_title" />
 
     <ClientOnly>
       <UForm
@@ -53,7 +53,7 @@ import type { ProductHeaderTitle } from '~/types'
 import { z } from 'zod'
 import type { FormSubmitEvent } from '#ui/types'
 
-const product_header_title = ref<ProductHeaderTitle>('New Product')
+const page_title = ref<ProductHeaderTitle>('New Product')
 
 const schema = z.object({
   product_name: z.string().min(1),

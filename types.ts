@@ -25,3 +25,5 @@ export interface IProductCategory {
   name: string
   description?: string
 }
+
+export type ProductCategoryHeaderTitle = 'New Category' | 'Update Category'
