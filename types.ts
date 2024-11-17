@@ -27,3 +27,5 @@ export interface IProductCategory {
 }
 
 export type ProductCategoryHeaderTitle = 'New Category' | 'Update Category'
+
+export type BarcodeOptions = 'webcam' | 'scanner' | 'choose' | 'none'
