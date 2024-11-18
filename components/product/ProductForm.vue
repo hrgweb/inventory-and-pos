@@ -2,7 +2,7 @@
   <UForm
     :schema="schema"
     :state="state"
-    class="space-y-4 w-[500px]"
+    class="space-y-4 w-[500px] pb-12"
     @submit="onSubmit"
   >
     <img
@@ -49,7 +49,7 @@
     </UFormGroup>
     <UFormGroup label="Barcode" name="barcode">
       <!-- Barcode SVG -->
-      <div v-html="barcodeSvg"></div>
+      <div class="pb-6" v-html="barcodeSvg"></div>
 
       <div class="flex gap-3">
         <UButton
@@ -126,11 +126,8 @@ function onUpload(event: Event) {
     const reader = new FileReader()
 
     reader.onload = (event) => {
-      console.log('event: ', event)
       imagePreview.src = event?.target?.result as string
       fileUploaded.value = true
-
-      console.log('image: ', imagePreview.src)
     }
 
     reader.readAsDataURL(file)

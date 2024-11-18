@@ -20,12 +20,22 @@ export interface IProduct {
 
 export type ProductSortBy = 'Latest Added' | 'Product Name'
 
-export interface IProductCategory {
+export interface ICategory {
   id: number
   name: string
   description?: string
 }
 
-export type ProductCategoryHeaderTitle = 'New Category' | 'Update Category'
+export type CategoryHeaderTitle = 'New Category' | 'Update Category'
 
 export type BarcodeOptions = 'webcam' | 'scanner' | 'choose' | 'none'
+
+export type PaymentHeaderTitle = 'New Payment' | 'Update Payment'
+
+export interface IPayment {
+  id: number
+  bank_name: string
+  account_name: string
+  account_number: string
+  account_details: string
+}

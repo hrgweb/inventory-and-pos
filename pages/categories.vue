@@ -59,7 +59,7 @@
 </template>
 
 <script setup lang="ts">
-import type { ProductCategoryHeaderTitle, IProductCategory } from '~/types'
+import type { CategoryHeaderTitle, ICategory } from '~/types'
 import { z } from 'zod'
 import type { FormSubmitEvent } from '#ui/types'
 
@@ -78,7 +78,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
   console.log(event.data)
 }
 
-const modal_title = ref<ProductCategoryHeaderTitle>('New Category')
+const modal_title = ref<CategoryHeaderTitle>('New Category')
 
 const columns = [
   {
@@ -96,7 +96,7 @@ const columns = [
 ]
 
 // TODO: Fetch categories from API
-const categories = ref<IProductCategory[]>([
+const categories = ref<ICategory[]>([
   {
     id: 1,
     name: 'Category 1'
