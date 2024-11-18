@@ -39,12 +39,10 @@ export function useBarcode() {
     quagga.detect((data: any) => {
       console.log('Barcode detected:', data)
 
-      //   const result = data.codeResult.code
-      // document.getElementById('barcode-result').textContent = result
+      const result = data.codeResult.code
+      console.log('barcode: ', result)
 
-      //   console.log(result)
-
-      quagga.data.value = data
+      quagga.data.value = result
 
       // Stop the scanner after detection
       quagga._this.value.stop()
