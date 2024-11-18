@@ -1,6 +1,10 @@
 import Quagga from 'quagga' // ES6
 
+const data = ref(null)
+
 export function useQuagga() {
+  const _this = ref<Quagga | null>(Quagga)
+
   function init(element: HTMLDivElement | null): void {
     Quagga.init(
       {
@@ -9,7 +13,6 @@ export function useQuagga() {
           type: 'LiveStream',
           target: element
         },
-        locate: true,
         decoder: {
           readers: [
             'code_128_reader' // Supports Code 128
@@ -27,22 +30,14 @@ export function useQuagga() {
     )
   }
 
-  function detect(): void {
-    Quagga.onDetected((data: any) => {
-      console.log('Barcode detected:', data)
-
-      const result = data.codeResult.code
-      // document.getElementById('barcode-result').textContent = result
-
-      console.log(result)
-
-      // Stop the scanner after detection
-      Quagga.stop()
-    })
+  async function detect(cb: Function): Promise<any | null> {
+    Quagga.onDetected(cb)
   }
 
   return {
     init,
-    detect
+    detect,
+    data,
+    _this
   }
 }

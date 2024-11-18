@@ -36,7 +36,21 @@ export function useBarcode() {
     }
 
     quagga.init(scannderDiv)
-    quagga.detect()
+    quagga.detect((data: any) => {
+      console.log('Barcode detected:', data)
+
+      //   const result = data.codeResult.code
+      // document.getElementById('barcode-result').textContent = result
+
+      //   console.log(result)
+
+      quagga.data.value = data
+
+      // Stop the scanner after detection
+      quagga._this.value.stop()
+
+      closeModal()
+    })
   })
 
   function choose() {
