@@ -48,7 +48,7 @@
       <UInput v-model="state.sold" size="xl" />
     </UFormGroup>
     <UFormGroup label="Barcode" name="barcode">
-      <!-- tmp -->
+      <!-- Barcode SVG -->
       <div v-html="barcodeSvg"></div>
 
       <div class="flex gap-3">
@@ -69,7 +69,9 @@
       </div>
     </UFormGroup>
 
-    <UButton type="submit" size="lg">Register</UButton>
+    <div class="text-right">
+      <UButton type="submit" size="lg">Save New Record</UButton>
+    </div>
   </UForm>
 </template>
 

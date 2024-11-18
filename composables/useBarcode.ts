@@ -40,6 +40,17 @@ export function useBarcode() {
     modal.value = 'scanner'
   }
 
+  function generateRandomCode(len = 12) {
+    const chars =
+      // 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+      '0123456789'
+    let result = ''
+    for (let i = 0; i < len; i++) {
+      result += chars.charAt(Math.floor(Math.random() * chars.length))
+    }
+    return result
+  }
+
   function generate(): string {
     const xmlSerializer = new XMLSerializer()
     const document = new DOMImplementation().createDocument(
@@ -52,8 +63,17 @@ export function useBarcode() {
       'svg'
     )
 
-    JsBarcode(svgNode, 'test', {
-      xmlDocument: document
+    const code = generateRandomCode(10)
+
+    JsBarcode(svgNode, code, {
+      xmlDocument: document,
+      format: 'CODE128',
+      displayValue: true,
+      fontSize: 16,
+      lineColor: '#000',
+      width: 3,
+      height: 100,
+      margin: 10
     })
 
     return xmlSerializer.serializeToString(svgNode)
