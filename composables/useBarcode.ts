@@ -3,10 +3,16 @@ import BarcodeScanner from '~/components/product/ProductBarcodeScanner.vue'
 import BarcodeGenerate from '~/components/product/ProductBarcodeGenerate.vue'
 import type { BarcodeOptions } from '~/types'
 
-const modal = ref<BarcodeOptions>('choose')
+// barcode
+import JsBarcode from 'jsbarcode'
+import { DOMImplementation, XMLSerializer } from 'xmldom'
+
+const modal = ref<BarcodeOptions>('none')
 const componentToUse = shallowRef(BarcodeChoose)
 
-export function useProductBarcode() {
+export function useBarcode() {
+  const barcodeSvg = ref<HTMLOrSVGElement | string | null>(null)
+
   watch(modal, (value) => {
     console.log('watched: ', value)
 
@@ -34,7 +40,28 @@ export function useProductBarcode() {
     modal.value = 'scanner'
   }
 
-  function chooseGenerate() {}
+  function generate(): string {
+    const xmlSerializer = new XMLSerializer()
+    const document = new DOMImplementation().createDocument(
+      'http://www.w3.org/1999/xhtml',
+      'html',
+      null
+    )
+    const svgNode = document.createElementNS(
+      'http://www.w3.org/2000/svg',
+      'svg'
+    )
+
+    JsBarcode(svgNode, 'test', {
+      xmlDocument: document
+    })
+
+    return xmlSerializer.serializeToString(svgNode)
+  }
+
+  function chooseGenerate() {
+    barcodeSvg.value = generate()
+  }
 
   function closeModal() {
     modal.value = 'none'
@@ -47,6 +74,7 @@ export function useProductBarcode() {
     chooseBarcodeScanner,
     choose,
     closeModal,
-    chooseGenerate
+    chooseGenerate,
+    barcodeSvg
   }
 }

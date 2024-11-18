@@ -21,5 +21,5 @@
 </template>
 
 <script setup lang="ts">
-const { modal, componentToUse, closeModal } = useProductBarcode()
+const { modal, componentToUse, closeModal } = useBarcode()
 </script>

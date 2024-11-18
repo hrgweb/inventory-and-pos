@@ -36,5 +36,5 @@
 </template>
 
 <script setup lang="ts">
-const { choose } = useProductBarcode()
+const { choose } = useBarcode()
 </script>

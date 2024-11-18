@@ -22,5 +22,5 @@
 </template>
 
 <script setup lang="ts">
-const { chooseWebcam, chooseBarcodeScanner } = useProductBarcode()
+const { chooseWebcam, chooseBarcodeScanner } = useBarcode()
 </script>

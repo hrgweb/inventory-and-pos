@@ -48,6 +48,9 @@
       <UInput v-model="state.sold" size="xl" />
     </UFormGroup>
     <UFormGroup label="Barcode" name="barcode">
+      <!-- tmp -->
+      <div v-html="barcodeSvg"></div>
+
       <div class="flex gap-3">
         <UButton
           label="Scan"
@@ -61,6 +64,7 @@
           color="blue"
           icon="heroicons:viewfinder-circle"
           size="lg"
+          @click="chooseGenerate"
         />
       </div>
     </UFormGroup>
@@ -72,8 +76,6 @@
 <script setup lang="ts">
 import { z } from 'zod'
 import type { FormSubmitEvent } from '#ui/types'
-
-const is_show = ref(false)
 
 const schema = z.object({
   product_name: z.string().min(1),
@@ -136,5 +138,5 @@ function onUpload(event: Event) {
   }
 }
 
-const { choose } = useProductBarcode()
+const { choose, chooseGenerate, barcodeSvg } = useBarcode()
 </script>

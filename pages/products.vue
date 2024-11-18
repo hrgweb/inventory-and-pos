@@ -19,7 +19,7 @@ import ProductBarcode from '~/components/product/ProductBarcode.vue'
 
 const page_title = ref<ProductHeaderTitle>('New Product')
 
-const { modal } = useProductBarcode()
+const { modal } = useBarcode()
 
 const show_modal = computed(() => (modal.value !== 'none' ? true : false))
 </script>
