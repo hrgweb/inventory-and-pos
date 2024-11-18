@@ -13,9 +13,9 @@ const componentToUse = shallowRef(BarcodeChoose)
 export function useBarcode() {
   const barcodeSvg = ref<HTMLOrSVGElement | string | null>(null)
 
-  watch(modal, (value) => {
-    console.log('watched: ', value)
+  const quagga = useQuagga()
 
+  watch(modal, (value) => {
     switch (value) {
       case 'webcam':
         componentToUse.value = BarcodeScanner
@@ -26,6 +26,17 @@ export function useBarcode() {
       default:
         componentToUse.value = BarcodeChoose
     }
+  })
+
+  onMounted(() => {
+    const scannderDiv = document.getElementById('media') as HTMLDivElement
+
+    if (!scannderDiv) {
+      return
+    }
+
+    quagga.init(scannderDiv)
+    quagga.detect()
   })
 
   function choose() {
