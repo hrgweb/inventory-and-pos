@@ -25,7 +25,7 @@
     </div>
 
     <div class="flex justify-center m-auto sm:w-full md:w-full lg:w-[1200px]">
-      <div class="sidebar w-[300px] shrink-0">
+      <div class="sidebar w-[250px] shrink-0">
         <AppNavigation />
       </div>
 

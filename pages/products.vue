@@ -13,9 +13,10 @@
 </template>
 
 <script setup lang="ts">
-import type { PageTitle } from '~/types'
 import ProductForm from '~/components/product/ProductForm.vue'
 import ProductBarcode from '~/components/product/ProductBarcode.vue'
+
+type PageTitle = 'New Product' | 'Update Product'
 
 const page_title = ref<PageTitle>('New Product')
 

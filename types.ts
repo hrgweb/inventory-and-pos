@@ -12,6 +12,7 @@ export interface IProduct {
   supplier_price: number
   mark_up: number | string
   price: number
+  price_formatted: string
   thumbnail?: string
   image: File | null
 }
