@@ -1,7 +1,9 @@
 <template>
   <div class="bg-slate-300 text-slate-800">
     <!-- Navbar -->
-    <div class="flex justify-between items-center bg-slate-100 px-6 py-3">
+    <div
+      class="flex justify-between items-center bg-slate-500 text-white px-6 py-3"
+    >
       <div class="flex gap-3">
         <NuxtLink v-for="(nav, i) in nav_options" :key="i" :to="`${nav.to}`">{{
           nav.label
@@ -27,7 +29,7 @@
         <AppNavigation />
       </div>
 
-      <div class="content flex-1 bg-white">
+      <div class="content flex-1 bg-slate-100">
         <slot />
       </div>
     </div>

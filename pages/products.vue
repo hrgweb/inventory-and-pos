@@ -13,11 +13,11 @@
 </template>
 
 <script setup lang="ts">
-import type { ProductHeaderTitle } from '~/types'
+import type { PageTitle } from '~/types'
 import ProductForm from '~/components/product/ProductForm.vue'
 import ProductBarcode from '~/components/product/ProductBarcode.vue'
 
-const page_title = ref<ProductHeaderTitle>('New Product')
+const page_title = ref<PageTitle>('New Product')
 
 const { modal } = useBarcode()
 

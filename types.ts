@@ -5,8 +5,6 @@ export interface INavigationOptions {
   to: string
 }
 
-export type ProductHeaderTitle = 'New Product' | 'Update Product'
-
 export interface IProduct {
   id: number
   product_name: string
@@ -26,11 +24,7 @@ export interface ICategory {
   description?: string
 }
 
-export type CategoryHeaderTitle = 'New Category' | 'Update Category'
-
 export type BarcodeOptions = 'webcam' | 'scanner' | 'choose' | 'none'
-
-export type PaymentHeaderTitle = 'New Payment' | 'Update Payment'
 
 export interface IPayment {
   id: number

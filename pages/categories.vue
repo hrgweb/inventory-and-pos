@@ -59,9 +59,9 @@
 </template>
 
 <script setup lang="ts">
-import type { CategoryHeaderTitle, ICategory } from '~/types'
+import type { ICategory } from '~/types'
 import { z } from 'zod'
-import type { FormSubmitEvent } from '#ui/types'
+import type { Form, FormSubmitEvent } from '#ui/types'
 
 const schema = z.object({
   name: z.string().min(1)
@@ -78,7 +78,9 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
   console.log(event.data)
 }
 
-const modal_title = ref<CategoryHeaderTitle>('New Category')
+type FormTitle = 'New Category' | 'Update Category'
+
+const modal_title = ref<FormTitle>('New Category')
 
 const columns = [
   {

@@ -1,11 +1,9 @@
 <template>
-  <pre>{{ modal }}</pre>
-
   <div class="p-6">
     <div class="flex items-center justify-between">
       <AppPageTitle title="Payments" />
 
-      <UButton label="New Payments" icon="heroicons:plus" @click="add" />
+      <UButton label="New Payment" icon="heroicons:plus" @click="add" />
     </div>
 
     <UTable :rows="payments" :columns="columns">
@@ -47,9 +45,11 @@
 </template>
 
 <script setup lang="ts">
-import type { PaymentHeaderTitle, IPayment } from '~/types'
+import type { IPayment } from '~/types'
 
-const modal_title = ref<PaymentHeaderTitle>('New Payment')
+type PageTitle = 'New Payment' | 'Update Payment'
+
+const modal_title = ref<PageTitle>('New Payment')
 
 const columns = [
   {
