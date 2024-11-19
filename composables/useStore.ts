@@ -1,7 +1,8 @@
 import type { IProduct } from '~/types'
 import { mapItem, formatNumber } from '~/utils'
+import { useLocalStorage } from '@vueuse/core'
 
-const product = ref<IProduct | null>(null)
+const product = useLocalStorage<IProduct>('product', null)
 
 export function useStore() {
   const IMAGE = 'https://loremflickr.com/1280/720'
@@ -10,99 +11,55 @@ export function useStore() {
     {
       id: 1,
       product_name: 'Shampoo',
-      description: 'This is a shampoo',
-      supplier_price: 12,
+      description: 'shampoo',
+      supplier_price: 5,
       mark_up: '%',
-      price: 75,
-      price_formatted: formatNumber(75),
+      price: 10,
+      price_formatted: formatNumber(10),
       thumbnail: IMAGE,
       image: null
     },
     {
       id: 2,
       product_name: 'Foods',
-      description: 'This is a shampoo',
-      supplier_price: 12,
+      description: 'foods',
+      supplier_price: 15,
       mark_up: '%',
-      price: 75,
-      price_formatted: formatNumber(75),
+      price: 15,
+      price_formatted: formatNumber(15),
       thumbnail: IMAGE,
       image: null
     },
     {
       id: 3,
       product_name: 'Tanduay',
-      description: 'This is a shampoo',
-      supplier_price: 12,
+      description: 'tanduay',
+      supplier_price: 80,
       mark_up: '%',
-      price: 75,
-      price_formatted: formatNumber(75),
+      price: 80,
+      price_formatted: formatNumber(80),
       thumbnail: IMAGE,
       image: null
     },
     {
       id: 21,
-      product_name: 'Shampoo',
-      description: 'This is a shampoo',
-      supplier_price: 12,
+      product_name: 'Hamburger',
+      description: 'hamburger',
+      supplier_price: 45,
       mark_up: '%',
-      price: 75,
-      price_formatted: formatNumber(75),
+      price: 45,
+      price_formatted: formatNumber(45),
       thumbnail: IMAGE,
       image: null
     },
     {
       id: 22,
-      product_name: 'Foods',
-      description: 'This is a shampoo',
-      supplier_price: 12,
+      product_name: 'Goods',
+      description: 'goods',
+      supplier_price: 30,
       mark_up: '%',
-      price: 75,
-      price_formatted: formatNumber(75),
-      thumbnail: IMAGE,
-      image: null
-    },
-    {
-      id: 23,
-      product_name: 'Tanduay',
-      description: 'This is a shampoo',
-      supplier_price: 12,
-      mark_up: '%',
-      price: 75,
-      price_formatted: formatNumber(75),
-      thumbnail: IMAGE,
-      image: null
-    },
-    {
-      id: 31,
-      product_name: 'Shampoo',
-      description: 'This is a shampoo',
-      supplier_price: 12,
-      mark_up: '%',
-      price: 75,
-      price_formatted: formatNumber(75),
-      thumbnail: IMAGE,
-      image: null
-    },
-    {
-      id: 32,
-      product_name: 'Foods',
-      description: 'This is a shampoo',
-      supplier_price: 12,
-      mark_up: '%',
-      price: 75,
-      price_formatted: formatNumber(75),
-      thumbnail: IMAGE,
-      image: null
-    },
-    {
-      id: 33,
-      product_name: 'Tanduay',
-      description: 'This is a shampoo',
-      supplier_price: 12,
-      mark_up: '%',
-      price: 75,
-      price_formatted: formatNumber(75),
+      price: 30,
+      price_formatted: formatNumber(30),
       thumbnail: IMAGE,
       image: null
     }

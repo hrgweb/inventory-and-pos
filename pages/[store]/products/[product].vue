@@ -1,11 +1,13 @@
 <template>
-  <div class="p-6 flex gap-6">
+  <div
+    class="p-6 flex justify-between gap-6 md:border-4 md:border-green-500 md:w-[900px]"
+  >
     <img
       :src="product?.thumbnail"
       :alt="product?.product_name"
-      :style="{ width: '200px', height: '250px' }"
+      :style="{ width: '400px', height: '400px' }"
     />
-    <div class="flex flex-col">
+    <div class="flex flex-col border-4 border-red-500 flex-1">
       <h2 class="text-2xl font-medium">{{ product?.product_name }}</h2>
       <div class="flex justify-between">
         <span>Price</span>
@@ -37,5 +39,8 @@
 </template>
 
 <script setup lang="ts">
+definePageMeta({
+  layout: 'view'
+})
 const { product } = useStore()
 </script>
