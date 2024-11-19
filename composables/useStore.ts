@@ -1,6 +1,8 @@
 import type { IProduct } from '~/types'
 import { mapItem, formatNumber } from '~/utils'
 
+const product = ref<IProduct | null>(null)
+
 export function useStore() {
   const IMAGE = 'https://loremflickr.com/1280/720'
 
@@ -12,6 +14,7 @@ export function useStore() {
       supplier_price: 12,
       mark_up: '%',
       price: 75,
+      price_formatted: formatNumber(75),
       thumbnail: IMAGE,
       image: null
     },
@@ -22,6 +25,7 @@ export function useStore() {
       supplier_price: 12,
       mark_up: '%',
       price: 75,
+      price_formatted: formatNumber(75),
       thumbnail: IMAGE,
       image: null
     },
@@ -32,6 +36,7 @@ export function useStore() {
       supplier_price: 12,
       mark_up: '%',
       price: 75,
+      price_formatted: formatNumber(75),
       thumbnail: IMAGE,
       image: null
     },
@@ -42,6 +47,7 @@ export function useStore() {
       supplier_price: 12,
       mark_up: '%',
       price: 75,
+      price_formatted: formatNumber(75),
       thumbnail: IMAGE,
       image: null
     },
@@ -52,6 +58,7 @@ export function useStore() {
       supplier_price: 12,
       mark_up: '%',
       price: 75,
+      price_formatted: formatNumber(75),
       thumbnail: IMAGE,
       image: null
     },
@@ -62,6 +69,7 @@ export function useStore() {
       supplier_price: 12,
       mark_up: '%',
       price: 75,
+      price_formatted: formatNumber(75),
       thumbnail: IMAGE,
       image: null
     },
@@ -72,6 +80,7 @@ export function useStore() {
       supplier_price: 12,
       mark_up: '%',
       price: 75,
+      price_formatted: formatNumber(75),
       thumbnail: IMAGE,
       image: null
     },
@@ -82,6 +91,7 @@ export function useStore() {
       supplier_price: 12,
       mark_up: '%',
       price: 75,
+      price_formatted: formatNumber(75),
       thumbnail: IMAGE,
       image: null
     },
@@ -92,14 +102,15 @@ export function useStore() {
       supplier_price: 12,
       mark_up: '%',
       price: 75,
+      price_formatted: formatNumber(75),
       thumbnail: IMAGE,
       image: null
     }
   ])
 
-  const name = computed<string>(() => route.params.store as string)
-
   const route = useRoute()
+
+  const name = computed<string>(() => route.params.store as string)
 
   const getProducts = computed<IProduct[]>(() => {
     return products.value.map((product) => {
@@ -109,5 +120,10 @@ export function useStore() {
     })
   })
 
-  return { name, getProducts }
+  function goToItem(item: IProduct): string {
+    product.value = item
+    return `/${name.value}/products/${item.product_name}`
+  }
+
+  return { name, getProducts, goToItem, product }
 }
