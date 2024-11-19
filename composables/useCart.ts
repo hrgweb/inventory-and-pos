@@ -9,7 +9,7 @@ export function useCart() {
     await fetchOrders()
   })
 
-  async function fetchOrders() {
+  async function fetchOrders(): Promise<void> {
     // TODO: Fetch orders from API
     const { getProducts } = useStore()
     orders.value.push(getProducts.value[0])

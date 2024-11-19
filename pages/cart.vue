@@ -2,19 +2,22 @@
   <div class="md:w-[900px] flex gap-6 my-6">
     <div class="flex-1">
       <UCard>
-        <template #header>Order Summary</template>
+        <template #header>Cart ({{ items.length }})</template>
 
-        <pre>{{ orders }}</pre>
+        <pre>{{ items }}</pre>
 
-        <UTable :rows="orders" :columns="columns">
+        <UTable :rows="items" :columns="columns">
           <template #thumbnail-data="{ row }">
             <img :src="row.thumbnail"
           /></template>
           <template #title-data="{ row }">
             <span>{{ row.product_name }}</span>
           </template>
-          <template #price-data="{ row }">
-            <span>{{ row.price_formatted }}</span>
+          <template #price-data="{ row, index }">
+            <SharedAdjustQty
+              :qty="row.qty"
+              @update="updateQty(index, $event)"
+            />
           </template>
           <template #product_name-data="{ row }">
             <span>{{ row.product_name }}</span>
@@ -40,6 +43,8 @@
 </template>
 
 <script setup lang="ts">
+import type { IItem } from '~/types'
+
 definePageMeta({
   layout: 'view'
 })
@@ -67,5 +72,16 @@ const columns = [
   }
 ]
 
-const { getItems: orders } = useCart()
+const items = ref<IItem[]>([])
+
+const { getItems } = useCart()
+
+watchEffect(() => {
+  items.value = getItems.value
+  console.log('items: ', items.value)
+})
+
+function updateQty(i: number, qty: number) {
+  items.value[i].qty = qty
+}
 </script>
