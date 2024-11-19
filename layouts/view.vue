@@ -24,10 +24,8 @@
       </div>
     </div>
 
-    <div class="flex justify-center m-auto sm:w-full md:w-full lg:w-[1200px]">
-      <div class="content flex-1 bg-slate-100">
-        <slot />
-      </div>
+    <div class="bg-white flex justify-center">
+      <slot />
     </div>
   </div>
 </template>

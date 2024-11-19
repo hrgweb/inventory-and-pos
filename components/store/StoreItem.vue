@@ -12,7 +12,7 @@
     />
     <h3>{{ product.product_name }}</h3>
 
-    <span class="text-orange-500">&#8369; {{ product.price_formatted }}</span>
+    <SharedDisplayNumber :value="product.price_formatted" />
   </div>
 </template>
 

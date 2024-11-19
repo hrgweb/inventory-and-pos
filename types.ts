@@ -5,6 +5,11 @@ export interface INavigationOptions {
   to: string
 }
 
+export interface SocialLink {
+  name: string
+  url: string
+}
+
 export interface IProduct {
   id: number
   product_name: string
@@ -15,6 +20,8 @@ export interface IProduct {
   price_formatted: string
   thumbnail?: string
   image: File | null
+  social_links: SocialLink[]
+  copy_link: string
 }
 
 export type ProductSortBy = 'Latest Added' | 'Product Name'

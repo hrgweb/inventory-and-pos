@@ -1,8 +1,6 @@
 import type { IProduct } from '~/types'
 import { mapItem, formatNumber } from '~/utils'
-import { useLocalStorage } from '@vueuse/core'
-
-const product = useLocalStorage<IProduct>('product', null)
+import { useStorage } from '@vueuse/core'
 
 export function useStore() {
   const IMAGE = 'https://loremflickr.com/1280/720'
@@ -17,7 +15,14 @@ export function useStore() {
       price: 10,
       price_formatted: formatNumber(10),
       thumbnail: IMAGE,
-      image: null
+      image: null,
+      social_links: [
+        {
+          name: 'Facebook',
+          url: 'https://www.facebook.com'
+        }
+      ],
+      copy_link: 'https://www.google.com'
     },
     {
       id: 2,
@@ -28,7 +33,14 @@ export function useStore() {
       price: 15,
       price_formatted: formatNumber(15),
       thumbnail: IMAGE,
-      image: null
+      image: null,
+      social_links: [
+        {
+          name: 'Facebook',
+          url: 'https://www.facebook.com'
+        }
+      ],
+      copy_link: 'https://www.google.com'
     },
     {
       id: 3,
@@ -39,7 +51,14 @@ export function useStore() {
       price: 80,
       price_formatted: formatNumber(80),
       thumbnail: IMAGE,
-      image: null
+      image: null,
+      social_links: [
+        {
+          name: 'Facebook',
+          url: 'https://www.facebook.com'
+        }
+      ],
+      copy_link: 'https://www.google.com'
     },
     {
       id: 21,
@@ -50,7 +69,14 @@ export function useStore() {
       price: 45,
       price_formatted: formatNumber(45),
       thumbnail: IMAGE,
-      image: null
+      image: null,
+      social_links: [
+        {
+          name: 'Facebook',
+          url: 'https://www.facebook.com'
+        }
+      ],
+      copy_link: 'https://www.google.com'
     },
     {
       id: 22,
@@ -61,7 +87,14 @@ export function useStore() {
       price: 30,
       price_formatted: formatNumber(30),
       thumbnail: IMAGE,
-      image: null
+      image: null,
+      social_links: [
+        {
+          name: 'Facebook',
+          url: 'https://www.facebook.com'
+        }
+      ],
+      copy_link: 'https://www.google.com'
     }
   ])
 
@@ -78,9 +111,8 @@ export function useStore() {
   })
 
   function goToItem(item: IProduct): string {
-    product.value = item
-    return `/${name.value}/products/${item.product_name}`
+    return `/${name.value}/products/${item.id}`
   }
 
-  return { name, getProducts, goToItem, product }
+  return { name, getProducts, goToItem }
 }
