@@ -23,6 +23,7 @@ export function useCart() {
     // Map orders to items
     items.value = orders.value.map((order) => {
       const qty = 1
+      const subtotal = order.price * qty
 
       return {
         product_id: order.id,
@@ -31,7 +32,8 @@ export function useCart() {
         price: order.price,
         price_formatted: formatNumber(order.price),
         qty,
-        subtotal: order.price * qty
+        subtotal,
+        subtotal_formatted: formatNumber(subtotal)
       }
     })
   }

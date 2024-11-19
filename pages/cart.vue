@@ -22,6 +22,9 @@
           <template #product_name-data="{ row }">
             <span>{{ row.product_name }}</span>
           </template>
+          <template #subtotal-data="{ row }">
+            <span>{{ row.subtotal_formatted }}</span>
+          </template>
           <template #actions-data>
             <div class="flex gap-3">
               <Icon
@@ -44,6 +47,7 @@
 
 <script setup lang="ts">
 import type { IItem } from '~/types'
+import { formatNumber } from '~/utils'
 
 definePageMeta({
   layout: 'view'
@@ -67,6 +71,10 @@ const columns = [
     label: 'Quantity'
   },
   {
+    key: 'subtotal',
+    label: 'Subtotal'
+  },
+  {
     key: 'actions',
     label: 'Actions'
   }
@@ -83,5 +91,7 @@ watchEffect(() => {
 
 function updateQty(i: number, qty: number) {
   items.value[i].qty = qty
+  items.value[i].subtotal = items.value[i].price! * qty
+  items.value[i].subtotal_formatted = formatNumber(items.value[i].price! * qty)
 }
 </script>

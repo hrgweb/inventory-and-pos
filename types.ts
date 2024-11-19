@@ -45,4 +45,5 @@ export interface IPayment {
 export interface IItem extends Partial<IProduct> {
   qty: number
   subtotal: number
+  subtotal_formatted: string
 }
