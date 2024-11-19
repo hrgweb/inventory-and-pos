@@ -1,3 +1,9 @@
 export function useProduct() {
-  return {}
+  const notification = useNotification()
+
+  function addToCart() {
+    notification.success({ title: 'Added to cart.' })
+  }
+
+  return { addToCart }
 }

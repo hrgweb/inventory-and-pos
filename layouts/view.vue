@@ -24,7 +24,7 @@
       </div>
     </div>
 
-    <div class="bg-white flex justify-center">
+    <div class="flex justify-center">
       <slot />
     </div>
   </div>

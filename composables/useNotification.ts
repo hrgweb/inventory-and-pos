@@ -9,7 +9,6 @@ export function useNotification() {
 
   function success({ title, description }: INotification): void {
     toast.add({
-      id: 'notif_success',
       title,
       description,
       color: 'green'

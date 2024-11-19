@@ -46,6 +46,7 @@
         color="green"
         icon="heroicons:shopping-cart"
         size="xl"
+        @click="addToCart"
       />
     </div>
   </div>
@@ -60,6 +61,7 @@ definePageMeta({
 })
 
 const { getProducts } = useStore()
+const { addToCart } = useProduct()
 
 // TODO: need to get the product
 const product = computed<IProduct>(

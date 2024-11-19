@@ -41,3 +41,8 @@ export interface IPayment {
   account_number: string
   account_details: string
 }
+
+export interface IItem extends Partial<IProduct> {
+  qty: number
+  subtotal: number
+}
