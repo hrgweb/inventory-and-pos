@@ -64,6 +64,12 @@ const nav_options = [
     label: 'Barcode',
     icon: '',
     to: '/barcode'
+  },
+  {
+    name: 'pos',
+    label: 'Pos',
+    icon: '',
+    to: '/pos'
   }
 ] as INavigationOptions[]
 
