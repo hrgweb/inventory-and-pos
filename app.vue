@@ -3,7 +3,5 @@
     <NuxtPage />
 
     <UNotifications />
-
-    <!-- tmp -->
   </NuxtLayout>
 </template>
