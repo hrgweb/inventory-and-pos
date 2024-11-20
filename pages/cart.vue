@@ -68,7 +68,7 @@ const columns = [
   },
   {
     key: 'qty',
-    label: 'Quantity'
+    label: 'Qty'
   },
   {
     key: 'subtotal',
