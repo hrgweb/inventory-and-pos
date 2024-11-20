@@ -1,7 +1,7 @@
 <template>
   <NuxtLayout>
-    <NuxtPage />x
+    <NuxtPage />
 
-    <!-- tmp -->
+    <UNotifications />
   </NuxtLayout>
 </template>
