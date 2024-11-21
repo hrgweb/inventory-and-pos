@@ -5,7 +5,7 @@ export interface INavigationOptions {
   to: string
 }
 
-export interface SocialLink {
+export interface ISocialLink {
   name: string
   url: string
 }
@@ -20,7 +20,7 @@ export interface IProduct {
   price_formatted: string
   thumbnail?: string
   image: File | null
-  social_links: SocialLink[]
+  social_links: ISocialLink[]
   copy_link: string
 }
 
