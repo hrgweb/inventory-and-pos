@@ -11,23 +11,23 @@ export interface ISocialLink {
 }
 
 export interface IProduct {
-  id: number
-  product_name: string
+  id: string
+  name: string
   description: string
   supplier_price: number
   mark_up: number | string
   price: number
   price_formatted: string
   thumbnail?: string
-  image: File | null
-  social_links: ISocialLink[]
-  copy_link: string
+  image?: File | null
+  category_id: number
+  qty: number
 }
 
 export type ProductSortBy = 'Latest Added' | 'Product Name'
 
 export interface ICategory {
-  id: number
+  id: string
   name: string
   description?: string
 }
@@ -47,3 +47,5 @@ export interface IItem extends Partial<IProduct> {
   subtotal: number
   subtotal_formatted: string
 }
+
+export interface IProductFormRequest extends Partial<IProduct> {}

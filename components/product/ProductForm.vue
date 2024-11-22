@@ -14,16 +14,18 @@
     />
 
     <!-- Thumbnail -->
-    <UInput
+    <!-- <UInput
       type="file"
       size="sm"
       icon="i-heroicons-folder"
       id="image-input"
       @change="onUpload"
-    />
+    /> -->
 
-    <UFormGroup label="Product Name" name="product_name">
-      <UInput v-model="state.product_name" size="xl" />
+    <pre>{{ state }}</pre>
+
+    <UFormGroup label="Product Name" name="name">
+      <UInput v-model="state.name" size="xl" />
     </UFormGroup>
     <UFormGroup label="Description" name="description">
       <UInput v-model="state.description" size="xl" />
@@ -38,14 +40,16 @@
       <UInput v-model="state.price" size="xl" />
     </UFormGroup>
     <UFormGroup label="Category" name="category">
-      <UInput v-model="state.category" size="xl" />
+      <USelect
+        v-model="state.category_id"
+        :options="getCategories"
+        size="xl"
+        option-attribute="name"
+        option-value="id"
+      />
     </UFormGroup>
     <UFormGroup label="Quantity" name="qty">
       <UInput v-model="state.qty" size="xl" />
-    </UFormGroup>
-    <!-- TODO: determine how many products are sold -->
-    <UFormGroup label="Sold" name="sold">
-      <UInput v-model="state.sold" size="xl" />
     </UFormGroup>
     <UFormGroup label="Barcode" name="barcode">
       <!-- Barcode SVG -->
@@ -70,7 +74,7 @@
     </UFormGroup>
 
     <div class="text-right">
-      <UButton type="submit" size="lg">Save New Record</UButton>
+      <UButton type="submit" size="lg" label="Save New Record" />
     </div>
   </UForm>
 </template>
@@ -78,35 +82,34 @@
 <script setup lang="ts">
 import { z } from 'zod'
 import type { FormSubmitEvent } from '#ui/types'
+import type { IProductFormRequest } from '~/types'
 
 const schema = z.object({
-  product_name: z.string().min(1),
+  name: z.string().min(1),
   description: z.string(),
   supplier_price: z.number().int().gt(0),
-  mark_up: z.string(),
+  mark_up: z.number(),
   price: z.number().int().gt(0),
-  category: z.string(),
-  qty: z.number(),
-  sold: z.number()
+  category_id: z.number(),
+  qty: z.number()
 })
 
 type Schema = z.output<typeof schema>
 
-const state = reactive({
-  thumbnail: null as File | null,
-  product_name: '',
+const state = reactive<IProductFormRequest>({
+  name: '',
   description: '',
   supplier_price: 0,
-  mark_up: '%',
+  mark_up: 0,
   price: 0,
-  category: '',
-  qty: 0,
-  sold: 0
+  category_id: 0,
+  qty: 0
 })
 
+const { create, getCategories } = useProduct()
+
 async function onSubmit(event: FormSubmitEvent<Schema>) {
-  // Do something with data
-  console.log(event.data)
+  create(event.data)
 }
 
 const fileUploaded = ref(false)
