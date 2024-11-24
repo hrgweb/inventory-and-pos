@@ -33,16 +33,19 @@ export async function crudHandler(event: H3Event<EventHandlerRequest>) {
     let page = (query?.page as number) || 1
     let itemsPerPage = 5
     let totalCount = 0
+    const search = query?.search || ''
 
     try {
       // First, get total count for pagination
       const { count } = await client
         .from('products')
         .select('*', { count: 'exact', head: true })
+        .ilike('name', `${search}%`)
 
       const { data, error } = await client
         .from(table)
         .select(select)
+        .ilike('name', `${search}%`)
         .order('id', { ascending: false })
         .range((page - 1) * itemsPerPage, page * itemsPerPage - 1)
 

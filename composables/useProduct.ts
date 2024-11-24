@@ -63,13 +63,19 @@ export function useProduct() {
     return []
   }
 
-  async function fetchProducts(
-    page: MaybeRefOrGetter<number>
-  ): Promise<IProductResponse | null> {
-    if (!page) return null
+  async function fetchProducts({
+    search
+  }: {
+    search: string
+  }): Promise<IProductResponse | null> {
+    const _page = page.value
+
+    if (!_page) return null
+
     try {
       const query = {
-        page: toValue(page)
+        page: toValue(_page),
+        search
       }
       const data = await $fetch<IProductResponse>('/api/products', { query })
       list.value = data.items.map((item) =>
