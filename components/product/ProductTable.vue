@@ -10,11 +10,12 @@
       <template #subtotal-data="{ row }">
         <span>{{ row.subtotal_formatted }}</span>
       </template>
-      <template #actions-data>
+      <template #actions-data="{ row }">
         <div class="flex gap-3">
           <Icon
             class="cursor-pointer text-xl text-orange-500"
             name="heroicons:pencil"
+            @click="onEdit(row)"
           />
           <Icon
             class="cursor-pointer text-xl text-red-500"
@@ -27,6 +28,8 @@
 </template>
 
 <script setup lang="ts">
+import type { IProduct } from '~/types'
+
 const { getProducts: items } = useProduct()
 
 const columns = [
@@ -47,4 +50,12 @@ const columns = [
     label: 'Actions'
   }
 ]
+
+const emit = defineEmits<{
+  edit: [product: IProduct]
+}>()
+
+function onEdit(product: IProduct) {
+  emit('edit', product)
+}
 </script>

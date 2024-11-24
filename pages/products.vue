@@ -6,11 +6,9 @@
       <UButton label="New Product" icon="heroicons:plus" @click="onNew" />
     </div>
 
-    <ProductTable />
+    <ProductTable @edit="onEdit" />
 
     <UModal v-model="show_modal">
-      <!-- <ProductBarcode /> -->
-
       <div class="p-6">
         <component :is="component_to_use" @close="modal = 'none'" />
       </div>
@@ -21,6 +19,9 @@
 <script setup lang="ts">
 import ProductForm from '~/components/product/ProductForm.vue'
 import ProductBarcode from '~/components/product/ProductBarcode.vue'
+import type { IProduct } from '~/types'
+
+const { isAdd, selected } = useProduct()
 
 type ModalValue = 'none' | 'form'
 
@@ -37,6 +38,13 @@ watchEffect(() => {
 
 function onNew() {
   modal.value = 'form'
+  isAdd.value = true
+}
+
+function onEdit(product: IProduct) {
+  modal.value = 'form'
+  isAdd.value = false
+  selected.value = product
 }
 
 // const { modal } = useBarcode()

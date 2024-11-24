@@ -6,9 +6,12 @@ import type {
 } from '~/types'
 import { formatNumber, mapItem } from '~/utils'
 
+const isAdd = ref(false)
+const selected = ref<IProduct | null>(null)
+
 export function useProduct() {
   const categories = ref<ICategory[]>([])
-  const list = ref<IProductResponse[]>([])
+  const list = ref<IProduct[] | IProductResponse[]>([])
 
   const notification = useNotification()
 
@@ -19,11 +22,24 @@ export function useProduct() {
   async function create(
     payload: IProductFormRequest
   ): Promise<IProduct | null> {
-    console.log('payload: ', payload)
-
     try {
       const data = await $fetch<IProduct>('/api/products', {
         method: 'POST',
+        body: JSON.stringify(payload)
+      })
+      return data as IProduct
+    } catch (error) {
+      console.log(error)
+    }
+    return null
+  }
+
+  async function update(
+    payload: IProductFormRequest
+  ): Promise<IProduct | null> {
+    try {
+      const data = await $fetch<IProduct>(`/api/products/${payload.id}`, {
+        method: 'PATCH',
         body: JSON.stringify(payload)
       })
       return data as IProduct
@@ -77,5 +93,13 @@ export function useProduct() {
     fetchProducts()
   })
 
-  return { addToCart, create, getCategories, getProducts }
+  return {
+    addToCart,
+    create,
+    getCategories,
+    getProducts,
+    isAdd,
+    selected,
+    update
+  }
 }

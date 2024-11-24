@@ -3,6 +3,6 @@ import type { IProduct } from '~/types'
 
 export default defineEventHandler(async (event) => {
   const { create } = await crudHandler(event)
-  const data = await create<IProduct>()
+  const data = await create<IProduct>('products')
   return { ...data }
 })

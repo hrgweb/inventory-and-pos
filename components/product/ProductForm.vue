@@ -8,11 +8,11 @@
         color="white"
         icon="heroicons:x-mark-solid"
         variant="ghost"
-        @click="close"
+        @click="onClose"
       />
     </div>
 
-    <UForm :schema="schema" :state="state" class="space-y-4" @submit="onSubmit">
+    <UForm :schema="schema" :state="form" class="space-y-4" @submit="onSubmit">
       <!-- <img
         v-show="fileUploaded"
         id="image-preview"
@@ -29,23 +29,23 @@
         @change="onUpload"
       /> -->
       <UFormGroup label="Product Name" name="name">
-        <UInput v-model="state.name" size="xl" />
+        <UInput v-model="form.name" size="xl" />
       </UFormGroup>
       <UFormGroup label="Description" name="description">
-        <UInput v-model="state.description" size="xl" />
+        <UInput v-model="form.description" size="xl" />
       </UFormGroup>
       <UFormGroup label="Supplier Price" name="supplier_price">
-        <UInput v-model.number="state.supplier_price" size="xl" />
+        <UInput v-model.number="form.supplier_price" size="xl" />
       </UFormGroup>
       <UFormGroup label="Mark-up (%)" name="mark_up">
-        <UInput v-model.number="state.markup" size="xl" />
+        <UInput v-model.number="form.markup" size="xl" />
       </UFormGroup>
       <UFormGroup label="Final Price" name="price">
-        <UInput v-model.number="state.price" size="xl" />
+        <UInput v-model.number="form.price" size="xl" />
       </UFormGroup>
       <UFormGroup label="Category" name="category_id">
         <USelect
-          v-model="state.category_id"
+          v-model="form.category_id"
           :options="getCategories"
           size="xl"
           option-attribute="name"
@@ -54,9 +54,9 @@
         />
       </UFormGroup>
       <UFormGroup label="Quantity" name="qty">
-        <UInput v-model.number="state.qty" size="xl" />
+        <UInput v-model.number="form.qty" size="xl" />
       </UFormGroup>
-      <UFormGroup label="Barcode" name="barcode">
+      <UFormGroup v-if="isAdd" label="Barcode" name="barcode">
         <!-- Barcode SVG -->
         <div v-if="barcode" class="pb-6" v-html="barcodeSvg"></div>
         <div class="flex gap-3">
@@ -76,8 +76,24 @@
           />
         </div>
       </UFormGroup>
-      <div class="text-right">
-        <UButton type="submit" size="lg" label="Save New Record" />
+      <div class="text-left space-x-3">
+        <UButton v-if="isAdd" type="submit" size="lg" label="Save Record" />
+        <UButton
+          v-else
+          type="button"
+          size="lg"
+          label="Update Record"
+          color="orange"
+          @click="onUpdate"
+        />
+        <UButton
+          type="button"
+          size="lg"
+          label="Cancel"
+          variant="ghost"
+          color="white"
+          @click="onClose"
+        />
       </div>
     </UForm>
   </div>
@@ -89,7 +105,7 @@ import type { FormSubmitEvent } from '#ui/types'
 import type { IProductFormRequest } from '~/types'
 
 const { choose, chooseGenerate, barcode, barcodeSvg } = useBarcode()
-const { create, getCategories } = useProduct()
+const { create, getCategories, isAdd, selected, update } = useProduct()
 
 const schema = z.object({
   name: z.string().min(1, { message: 'Product name is required' }),
@@ -116,6 +132,17 @@ const state = reactive<IProductFormRequest>({
   barcode_img: null
 })
 
+const editState = reactive<IProductFormRequest>({
+  id: '',
+  name: '',
+  description: '',
+  supplier_price: 0,
+  markup: 0,
+  price: 0,
+  category_id: undefined,
+  qty: 0
+})
+
 // Add this watch effect to capture the SVG when it changes
 watch(barcodeSvg, (svg) => {
   if (svg) {
@@ -136,6 +163,7 @@ watch(barcodeSvg, (svg) => {
 })
 
 function reset() {
+  // Add
   state.name = ''
   state.description = ''
   state.supplier_price = 0
@@ -145,6 +173,16 @@ function reset() {
   state.qty = 0
   state.barcode = ''
   state.barcode_img = null
+
+  // Edit
+  editState.name = ''
+  editState.description = ''
+  editState.supplier_price = 0
+  editState.markup = 0
+  editState.price = 0
+  editState.category_id = undefined
+  editState.qty = 0
+
   barcode.value = ''
 }
 
@@ -158,7 +196,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
   await create(formData) // save product
   notification.success({ title: 'Product saved successfully' })
   setTimeout(() => reset(), 100)
-  close()
+  onClose()
 }
 
 const fileUploaded = ref(false)
@@ -193,9 +231,35 @@ const emit = defineEmits<{
   close: [void]
 }>()
 
-function close() {
+function onClose() {
+  isAdd.value = false
   emit('close')
 }
 
-onMounted(() => reset())
+const form = computed(() => (isAdd.value ? state : editState))
+
+// Watch for the isAdd value
+watchEffect(() => {
+  if (isAdd.value) {
+    console.log('add')
+    return
+  }
+
+  // Edit
+  const product = selected.value
+  editState.id = product?.id
+  editState.name = product?.name
+  editState.description = product?.description
+  editState.supplier_price = product?.supplier_price
+  editState.markup = product?.markup
+  editState.price = product?.price
+  editState.category_id = product?.category_id
+  editState.qty = product?.qty
+})
+
+async function onUpdate() {
+  const product = editState
+  await update(product)
+  emit('close')
+}
 </script>

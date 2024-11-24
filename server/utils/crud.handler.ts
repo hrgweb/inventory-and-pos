@@ -4,15 +4,11 @@ import { H3Event, EventHandlerRequest, H3Error } from 'h3'
 export async function crudHandler(event: H3Event<EventHandlerRequest>) {
   const client = await serverSupabaseClient(event)
 
-  async function create<T>(): Promise<T | null> {
+  async function create<T>(table: string): Promise<T | null> {
     const body = await readBody(event)
 
     try {
-      // Products
-      const { data, error } = await client
-        .from('products')
-        .insert(body)
-        .select()
+      const { data, error } = await client.from(table).insert(body).select()
 
       if (error) {
         throw createError({
@@ -20,10 +16,7 @@ export async function crudHandler(event: H3Event<EventHandlerRequest>) {
           statusMessage: error.message
         })
       }
-
-      setResponseStatus(event, 201)
       const result = data && data.length ? data[0] : data
-
       return result as T
     } catch (error) {
       throw createError({
@@ -53,5 +46,40 @@ export async function crudHandler(event: H3Event<EventHandlerRequest>) {
     }
   }
 
-  return { create, findAll }
+  async function update<T>(table: string): Promise<T | null> {
+    const productId = getRouterParam(event, 'productId')
+    const body = (await readBody(event)) as never
+
+    if (!productId) {
+      throw createError({
+        statusCode: 404,
+        statusMessage: 'Product not found'
+      })
+    }
+
+    try {
+      const { data, error } = await client
+        .from(table)
+        .update(body)
+        .eq('id', productId)
+        .select()
+
+      if (error) {
+        throw createError({
+          statusCode: 500,
+          statusMessage: error.message
+        })
+      }
+
+      const result = data && data.length ? data[0] : data
+      return result as T
+    } catch (error) {
+      throw createError({
+        statusCode: 500,
+        statusMessage: (error as Error).message
+      })
+    }
+  }
+
+  return { create, findAll, update }
 }
