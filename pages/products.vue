@@ -6,7 +6,9 @@
       <UButton label="New Product" icon="heroicons:plus" @click="onNew" />
     </div>
 
-    <ProductTable @edit="onEdit" />
+    <ClientOnly>
+      <ProductTable @edit="onEdit" />
+    </ClientOnly>
 
     <UModal v-model="show_modal">
       <div class="p-6">

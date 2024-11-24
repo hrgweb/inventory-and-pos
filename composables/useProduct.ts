@@ -13,6 +13,7 @@ const list = ref<IProduct[] | IProductMapped[]>([])
 const categories = ref<ICategory[]>([])
 const listCount = ref<number>(0)
 const page = ref<number>(1)
+const selectedIndex = ref<number>(0)
 
 export function useProduct() {
   const notification = useNotification()
@@ -29,7 +30,7 @@ export function useProduct() {
         method: 'POST',
         body: JSON.stringify(payload)
       })
-      return data as IProduct
+      list.value.unshift(mapProduct(data))
     } catch (error) {
       console.log(error)
     }
@@ -44,7 +45,8 @@ export function useProduct() {
         method: 'PATCH',
         body: JSON.stringify(payload)
       })
-      return data as IProduct
+      const content = mapProduct(data)
+      list.value[selectedIndex.value] = content
     } catch (error) {
       console.log(error)
     }
@@ -106,6 +108,7 @@ export function useProduct() {
     fetchProducts,
     list,
     listCount,
-    page
+    page,
+    selectedIndex
   }
 }
