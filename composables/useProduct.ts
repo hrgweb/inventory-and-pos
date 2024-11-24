@@ -10,11 +10,11 @@ import { formatNumber, mapItem } from '~/utils'
 const isAdd = ref(false)
 const selected = ref<IProduct | null>(null)
 const list = ref<IProduct[] | IProductMapped[]>([])
+const categories = ref<ICategory[]>([])
+const listCount = ref<number>(0)
+const page = ref<number>(1)
 
 export function useProduct() {
-  const categories = ref<ICategory[]>([])
-  const listCount = ref<number>(0)
-
   const notification = useNotification()
 
   function addToCart() {
@@ -55,7 +55,6 @@ export function useProduct() {
     try {
       const data = await $fetch<ICategory[]>('/api/categories')
       categories.value = data
-      return data
     } catch (error) {
       console.log(error)
     }
@@ -87,12 +86,12 @@ export function useProduct() {
     return newObj
   }
 
-  const getCategories = computed(() => categories.value)
+  const getCategories = computed<ICategory[]>(() => categories.value)
   const getProducts = computed<IProductMapped[]>(() => {
     if (!list.value || list.value.length === 0) {
       return []
     }
-    return list.value.map((item) => mapProduct(item)) as IProductMapped[]
+    return list.value.map((item) => mapProduct(item))
   })
 
   return {
@@ -106,6 +105,7 @@ export function useProduct() {
     fetchCategories,
     fetchProducts,
     list,
-    listCount
+    listCount,
+    page
   }
 }

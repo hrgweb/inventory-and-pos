@@ -1,5 +1,6 @@
 import { serverSupabaseClient } from '#supabase/server'
 import { H3Event, EventHandlerRequest, H3Error } from 'h3'
+import type { ICategory } from '~/types'
 
 export async function crudHandler(event: H3Event<EventHandlerRequest>) {
   const client = await serverSupabaseClient(event)
@@ -19,10 +20,7 @@ export async function crudHandler(event: H3Event<EventHandlerRequest>) {
       const result = data && data.length ? data[0] : data
       return result as T
     } catch (error) {
-      throw createError({
-        statusCode: 500,
-        statusMessage: (error as Error).message
-      })
+      throw error
     }
   }
 
@@ -57,10 +55,26 @@ export async function crudHandler(event: H3Event<EventHandlerRequest>) {
         total: totalCount
       }
     } catch (error) {
-      throw createError({
-        statusCode: 500,
-        statusMessage: (error as Error).message
-      })
+      throw error
+    }
+  }
+
+  async function findMany<T>(
+    table: string,
+    select = '*',
+    { column, order }: { column: string; order: string }
+  ): Promise<T[]> {
+    try {
+      const { data, error } = await client
+        .from(table)
+        .select(select)
+        .order(column, { ascending: order === 'asc' ? true : false })
+
+      if (error) throw error
+
+      return data as T[]
+    } catch (error) {
+      throw error
     }
   }
 
@@ -83,21 +97,15 @@ export async function crudHandler(event: H3Event<EventHandlerRequest>) {
         .select()
 
       if (error) {
-        throw createError({
-          statusCode: 500,
-          statusMessage: error.message
-        })
+        throw error
       }
 
       const result = data && data.length ? data[0] : data
       return result as T
     } catch (error) {
-      throw createError({
-        statusCode: 500,
-        statusMessage: (error as Error).message
-      })
+      throw error
     }
   }
 
-  return { create, findAll, update }
+  return { create, findAll, update, findMany }
 }

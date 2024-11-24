@@ -27,6 +27,7 @@
 
     <UPagination
       v-model="page"
+      class="pt-3"
       :page-count="5"
       :total="listCount"
       @update:model-value="page = $event"
@@ -37,7 +38,7 @@
 <script setup lang="ts">
 import type { IProduct } from '~/types'
 
-const { getProducts: items, list, fetchProducts, listCount } = useProduct()
+const { getProducts: items, page, listCount } = useProduct()
 
 const columns = [
   {
@@ -57,7 +58,6 @@ const columns = [
     label: 'Actions'
   }
 ]
-const page = ref(1)
 
 const emit = defineEmits<{
   edit: [product: IProduct]
@@ -66,9 +66,4 @@ const emit = defineEmits<{
 function onEdit(product: IProduct) {
   emit('edit', product)
 }
-
-watchEffect(() => {
-  list.value = []
-  fetchProducts(page)
-})
 </script>

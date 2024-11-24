@@ -21,7 +21,7 @@ import ProductForm from '~/components/product/ProductForm.vue'
 import ProductBarcode from '~/components/product/ProductBarcode.vue'
 import type { IProduct } from '~/types'
 
-const { isAdd, selected, fetchCategories, fetchProducts, getProducts } =
+const { isAdd, selected, fetchCategories, fetchProducts, list, page } =
   useProduct()
 
 type ModalValue = 'none' | 'form'
@@ -50,7 +50,11 @@ function onEdit(product: IProduct) {
 
 onBeforeMount(async () => {
   fetchCategories()
-  fetchProducts()
+})
+
+watchEffect(() => {
+  list.value = []
+  fetchProducts(page.value)
 })
 
 // const { modal } = useBarcode()
