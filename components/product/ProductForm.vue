@@ -1,82 +1,86 @@
 <template>
-  <UForm
-    :schema="schema"
-    :state="state"
-    class="space-y-4 w-[500px] pb-12"
-    @submit="onSubmit"
-  >
-    <!-- <img
-      v-show="fileUploaded"
-      id="image-preview"
-      src=""
-      alt="Image Preview"
-      :style="{ width: '100%', height: '300px' }"
-    /> -->
+  <div>
+    <div class="flex justify-between items-center pb-6">
+      <AppPageTitle title="New Product" />
 
-    <!-- Thumbnail -->
-    <!-- <UInput
-      type="file"
-      size="sm"
-      icon="i-heroicons-folder"
-      id="image-input"
-      @change="onUpload"
-    /> -->
-
-    <UFormGroup label="Product Name" name="name">
-      <UInput v-model="state.name" size="xl" />
-    </UFormGroup>
-    <UFormGroup label="Description" name="description">
-      <UInput v-model="state.description" size="xl" />
-    </UFormGroup>
-    <UFormGroup label="Supplier Price" name="supplier_price">
-      <UInput v-model.number="state.supplier_price" size="xl" />
-    </UFormGroup>
-    <UFormGroup label="Mark-up (%)" name="mark_up">
-      <UInput v-model.number="state.markup" size="xl" />
-    </UFormGroup>
-    <UFormGroup label="Final Price" name="price">
-      <UInput v-model.number="state.price" size="xl" />
-    </UFormGroup>
-
-    <UFormGroup label="Category" name="category_id">
-      <USelect
-        v-model="state.category_id"
-        :options="getCategories"
-        size="xl"
-        option-attribute="name"
-        value-attribute="id"
-        placeholder="Select category"
+      <UButton
+        class="rounded-full"
+        color="white"
+        icon="heroicons:x-mark-solid"
+        variant="ghost"
+        @click="close"
       />
-    </UFormGroup>
-    <UFormGroup label="Quantity" name="qty">
-      <UInput v-model.number="state.qty" size="xl" />
-    </UFormGroup>
-    <UFormGroup label="Barcode" name="barcode">
-      <!-- Barcode SVG -->
-      <div v-if="barcode" class="pb-6" v-html="barcodeSvg"></div>
-
-      <div class="flex gap-3">
-        <UButton
-          label="Scan"
-          color="orange"
-          icon="heroicons:finger-print-20-solid"
-          size="lg"
-          @click="choose"
-        />
-        <UButton
-          label="Generate"
-          color="blue"
-          icon="heroicons:viewfinder-circle"
-          size="lg"
-          @click="chooseGenerate"
-        />
-      </div>
-    </UFormGroup>
-
-    <div class="text-right">
-      <UButton type="submit" size="lg" label="Save New Record" />
     </div>
-  </UForm>
+
+    <UForm :schema="schema" :state="state" class="space-y-4" @submit="onSubmit">
+      <!-- <img
+        v-show="fileUploaded"
+        id="image-preview"
+        src=""
+        alt="Image Preview"
+        :style="{ width: '100%', height: '300px' }"
+      /> -->
+      <!-- Thumbnail -->
+      <!-- <UInput
+        type="file"
+        size="sm"
+        icon="i-heroicons-folder"
+        id="image-input"
+        @change="onUpload"
+      /> -->
+      <UFormGroup label="Product Name" name="name">
+        <UInput v-model="state.name" size="xl" />
+      </UFormGroup>
+      <UFormGroup label="Description" name="description">
+        <UInput v-model="state.description" size="xl" />
+      </UFormGroup>
+      <UFormGroup label="Supplier Price" name="supplier_price">
+        <UInput v-model.number="state.supplier_price" size="xl" />
+      </UFormGroup>
+      <UFormGroup label="Mark-up (%)" name="mark_up">
+        <UInput v-model.number="state.markup" size="xl" />
+      </UFormGroup>
+      <UFormGroup label="Final Price" name="price">
+        <UInput v-model.number="state.price" size="xl" />
+      </UFormGroup>
+      <UFormGroup label="Category" name="category_id">
+        <USelect
+          v-model="state.category_id"
+          :options="getCategories"
+          size="xl"
+          option-attribute="name"
+          value-attribute="id"
+          placeholder="Select category"
+        />
+      </UFormGroup>
+      <UFormGroup label="Quantity" name="qty">
+        <UInput v-model.number="state.qty" size="xl" />
+      </UFormGroup>
+      <UFormGroup label="Barcode" name="barcode">
+        <!-- Barcode SVG -->
+        <div v-if="barcode" class="pb-6" v-html="barcodeSvg"></div>
+        <div class="flex gap-3">
+          <UButton
+            label="Scan"
+            color="orange"
+            icon="heroicons:finger-print-20-solid"
+            size="lg"
+            @click="choose"
+          />
+          <UButton
+            label="Generate"
+            color="blue"
+            icon="heroicons:viewfinder-circle"
+            size="lg"
+            @click="chooseGenerate"
+          />
+        </div>
+      </UFormGroup>
+      <div class="text-right">
+        <UButton type="submit" size="lg" label="Save New Record" />
+      </div>
+    </UForm>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -153,7 +157,8 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
   }
   await create(formData) // save product
   notification.success({ title: 'Product saved successfully' })
-  reset()
+  setTimeout(() => reset(), 100)
+  close()
 }
 
 const fileUploaded = ref(false)
@@ -183,4 +188,14 @@ function onUpload(event: Event) {
     // handle the case where no files are selected
   }
 }
+
+const emit = defineEmits<{
+  close: [void]
+}>()
+
+function close() {
+  emit('close')
+}
+
+onMounted(() => reset())
 </script>

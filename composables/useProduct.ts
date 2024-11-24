@@ -1,7 +1,14 @@
-import type { IProduct, ICategory, IProductFormRequest } from '~/types'
+import type {
+  IProduct,
+  ICategory,
+  IProductFormRequest,
+  IProductResponse
+} from '~/types'
+import { formatNumber, mapItem } from '~/utils'
 
 export function useProduct() {
   const categories = ref<ICategory[]>([])
+  const list = ref<IProductResponse[]>([])
 
   const notification = useNotification()
 
@@ -32,18 +39,43 @@ export function useProduct() {
       categories.value = data
       return data
     } catch (error) {
-      throw createError({
-        statusCode: 500,
-        statusMessage: (error as Error).message
-      })
+      console.log(error)
     }
+    return []
+  }
+
+  async function fetchProducts(): Promise<ICategory[]> {
+    try {
+      const data = await $fetch<IProduct[]>('/api/products')
+      list.value = data.map((item) => mapProduct(item)) as IProductResponse[]
+    } catch (error) {
+      console.log(error)
+    }
+    return []
+  }
+
+  function mapProduct(item: IProduct): IProductResponse {
+    let newObj = mapItem(item) as IProductResponse
+    newObj['price_formatted'] = formatNumber(item.price)
+    return newObj
   }
 
   const getCategories = computed(() => categories.value)
+  const getProducts = computed(() => {
+    if (!list.value || list.value.length === 0) {
+      return []
+    }
+    return list.value.map((item) => {
+      let newObj = mapItem(item) as IProductResponse
+      newObj['price_formatted'] = formatNumber(item.price)
+      return newObj
+    })
+  })
 
   onBeforeMount(async () => {
     fetchCategories()
+    fetchProducts()
   })
 
-  return { addToCart, create, getCategories }
+  return { addToCart, create, getCategories, getProducts }
 }

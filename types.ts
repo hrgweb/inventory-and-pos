@@ -51,3 +51,7 @@ export interface IProductFormRequest
   extends Partial<Record<keyof IProduct, string | number | undefined>> {
   barcode_img?: File | null
 }
+
+export interface IProductResponse extends IProduct {
+  price_formatted: string
+}

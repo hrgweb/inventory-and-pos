@@ -1,16 +1,8 @@
-import { serverSupabaseClient } from '#supabase/server'
+import { crudHandler } from '~/server/utils/crud.handler'
+import { IProduct } from '~/types'
 
 export default defineEventHandler(async (event) => {
-  const client = await serverSupabaseClient(event)
-
-  const { data, error } = await client.from('categories').select('*')
-
-  if (error) {
-    throw createError({
-      statusCode: 500,
-      statusMessage: error.message
-    })
-  }
-
-  return { categories: data }
+  const { findAll } = await crudHandler(event)
+  const data = await findAll<IProduct>('products')
+  return [...data]
 })
