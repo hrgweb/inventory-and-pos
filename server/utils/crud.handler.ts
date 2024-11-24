@@ -8,11 +8,6 @@ export async function crudHandler(event: H3Event<EventHandlerRequest>) {
     const body = await readBody(event)
 
     try {
-      // Categories
-      const { data: category, error: categoryError } = await client
-        .from('categories')
-        .insert(body)
-
       // Products
       const { data, error } = await client
         .from('products')

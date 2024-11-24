@@ -22,8 +22,6 @@
       @change="onUpload"
     /> -->
 
-    <pre>{{ state }}</pre>
-
     <UFormGroup label="Product Name" name="name">
       <UInput v-model="state.name" size="xl" />
     </UFormGroup>
@@ -40,9 +38,7 @@
       <UInput v-model.number="state.price" size="xl" />
     </UFormGroup>
 
-    <pre>category_id: {{ state.category_id }}</pre>
-
-    <UFormGroup label="Category" name="category">
+    <UFormGroup label="Category" name="category_id">
       <USelect
         v-model="state.category_id"
         :options="getCategories"
@@ -57,7 +53,7 @@
     </UFormGroup>
     <UFormGroup label="Barcode" name="barcode">
       <!-- Barcode SVG -->
-      <div class="pb-6" v-html="barcodeSvg"></div>
+      <div v-if="barcode" class="pb-6" v-html="barcodeSvg"></div>
 
       <div class="flex gap-3">
         <UButton
@@ -92,12 +88,12 @@ const { choose, chooseGenerate, barcode, barcodeSvg } = useBarcode()
 const { create, getCategories } = useProduct()
 
 const schema = z.object({
-  name: z.string().min(1),
+  name: z.string().min(1, { message: 'Product name is required' }),
   description: z.string(),
   supplier_price: z.number(),
   markup: z.number(),
   price: z.number(),
-  category_id: z.string().min(1),
+  category_id: z.string({ message: 'Category is required' }).min(1),
   qty: z.number(),
   barcode: z.string().min(1, { message: 'Barcode is required' })
 })
@@ -114,12 +110,6 @@ const state = reactive<IProductFormRequest>({
   qty: 0,
   barcode: '',
   barcode_img: null
-})
-
-watch(getCategories, (categories) => {
-  console.log('categories: ', categories)
-  // state.category_id = getCategories.value?.[0]?.id
-  state.category_id = undefined
 })
 
 // Add this watch effect to capture the SVG when it changes
@@ -141,15 +131,29 @@ watch(barcodeSvg, (svg) => {
   }
 })
 
+function reset() {
+  state.name = ''
+  state.description = ''
+  state.supplier_price = 0
+  state.markup = 0
+  state.price = 0
+  state.category_id = undefined
+  state.qty = 0
+  state.barcode = ''
+  state.barcode_img = null
+  barcode.value = ''
+}
+
+const notification = useNotification()
+
 async function onSubmit(event: FormSubmitEvent<Schema>) {
-  // Transform the data to match IProductFormRequest
   const formData = {
     ...event.data,
     barcode_img: state.barcode_img
   }
-
-  // Save product
-  create(formData)
+  await create(formData) // save product
+  notification.success({ title: 'Product saved successfully' })
+  reset()
 }
 
 const fileUploaded = ref(false)

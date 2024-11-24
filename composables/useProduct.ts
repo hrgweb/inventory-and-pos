@@ -1,4 +1,4 @@
-import type { ICategory, IProductFormRequest } from '~/types'
+import type { IProduct, ICategory, IProductFormRequest } from '~/types'
 
 export function useProduct() {
   const categories = ref<ICategory[]>([])
@@ -9,19 +9,21 @@ export function useProduct() {
     notification.success({ title: 'Added to cart.' })
   }
 
-  async function create(payload: IProductFormRequest) {
+  async function create(
+    payload: IProductFormRequest
+  ): Promise<IProduct | null> {
     console.log('payload: ', payload)
 
     try {
-      const res = await $fetch('/api/products', {
+      const data = await $fetch<IProduct>('/api/products', {
         method: 'POST',
         body: JSON.stringify(payload)
       })
-
-      console.log(res)
+      return data as IProduct
     } catch (error) {
       console.log(error)
     }
+    return null
   }
 
   async function fetchCategories(): Promise<ICategory[]> {
