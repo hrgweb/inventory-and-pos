@@ -8,9 +8,15 @@ export async function crudHandler(event: H3Event<EventHandlerRequest>) {
     const body = await readBody(event)
 
     try {
-      const { data, error } = await client
+      // Categories
+      const { data: category, error: categoryError } = await client
         .from('categories')
-        .insert(body as any, {})
+        .insert(body)
+
+      // Products
+      const { data, error } = await client
+        .from('products')
+        .insert(body)
         .select()
 
       if (error) {
@@ -23,7 +29,7 @@ export async function crudHandler(event: H3Event<EventHandlerRequest>) {
       setResponseStatus(event, 201)
       const result = data && data.length ? data[0] : data
 
-      return data as T
+      return result as T
     } catch (error) {
       throw createError({
         statusCode: 500,

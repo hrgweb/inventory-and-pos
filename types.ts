@@ -15,13 +15,12 @@ export interface IProduct {
   name: string
   description: string
   supplier_price: number
-  mark_up: number | string
+  markup: number | string
   price: number
   price_formatted: string
-  thumbnail?: string
-  image?: File | null
-  category_id: number
+  category_id: number | string
   qty: number
+  barcode: string
 }
 
 export type ProductSortBy = 'Latest Added' | 'Product Name'
@@ -48,4 +47,7 @@ export interface IItem extends Partial<IProduct> {
   subtotal_formatted: string
 }
 
-export interface IProductFormRequest extends Partial<IProduct> {}
+export interface IProductFormRequest
+  extends Partial<Record<keyof IProduct, string | number | undefined>> {
+  barcode_img?: File | null
+}

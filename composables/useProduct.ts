@@ -12,12 +12,16 @@ export function useProduct() {
   async function create(payload: IProductFormRequest) {
     console.log('payload: ', payload)
 
-    const res = await $fetch('/api/products', {
-      method: 'POST',
-      body: JSON.stringify(payload)
-    })
+    try {
+      const res = await $fetch('/api/products', {
+        method: 'POST',
+        body: JSON.stringify(payload)
+      })
 
-    console.log(res)
+      console.log(res)
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   async function fetchCategories(): Promise<ICategory[]> {

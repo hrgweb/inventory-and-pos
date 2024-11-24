@@ -1,5 +1,8 @@
 import { crudHandler } from '~/server/utils/crud.handler'
+import type { IProduct } from '~/types'
 
 export default defineEventHandler(async (event) => {
-  return await crudHandler(event)
+  const { create } = await crudHandler(event)
+  const data = await create<IProduct>()
+  return { ...data }
 })
