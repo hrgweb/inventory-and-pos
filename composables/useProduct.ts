@@ -13,6 +13,7 @@ const list = ref<IProduct[] | IProductMapped[]>([])
 
 export function useProduct() {
   const categories = ref<ICategory[]>([])
+  const listCount = ref<number>(0)
 
   const notification = useNotification()
 
@@ -61,12 +62,19 @@ export function useProduct() {
     return []
   }
 
-  async function fetchProducts(): Promise<IProductResponse | null> {
+  async function fetchProducts(
+    page: MaybeRefOrGetter<number>
+  ): Promise<IProductResponse | null> {
+    if (!page) return null
     try {
-      const data = await $fetch<IProductResponse>('/api/products')
+      const query = {
+        page: toValue(page)
+      }
+      const data = await $fetch<IProductResponse>('/api/products', { query })
       list.value = data.items.map((item) =>
         mapProduct(item)
       ) as IProductMapped[]
+      listCount.value = data.total
     } catch (error) {
       console.log(error)
     }
@@ -96,6 +104,8 @@ export function useProduct() {
     selected,
     update,
     fetchCategories,
-    fetchProducts
+    fetchProducts,
+    list,
+    listCount
   }
 }

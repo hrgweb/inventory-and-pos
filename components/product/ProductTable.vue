@@ -25,14 +25,19 @@
       </template>
     </UTable>
 
-    <UPagination v-model="page" :page-count="5" :total="items.length" />
+    <UPagination
+      v-model="page"
+      :page-count="5"
+      :total="listCount"
+      @update:model-value="page = $event"
+    />
   </UCard>
 </template>
 
 <script setup lang="ts">
 import type { IProduct } from '~/types'
 
-const { getProducts: items } = useProduct()
+const { getProducts: items, list, fetchProducts, listCount } = useProduct()
 
 const columns = [
   {
@@ -61,4 +66,9 @@ const emit = defineEmits<{
 function onEdit(product: IProduct) {
   emit('edit', product)
 }
+
+watchEffect(() => {
+  list.value = []
+  fetchProducts(page)
+})
 </script>

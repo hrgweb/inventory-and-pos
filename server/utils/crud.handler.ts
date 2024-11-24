@@ -30,8 +30,10 @@ export async function crudHandler(event: H3Event<EventHandlerRequest>) {
     table: string,
     select = '*'
   ): Promise<{ items: T[]; total: number }> {
-    let page = 1
-    let itemsPerPage = 10
+    const query = getQuery(event)
+
+    let page = (query?.page as number) || 1
+    let itemsPerPage = 5
     let totalCount = 0
 
     try {
