@@ -24,6 +24,8 @@
         </div>
       </template>
     </UTable>
+
+    <UPagination v-model="page" :page-count="5" :total="items.length" />
   </UCard>
 </template>
 
@@ -50,6 +52,7 @@ const columns = [
     label: 'Actions'
   }
 ]
+const page = ref(1)
 
 const emit = defineEmits<{
   edit: [product: IProduct]

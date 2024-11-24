@@ -3,6 +3,6 @@ import { IProduct } from '~/types'
 
 export default defineEventHandler(async (event) => {
   const { findAll } = await crudHandler(event)
-  const data = await findAll<IProduct>('products')
-  return [...data]
+  const data = await findAll<IProduct>('products', '*')
+  return data
 })

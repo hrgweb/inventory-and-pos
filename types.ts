@@ -52,6 +52,11 @@ export interface IProductFormRequest
   barcode_img?: File | null
 }
 
-export interface IProductResponse extends IProduct {
+export interface IProductMapped extends IProduct {
   price_formatted: string
+}
+
+export interface IProductResponse {
+  items: IProduct[]
+  total: number
 }

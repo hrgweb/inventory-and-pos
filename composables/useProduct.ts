@@ -2,16 +2,17 @@ import type {
   IProduct,
   ICategory,
   IProductFormRequest,
+  IProductMapped,
   IProductResponse
 } from '~/types'
 import { formatNumber, mapItem } from '~/utils'
 
 const isAdd = ref(false)
 const selected = ref<IProduct | null>(null)
+const list = ref<IProduct[] | IProductMapped[]>([])
 
 export function useProduct() {
   const categories = ref<ICategory[]>([])
-  const list = ref<IProduct[] | IProductResponse[]>([])
 
   const notification = useNotification()
 
@@ -60,37 +61,30 @@ export function useProduct() {
     return []
   }
 
-  async function fetchProducts(): Promise<ICategory[]> {
+  async function fetchProducts(): Promise<IProductResponse | null> {
     try {
-      const data = await $fetch<IProduct[]>('/api/products')
-      list.value = data.map((item) => mapProduct(item)) as IProductResponse[]
+      const data = await $fetch<IProductResponse>('/api/products')
+      list.value = data.items.map((item) =>
+        mapProduct(item)
+      ) as IProductMapped[]
     } catch (error) {
       console.log(error)
     }
-    return []
+    return null
   }
 
-  function mapProduct(item: IProduct): IProductResponse {
-    let newObj = mapItem(item) as IProductResponse
+  function mapProduct(item: IProduct): IProductMapped {
+    let newObj = mapItem(item) as IProductMapped
     newObj['price_formatted'] = formatNumber(item.price)
     return newObj
   }
 
   const getCategories = computed(() => categories.value)
-  const getProducts = computed(() => {
+  const getProducts = computed<IProductMapped[]>(() => {
     if (!list.value || list.value.length === 0) {
       return []
     }
-    return list.value.map((item) => {
-      let newObj = mapItem(item) as IProductResponse
-      newObj['price_formatted'] = formatNumber(item.price)
-      return newObj
-    })
-  })
-
-  onBeforeMount(async () => {
-    fetchCategories()
-    fetchProducts()
+    return list.value.map((item) => mapProduct(item)) as IProductMapped[]
   })
 
   return {
@@ -100,6 +94,8 @@ export function useProduct() {
     getProducts,
     isAdd,
     selected,
-    update
+    update,
+    fetchCategories,
+    fetchProducts
   }
 }

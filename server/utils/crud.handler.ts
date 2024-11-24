@@ -26,18 +26,34 @@ export async function crudHandler(event: H3Event<EventHandlerRequest>) {
     }
   }
 
-  async function findAll<T>(table: string, select = '*'): Promise<T[]> {
+  async function findAll<T>(
+    table: string,
+    select = '*'
+  ): Promise<{ items: T[]; total: number }> {
+    let page = 1
+    let itemsPerPage = 10
+    let totalCount = 0
+
     try {
-      const { data, error } = await client.from(table).select(select)
+      // First, get total count for pagination
+      const { count } = await client
+        .from('products')
+        .select('*', { count: 'exact', head: true })
 
-      if (error) {
-        throw createError({
-          statusCode: 500,
-          statusMessage: error.message
-        })
+      const { data, error } = await client
+        .from(table)
+        .select(select)
+        .order('id', { ascending: false })
+        .range((page - 1) * itemsPerPage, page * itemsPerPage - 1)
+
+      if (error) throw error
+
+      totalCount = count || 0
+
+      return {
+        items: data as T[],
+        total: totalCount
       }
-
-      return data as T[]
     } catch (error) {
       throw createError({
         statusCode: 500,
