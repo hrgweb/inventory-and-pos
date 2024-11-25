@@ -11,9 +11,9 @@ const isAdd = ref(false)
 const selected = ref<IProduct | null>(null)
 const list = ref<IProduct[] | IProductMapped[]>([])
 const categories = ref<ICategory[]>([])
-const listCount = ref<number>(0)
-const page = ref<number>(1)
-const selectedIndex = ref<number>(0)
+const listCount = ref(0)
+const page = ref(1)
+const selectedIndex = ref(0)
 
 export function useProduct() {
   const notification = useNotification()

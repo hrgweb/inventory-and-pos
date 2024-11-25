@@ -260,6 +260,7 @@ watchEffect(() => {
 async function onUpdate() {
   const product = editState
   await update(product)
+  notification.info({ title: 'Product updated successfully' })
   emit('close')
 }
 </script>

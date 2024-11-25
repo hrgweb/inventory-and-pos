@@ -72,7 +72,7 @@ watchEffect((onCleanup) => {
 const search = ref('')
 const onSearch = useDebounceFn(async () => {
   list.value = []
-  console.log('searched...', search.value)
+  page.value = 1
   await fetchProducts({ search: search.value })
 }, 500)
 
