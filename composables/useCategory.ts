@@ -1,75 +1,38 @@
-import type { ICategory, ICategoryFormRequest, IItemResponse } from '~/types'
+import type { ICategory, ICategoryFormRequest } from '~/types'
 
 const isAdd = ref(false)
 const selected = ref<ICategory | null>(null)
 const list = ref<ICategory[]>([])
 const listCount = ref(0)
-const page = ref(1)
 const selectedIndex = ref(0)
 
 export function useCategory() {
-  const notification = useNotification()
+  const http = useHttp()
 
-  function addToCart() {
-    notification.success({ title: 'Added to cart.' })
+  async function fetchCategories({ search }: { search: string }) {
+    const data = await http.get<ICategory>('/api/categories', { search })
+    list.value = data
   }
 
-  async function create(
-    payload: ICategoryFormRequest
-  ): Promise<ICategory | null> {
-    try {
-      const data = await $fetch<ICategory>('/api/categories', {
-        method: 'POST',
-        body: JSON.stringify(payload)
-      })
-      list.value.unshift(data)
-    } catch (error) {
-      console.log(error)
-    }
-    return null
+  async function create(payload: ICategoryFormRequest) {
+    const data = await http.post<ICategory, ICategoryFormRequest>(
+      '/api/categories',
+      payload
+    )
+    list.value.unshift(data)
   }
 
-  async function update(
-    payload: ICategoryFormRequest
-  ): Promise<ICategory | null> {
-    try {
-      const data = await $fetch<ICategory>(`/api/categories/${payload.id}`, {
-        method: 'PATCH',
-        body: JSON.stringify(payload)
-      })
-      list.value[selectedIndex.value] = data
-    } catch (error) {
-      console.log(error)
-    }
-    return null
-  }
-
-  async function fetchCategories({
-    search
-  }: {
-    search: string
-  }): Promise<ICategory | null> {
-    try {
-      const query = {
-        search
-      }
-      const data = await $fetch<ICategory[]>('/api/categories', { query })
-      list.value = data
-    } catch (error) {
-      console.log(error)
-    }
-    return null
+  async function update(payload: ICategoryFormRequest) {
+    const data = await http.update<ICategory, ICategoryFormRequest>(
+      `/api/categories/${payload.id}`,
+      payload
+    )
+    list.value[selectedIndex.value] = data
   }
 
   async function remove(id: number): Promise<void> {
-    try {
-      await $fetch<void>(`/api/categories/${id}`, {
-        method: 'DELETE'
-      })
-      list.value.splice(selectedIndex.value, 1)
-    } catch (error) {
-      console.log(error)
-    }
+    await http.remove<ICategory>(`/api/categories/${id}`)
+    list.value.splice(selectedIndex.value, 1)
   }
 
   const getCategories = computed<ICategory[]>(() => list.value)
@@ -83,7 +46,6 @@ export function useCategory() {
     fetchCategories,
     list,
     listCount,
-    page,
     selectedIndex,
     remove
   }
