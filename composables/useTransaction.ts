@@ -34,5 +34,15 @@ export function useTransaction() {
     }
   }
 
-  return { barcode, findProduct, product, items }
+  const total = computed<number>(() => {
+    if (!items.value?.length) return 0
+
+    return items.value.reduce((acc, item) => {
+      const quantity = 1
+      const price = item.price ?? 0
+      return acc + price * quantity
+    }, 0)
+  })
+
+  return { barcode, findProduct, product, items, total }
 }

@@ -9,7 +9,7 @@
     <div
       class="bg-slate-800 text-white text-8xl p-6 font-medium flex justify-end"
     >
-      <SharedDisplayNumber value="150" />
+      <SharedDisplayNumber :value="total.toString() || '0'" />
     </div>
 
     <div class="uppercase text-4xl bg-slate-600 font-medium text-white p-3">
@@ -30,13 +30,13 @@
             }}</span>
           </template>
           <template #qty-data="{ row }">
-            <span class="uppercase text-2xl text-slate-800">{{ row.qty }}</span>
+            <span class="uppercase text-2xl text-slate-800">{{ qty }}</span>
           </template>
-          <!-- <template #subtotal-data="{ row }">
+          <template #price-data="{ row }">
             <span class="uppercase text-2xl text-slate-800">{{
-              row.subtotal_formatted
+              row.price
             }}</span>
-          </template> -->
+          </template>
           <template #empty-state>&nbsp;</template>
         </UTable>
       </div>
@@ -87,7 +87,7 @@ import { formatNumber } from '~/utils'
 
 definePageMeta({ layout: 'none' })
 
-const { barcode, findProduct, product, items } = useTransaction()
+const { barcode, findProduct, product, items, total } = useTransaction()
 
 const qty = ref(1)
 
@@ -100,20 +100,16 @@ const columns = [
   {
     key: 'qty',
     label: 'Qty',
-    class: 'text-lg'
+    class: 'text-lg text-center'
+  },
+  {
+    key: 'price',
+    label: 'Price',
+    class: 'text-lg text-center'
   }
-  // {
-  //   key: 'subtotal',
-  //   label: 'Subtotal',
-  //   class: 'text-lg'
-  // }
 ]
 
 const { getItems } = useCart()
-
-// watchEffect(() => {
-//   items.value = getItems.value
-// })
 
 function updateQty(i: number, qty: number) {
   // items.value[i].qty = qty
