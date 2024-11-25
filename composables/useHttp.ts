@@ -42,11 +42,23 @@ export function useHttp() {
 
   async function get<T>(
     url: string,
-    query?: Record<string, string>
+    query?: Record<string, any>
   ): Promise<T[]> {
     try {
       const data = await $fetch<T[]>(url, { method: 'GET', query })
       return data as T[]
+    } catch (error) {
+      throw error
+    }
+  }
+
+  async function getCustom<T>(
+    url: string,
+    query?: Record<string, any>
+  ): Promise<T> {
+    try {
+      const data = await $fetch<T[]>(url, { method: 'GET', query })
+      return data as T
     } catch (error) {
       throw error
     }
@@ -69,5 +81,5 @@ export function useHttp() {
     }
   }
 
-  return { get, post, update, remove }
+  return { get, getCustom, post, update, remove }
 }

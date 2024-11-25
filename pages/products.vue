@@ -64,7 +64,7 @@ onBeforeMount(async () => {
   fetchCategories()
 })
 
-watchEffect((onCleanup) => {
+watchEffect(() => {
   list.value = []
   fetchProducts({ search: '' })
 })

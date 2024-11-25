@@ -64,13 +64,11 @@ onBeforeMount(async () => {
 
 watchEffect(() => {
   list.value = []
-  // fetchProducts({ search: '' })
 })
 
 const search = ref('')
 const onSearch = useDebounceFn(async () => {
   list.value = []
-  // page.value = 1
   await fetchCategories({ search: search.value })
 }, 500)
 </script>

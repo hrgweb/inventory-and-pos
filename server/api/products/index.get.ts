@@ -3,5 +3,5 @@ import { IProduct } from '~/types'
 
 export default defineEventHandler(async (event) => {
   const { findAll } = await crudHandler(event)
-  return await findAll<IProduct>('products', '*')
+  return await findAll<IProduct>('products', '*', { columnToFilter: 'name' })
 })
