@@ -1,6 +1,6 @@
 <template>
   <div class="w-[400px] p-6 m-auto">
-    <UForm :schema="schema" :state="state" class="space-y-4" @submit="onSubmit">
+    <UForm :schema="schema" :state="state" class="space-y-4" @submit="onSignIn">
       <UFormGroup label="Email" name="email">
         <UInput v-model="state.email" />
       </UFormGroup>
@@ -21,8 +21,12 @@ definePageMeta({
 })
 
 const schema = z.object({
-  email: z.string().email('Invalid email'),
-  password: z.string().min(8, 'Must be at least 8 characters')
+  email: z
+    .string({ required_error: 'Email is required' })
+    .email('Please provide a valid email'),
+  password: z
+    .string({ required_error: 'Password is required' })
+    .min(8, 'Must be at least 8 characters')
 })
 
 type Schema = z.output<typeof schema>
@@ -32,8 +36,19 @@ const state = reactive({
   password: undefined
 })
 
-async function onSubmit(event: FormSubmitEvent<Schema>) {
-  // Do something with data
-  console.log(event.data)
+async function onSignIn(event: FormSubmitEvent<Schema>) {
+  const supabase = useSupabaseClient()
+  const { email, password } = { ...event.data }
+
+  const { data, error } = await supabase.auth.signInWithPassword({
+    email,
+    password
+  })
+
+  if (error) {
+    throw error
+  }
+
+  console.log(data)
 }
 </script>
