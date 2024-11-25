@@ -64,6 +64,18 @@ export function useHttp() {
     }
   }
 
+  async function getOne<T>(
+    url: string,
+    query?: Record<string, any>
+  ): Promise<T> {
+    try {
+      const data = await $fetch<T>(url, { method: 'GET', query })
+      return data as T
+    } catch (error) {
+      throw error
+    }
+  }
+
   async function post<T, B>(url: string, data: any) {
     return await create<T, B>(url, 'POST', data)
   }
@@ -81,5 +93,5 @@ export function useHttp() {
     }
   }
 
-  return { get, getCustom, post, update, remove }
+  return { get, getCustom, getOne, post, update, remove }
 }
