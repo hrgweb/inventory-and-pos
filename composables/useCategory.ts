@@ -1,12 +1,4 @@
-import type {
-  ICategory,
-  ICategory,
-  IProductFormRequest,
-  IProductMapped,
-  IProductResponse,
-  ICategoryFormRequest
-} from '~/types'
-import { formatNumber, mapItem } from '~/utils'
+import type { ICategory, ICategoryFormRequest, IItemResponse } from '~/types'
 
 const isAdd = ref(false)
 const selected = ref<ICategory | null>(null)
@@ -23,14 +15,14 @@ export function useCategory() {
   }
 
   async function create(
-    payload: IProductFormRequest
+    payload: ICategoryFormRequest
   ): Promise<ICategory | null> {
     try {
       const data = await $fetch<ICategory>('/api/categories', {
         method: 'POST',
         body: JSON.stringify(payload)
       })
-      list.value.unshift(mapProduct(data))
+      list.value.unshift(data)
     } catch (error) {
       console.log(error)
     }
@@ -45,22 +37,28 @@ export function useCategory() {
         method: 'PATCH',
         body: JSON.stringify(payload)
       })
-      const content = mapProduct(data)
-      list.value[selectedIndex.value] = content
+      list.value[selectedIndex.value] = data
     } catch (error) {
       console.log(error)
     }
     return null
   }
 
-  async function fetchCategories(): Promise<ICategory[]> {
+  async function fetchCategories({
+    search
+  }: {
+    search: string
+  }): Promise<ICategory | null> {
     try {
-      const data = await $fetch<ICategory[]>('/api/categories')
+      const query = {
+        search
+      }
+      const data = await $fetch<ICategory[]>('/api/categories', { query })
       list.value = data
     } catch (error) {
       console.log(error)
     }
-    return []
+    return null
   }
 
   async function remove(id: number): Promise<void> {
@@ -72,12 +70,6 @@ export function useCategory() {
     } catch (error) {
       console.log(error)
     }
-  }
-
-  function mapProduct(item: ICategory): IProductMapped {
-    let newObj = mapItem(item) as IProductMapped
-    newObj['price_formatted'] = formatNumber(item.price)
-    return newObj
   }
 
   const getCategories = computed<ICategory[]>(() => list.value)

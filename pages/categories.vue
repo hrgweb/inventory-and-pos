@@ -1,6 +1,4 @@
 <template>
-  <pre>{{ selected }}</pre>
-
   <div class="p-6">
     <div class="flex items-center justify-between pb-6">
       <div class="flex justify-between items-center gap-4">
@@ -11,7 +9,7 @@
       <UInput
         v-model="search"
         icon="i-heroicons-magnifying-glass"
-        placeholder="Search for product"
+        placeholder="Search for category"
         class="w-72"
         @update:model-value="onSearch"
       />
@@ -61,7 +59,7 @@ function onEdit(category: ICategory) {
 }
 
 onBeforeMount(async () => {
-  fetchCategories()
+  await fetchCategories({ search: '' })
 })
 
 watchEffect(() => {
@@ -73,6 +71,6 @@ const search = ref('')
 const onSearch = useDebounceFn(async () => {
   list.value = []
   // page.value = 1
-  // await fetchProducts({ search: search.value })
+  await fetchCategories({ search: search.value })
 }, 500)
 </script>

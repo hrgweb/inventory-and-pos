@@ -59,7 +59,12 @@ export interface IProductMapped extends IProduct {
   price_formatted: string
 }
 
-export interface IProductResponse {
-  items: IProduct[]
+// export interface IProductResponse {
+//   items: IProduct[]
+//   total: number
+// }
+
+export interface IItemResponse<T> {
+  items: T[]
   total: number
 }

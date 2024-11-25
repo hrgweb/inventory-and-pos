@@ -73,10 +73,10 @@ function onEdit(category: ICategory, index: number) {
 
 const notification = useNotification()
 
-async function onDelete(product: ICategory, index: number, close: () => void) {
+async function onDelete(category: ICategory, index: number, close: () => void) {
   selectedIndex.value = index
-  await remove(+product?.id)
-  notification.error({ title: 'Product removed successfully' })
+  await remove(+category?.id)
+  notification.error({ title: 'Category removed successfully' })
   close()
 }
 </script>
