@@ -110,5 +110,31 @@ export async function crudHandler(event: H3Event<EventHandlerRequest>) {
     }
   }
 
-  return { create, findAll, update, findMany }
+  async function remove<T>(table: string): Promise<T> {
+    const productId = getRouterParam(event, 'productId')
+
+    if (!productId) {
+      throw createError({
+        statusCode: 404,
+        statusMessage: 'Product not found'
+      })
+    }
+
+    try {
+      const { data, error } = await client
+        .from(table)
+        .delete()
+        .eq('id', productId)
+
+      if (error) {
+        throw error
+      }
+
+      return data as T
+    } catch (error) {
+      throw error
+    }
+  }
+
+  return { create, findAll, update, findMany, remove }
 }

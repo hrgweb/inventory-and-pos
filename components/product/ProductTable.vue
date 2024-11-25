@@ -17,10 +17,35 @@
             name="heroicons:pencil"
             @click="onEdit(row, index)"
           />
-          <Icon
-            class="cursor-pointer text-xl text-red-500"
-            name="heroicons:trash"
-          />
+
+          <UPopover>
+            <Icon
+              class="cursor-pointer text-xl text-red-500"
+              name="heroicons:trash"
+            />
+
+            <template #panel="{ close }">
+              <div class="p-4">
+                <p>
+                  Delete <b>{{ row.name }}?</b>?
+                </p>
+
+                <div>
+                  <UButton
+                    label="Yes"
+                    color="red"
+                    @click="onDelete(row, index, close)"
+                  />
+                  <UButton
+                    label="No"
+                    color="white"
+                    variant="ghost"
+                    @click="close"
+                  />
+                </div>
+              </div>
+            </template>
+          </UPopover>
         </div>
       </template>
     </UTable>
@@ -38,7 +63,13 @@
 <script setup lang="ts">
 import type { IProduct } from '~/types'
 
-const { getProducts: items, page, listCount, selectedIndex } = useProduct()
+const {
+  getProducts: items,
+  page,
+  listCount,
+  selectedIndex,
+  remove
+} = useProduct()
 
 const columns = [
   {
@@ -66,5 +97,14 @@ const emit = defineEmits<{
 function onEdit(product: IProduct, index: number) {
   selectedIndex.value = index
   emit('edit', product)
+}
+
+const notification = useNotification()
+
+async function onDelete(product: IProduct, index: number, close: () => void) {
+  selectedIndex.value = index
+  await remove(+product?.id)
+  notification.error({ title: 'Product removed successfully' })
+  close()
 }
 </script>

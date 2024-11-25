@@ -88,6 +88,17 @@ export function useProduct() {
     return null
   }
 
+  async function remove(id: number): Promise<void> {
+    try {
+      await $fetch<void>(`/api/products/${id}`, {
+        method: 'DELETE'
+      })
+      list.value.splice(selectedIndex.value, 1)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   function mapProduct(item: IProduct): IProductMapped {
     let newObj = mapItem(item) as IProductMapped
     newObj['price_formatted'] = formatNumber(item.price)
@@ -115,6 +126,7 @@ export function useProduct() {
     list,
     listCount,
     page,
-    selectedIndex
+    selectedIndex,
+    remove
   }
 }
