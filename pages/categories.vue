@@ -1,117 +1,78 @@
 <template>
-  <div class="p-6">
-    <div class="flex items-center justify-between">
-      <AppPageTitle title="Categories" />
+  <pre>{{ selected }}</pre>
 
-      <UButton
-        label="New Category"
-        icon="heroicons:plus"
-        @click="is_show = true"
+  <div class="p-6">
+    <div class="flex items-center justify-between pb-6">
+      <div class="flex justify-between items-center gap-4">
+        <AppPageTitle title="Categories" />
+        <UButton label="New Category" icon="heroicons:plus" @click="onNew" />
+      </div>
+
+      <UInput
+        v-model="search"
+        icon="i-heroicons-magnifying-glass"
+        placeholder="Search for product"
+        class="w-72"
+        @update:model-value="onSearch"
       />
     </div>
 
-    <UTable :rows="categories" :columns="columns">
-      <template #name-data="{ row }"
-        ><span>{{ row.name }}</span></template
-      >
-      <template #actions-data>
-        <div class="flex gap-3">
-          <Icon class="cursor-pointer text-xl" name="heroicons:pencil" />
-          <Icon
-            class="cursor-pointer text-xl text-red-500"
-            name="heroicons:trash"
-          />
-        </div>
-      </template>
-    </UTable>
+    <ClientOnly>
+      <CategoryTable @edit="onEdit" />
+    </ClientOnly>
 
-    <!-- Modal - form -->
-    <UModal v-model="is_show">
-      <UCard class="w-full">
-        <template #header>
-          <div class="flex items-center justify-between">
-            <span>{{ modal_title }}</span>
-
-            <UButton
-              icon="heroicons:x-mark"
-              variant="soft"
-              color="gray"
-              class="rounded-full"
-              @click="is_show = false"
-            />
-          </div>
-        </template>
-        <UForm
-          :schema="schema"
-          :state="state"
-          class="space-y-4"
-          @submit="onSubmit"
-        >
-          <UFormGroup label="Category Name" name="name">
-            <UInput v-model="state.name" size="xl" />
-          </UFormGroup>
-
-          <UButton label="Save" type="submit" />
-        </UForm>
-      </UCard>
+    <UModal v-model="show_modal">
+      <div class="p-6">
+        <component :is="component_to_use" @close="modal = 'none'" />
+      </div>
     </UModal>
   </div>
 </template>
 
 <script setup lang="ts">
 import type { ICategory } from '~/types'
-import { z } from 'zod'
-import type { Form, FormSubmitEvent } from '#ui/types'
+import { useDebounceFn } from '@vueuse/core'
+import CategoryForm from '~/components/category/CategoryForm.vue'
 
-const schema = z.object({
-  name: z.string().min(1)
+const { isAdd, selected, fetchCategories, list } = useCategory()
+
+type ModalValue = 'none' | 'form'
+
+const modal = ref<ModalValue>('none')
+const component_to_use = shallowRef(CategoryForm)
+const show_modal = computed(() => (modal.value !== 'none' ? true : false))
+
+watchEffect(() => {
+  switch (modal.value) {
+    case 'form':
+      CategoryForm
+  }
 })
 
-type Schema = z.output<typeof schema>
-
-const state = reactive({
-  name: ''
-})
-
-async function onSubmit(event: FormSubmitEvent<Schema>) {
-  // Do something with data
-  console.log(event.data)
+function onNew() {
+  modal.value = 'form'
+  isAdd.value = true
 }
 
-type FormTitle = 'New Category' | 'Update Category'
+function onEdit(category: ICategory) {
+  modal.value = 'form'
+  isAdd.value = false
+  selected.value = category
+}
 
-const modal_title = ref<FormTitle>('New Category')
+onBeforeMount(async () => {
+  fetchCategories()
+})
 
-const columns = [
-  {
-    key: 'name',
-    label: 'Name'
-  },
-  {
-    key: 'description',
-    label: 'Description'
-  },
-  {
-    key: 'actions',
-    label: 'Actions'
-  }
-]
+watchEffect(() => {
+  list.value = []
+  // fetchProducts({ search: '' })
+})
 
-// TODO: Fetch categories from API
-const categories = ref<ICategory[]>([
-  {
-    id: 1,
-    name: 'Category 1'
-  },
-  {
-    id: 2,
-    name: 'Category 2'
-  },
-  {
-    id: 3,
-    name: 'Category 3'
-  }
-])
-
-const is_show = ref(true)
+const search = ref('')
+const onSearch = useDebounceFn(async () => {
+  list.value = []
+  // page.value = 1
+  // await fetchProducts({ search: search.value })
+}, 500)
 </script>

@@ -81,11 +81,17 @@ export async function crudHandler(event: H3Event<EventHandlerRequest>) {
     }
   }
 
-  async function update<T>(table: string): Promise<T | null> {
-    const productId = getRouterParam(event, 'productId')
+  async function update<T>(
+    table: string,
+    paramIdName: string
+  ): Promise<T | null> {
+    const itemId = getRouterParam(event, paramIdName)
     const body = (await readBody(event)) as never
 
-    if (!productId) {
+    console.log('id: ', itemId)
+    console.log('name: ', paramIdName)
+
+    if (!itemId) {
       throw createError({
         statusCode: 404,
         statusMessage: 'Product not found'
@@ -96,7 +102,7 @@ export async function crudHandler(event: H3Event<EventHandlerRequest>) {
       const { data, error } = await client
         .from(table)
         .update(body)
-        .eq('id', productId)
+        .eq('id', itemId)
         .select()
 
       if (error) {
