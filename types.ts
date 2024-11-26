@@ -80,7 +80,7 @@ export enum TransactionStatus {
 }
 
 export interface IOrder {
-  created_at: Date
+  created_at?: Date
   id: number
   price: number
   product_id: number
@@ -90,3 +90,7 @@ export interface IOrder {
 }
 
 export interface IOrderFormRequest extends Partial<IOrder> {}
+
+export interface IOrderResponse extends Partial<Omit<IOrder, 'product_id'>> {
+  product: IProduct
+}

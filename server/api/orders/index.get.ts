@@ -1,4 +1,5 @@
 import { serverSupabaseClient } from '#supabase/server'
+import type { IOrderResponse } from '~/types'
 
 export default defineEventHandler(async (event) => {
   const client = await serverSupabaseClient(event)
@@ -25,7 +26,8 @@ export default defineEventHandler(async (event) => {
         barcode
       ),
       price,
-      qty
+      qty,
+      subtotal
     `
     )
     .eq('transaction_no', transaction_no)
@@ -38,7 +40,7 @@ export default defineEventHandler(async (event) => {
       product: item.products,
       products: undefined
     }
-  })
+  }) as IOrderResponse[]
 
   return formmattedData
 })

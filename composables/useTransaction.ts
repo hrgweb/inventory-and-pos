@@ -1,6 +1,5 @@
 import type {
-  IOrder,
-  IProduct,
+  IOrderResponse,
   ITransaction,
   ITransactionFormRequest
 } from '~/types'
@@ -14,13 +13,18 @@ const DATA_SERIALIZER = {
 }
 
 const barcode = ref('')
-const product = useStorage<IProduct | null>(
+const item = useStorage<IOrderResponse | null>(
   'product',
   null,
   undefined,
   DATA_SERIALIZER
 )
-const items = useStorage<IOrder[]>('items', [], undefined, DATA_SERIALIZER)
+const items = useStorage<IOrderResponse[]>(
+  'items',
+  [],
+  undefined,
+  DATA_SERIALIZER
+)
 const aboutToPay = ref(false)
 const tenderAmount = ref(0)
 const transaction = useStorage<ITransaction>(
@@ -47,13 +51,13 @@ export function useTransaction() {
       transaction_no: transaction.value?.transaction_no
     }
 
-    const data = await http.post<IProduct, ITransactionFormRequest>(
+    const data = await http.post<IOrderResponse, ITransactionFormRequest>(
       `/api/products/find-by-barcode`,
       body
     )
 
     if (data) {
-      product.value = data
+      item.value = data
       items.value.push(data)
     }
   }
@@ -69,8 +73,8 @@ export function useTransaction() {
 
   async function fetchOrders() {
     const query = { transaction_no: transaction.value?.transaction_no }
-    const data = await http.get<IOrder>('/api/orders', query)
-    items.value = data as IOrder[]
+    const data = await http.get<IOrderResponse>('/api/orders', query)
+    items.value = data as IOrderResponse[]
   }
 
   const getTotal = computed<number>(() => {
@@ -91,7 +95,6 @@ export function useTransaction() {
   return {
     barcode,
     findProduct,
-    product,
     items,
     getTotal,
     aboutToPay,

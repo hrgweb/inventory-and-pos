@@ -1,5 +1,5 @@
 import { serverSupabaseClient } from '#supabase/server'
-import { IOrder, IProduct } from '~/types'
+import type { IOrder, IOrderResponse, IProduct } from '~/types'
 
 export default defineEventHandler(async (event) => {
   const client = await serverSupabaseClient(event)
@@ -18,7 +18,7 @@ export default defineEventHandler(async (event) => {
   async function createOrder(
     product: IProduct,
     transaction_no?: string
-  ): Promise<IOrder[]> {
+  ): Promise<IOrderResponse[]> {
     // No product
     if (!product) {
       throw createError({
@@ -44,11 +44,36 @@ export default defineEventHandler(async (event) => {
       subtotal: product.price * qty
     } as never
 
-    const { data, error } = await client.from('orders').insert(payload).select()
+    const { data, error } = await client
+      .from('orders')
+      .insert(payload)
+      .select(
+        `
+      id,
+      transaction_no,
+      products (
+        id,
+        name,
+        price,
+        barcode
+      ),
+      price,
+      qty,
+      subtotal
+    `
+      )
 
     if (error) throw error
 
-    return data as IOrder[]
+    const formmattedData = data.map((item) => {
+      return {
+        ...item,
+        product: item.products,
+        products: undefined
+      }
+    }) as IOrderResponse[]
+
+    return formmattedData
   }
 
   const { barcode, transaction_no } = await readBody(event)
@@ -64,7 +89,7 @@ export default defineEventHandler(async (event) => {
     const order = await createOrder(product, transaction_no)
 
     if (order && order.length) {
-      return order[0] as IOrder
+      return order[0] as IOrderResponse
     }
   } catch (error) {
     throw error

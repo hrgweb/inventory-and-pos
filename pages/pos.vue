@@ -1,6 +1,4 @@
 <template>
-  <pre>{{ product }}</pre>
-
   <input
     v-model="barcode"
     class="py-1 px-2"
@@ -65,7 +63,6 @@ definePageMeta({ layout: 'none' })
 const {
   barcode,
   findProduct,
-  product,
   items,
   getTotal,
   aboutToPay,
