@@ -17,6 +17,7 @@ const product = useStorage<IProduct | null>(
 )
 const items = useStorage<IProduct[]>('items', [], undefined, DATA_SERIALIZER)
 const aboutToPay = ref(false)
+const tenderAmount = ref(0)
 
 export function useTransaction() {
   const http = useHttp()
@@ -45,5 +46,19 @@ export function useTransaction() {
     }, 0)
   })
 
-  return { barcode, findProduct, product, items, getTotal, aboutToPay }
+  const getChange = computed<number>(() => {
+    const change = tenderAmount.value - getTotal.value
+    return change > 0 ? change : 0
+  })
+
+  return {
+    barcode,
+    findProduct,
+    product,
+    items,
+    getTotal,
+    aboutToPay,
+    tenderAmount,
+    getChange
+  }
 }

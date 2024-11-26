@@ -9,30 +9,64 @@
       title=" Message!"
       :description="error_msg"
     />
-    <div>
-      <label for="amount" class="text-white text-2xl uppercase pb-2 block"
-        >Enter Amount</label
-      >
-      <input
-        v-model.number="tender_amount"
-        id="amount"
-        ref="amount"
-        type="text"
-        class="text-4xl p-6 relative block w-full disabled:cursor-not-allowed disabled:opacity-75 focus:outline-none border-0 form-input rounded-md placeholder-gray-400 dark:placeholder-gray-500 px-2.5 py-1.5 shadow-sm bg-white dark:bg-gray-900 text-gray-900 dark:text-white ring-1 ring-inset ring-gray-300 dark:ring-gray-700 focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400"
-        :class="[error_msg ? 'focus:ring-red-500' : 'ring-1 ring-gray-300']"
-      />
+    <div class="space-y-6">
+      <!-- Total -->
+      <div>
+        <label for="amount" class="text-white text-2xl uppercase pb-1 block">
+          Total</label
+        >
+        <input
+          type="text"
+          class="text-4xl p-6 relative block w-full disabled:cursor-not-allowed disabled:opacity-75 focus:outline-none border-0 form-input rounded-md placeholder-gray-400 dark:placeholder-gray-500 px-2.5 py-1.5 shadow-sm bg-white dark:bg-gray-900 text-gray-900 dark:text-white ring-1 ring-inset ring-gray-300 dark:ring-gray-700 focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400"
+          readonly
+          :value="formatNumber(getTotal)"
+        />
+      </div>
+
+      <!-- Amount -->
+      <div>
+        <label for="amount" class="text-white text-2xl uppercase pb-1 block">
+          Amount</label
+        >
+        <input
+          v-model.number="tender_amount"
+          id="amount"
+          ref="amount"
+          type="text"
+          class="text-4xl p-6 relative block w-full disabled:cursor-not-allowed disabled:opacity-75 focus:outline-none border-0 form-input rounded-md placeholder-gray-400 dark:placeholder-gray-500 px-2.5 py-1.5 shadow-sm bg-white dark:bg-gray-900 text-gray-900 dark:text-white ring-1 ring-inset ring-gray-300 dark:ring-gray-700 focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400"
+          :class="[error_msg ? 'focus:ring-red-500' : 'ring-1 ring-gray-300']"
+        />
+      </div>
+
+      <!-- Change -->
+      <div>
+        <label for="amount" class="text-white text-2xl uppercase pb-1 block"
+          >Change</label
+        >
+        <input
+          type="text"
+          class="text-4xl p-6 relative block w-full disabled:cursor-not-allowed disabled:opacity-75 focus:outline-none border-0 form-input rounded-md placeholder-gray-400 dark:placeholder-gray-500 px-2.5 py-1.5 shadow-sm bg-white dark:bg-gray-900 text-gray-900 dark:text-white ring-1 ring-inset ring-gray-300 dark:ring-gray-700 focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400"
+          readonly
+          :value="formatNumber(getChange)"
+        />
+      </div>
     </div>
   </UCard>
 </template>
 
 <script setup lang="ts">
 import { useFocus, useMagicKeys } from '@vueuse/core'
+import { formatNumber } from '~/utils'
 
-const { getTotal, aboutToPay } = useTransaction()
+const {
+  getTotal,
+  aboutToPay,
+  tenderAmount: tender_amount,
+  getChange
+} = useTransaction()
 
-const amount = ref<HTMLInputElement | null>()
-
-const { focused } = useFocus(amount)
+const amount = ref()
+const { focused } = useFocus(amount, { initialValue: true })
 
 const { enter, escape } = useMagicKeys()
 
@@ -56,11 +90,11 @@ watchEffect(() => {
   }
 })
 
-const tender_amount = ref(0)
 const error_msg = ref('')
 
 async function onPay(): Promise<void> {
   if (getTotal.value > tender_amount.value) {
+    focused.value = true
     error_msg.value = 'Tendered amount was insufficient.'
     return
   }
