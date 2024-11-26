@@ -82,8 +82,15 @@ import TenderAmount from '~/components/transaction/TenderAmount.vue'
 
 definePageMeta({ layout: 'none' })
 
-const { barcode, findProduct, product, items, getTotal, aboutToPay } =
-  useTransaction()
+const {
+  barcode,
+  findProduct,
+  product,
+  items,
+  getTotal,
+  aboutToPay,
+  getOrCreateTransaction
+} = useTransaction()
 
 type ModalValue = 'none' | 'form'
 
@@ -135,5 +142,9 @@ watchEffect(() => {
     modal.value = 'form'
     component_to_use.value = TenderAmount
   }
+})
+
+onBeforeMount(async () => {
+  await getOrCreateTransaction()
 })
 </script>

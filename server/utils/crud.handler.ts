@@ -24,6 +24,30 @@ export async function crudHandler(event: H3Event<EventHandlerRequest>) {
     }
   }
 
+  async function createMany<T>(table: string): Promise<T[]> {
+    const body = await readBody(event)
+    const items = body.items
+
+    console.log('items: ', items)
+
+    try {
+      const { data, error } = await client.from(table).insert(items).select()
+
+      console.log('data: ', data)
+
+      if (error) {
+        throw createError({
+          statusCode: 500,
+          statusMessage: error.message
+        })
+      }
+
+      return data as T[]
+    } catch (error) {
+      throw error
+    }
+  }
+
   async function findAll<T>(
     table: string,
     select = '*',
@@ -145,5 +169,5 @@ export async function crudHandler(event: H3Event<EventHandlerRequest>) {
     }
   }
 
-  return { create, findAll, update, findMany, remove }
+  return { create, createMany, findAll, update, findMany, remove }
 }

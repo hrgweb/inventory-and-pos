@@ -40,3 +40,14 @@ export function imageSchema() {
   })
   return imageSchema
 }
+
+export function generateHash(len = 12) {
+  const chars =
+    // 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+    '0123456789'
+  let result = ''
+  for (let i = 0; i < len; i++) {
+    result += chars.charAt(Math.floor(Math.random() * chars.length))
+  }
+  return result
+}

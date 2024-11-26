@@ -62,7 +62,8 @@ const {
   getTotal,
   aboutToPay,
   tenderAmount: tender_amount,
-  getChange
+  getChange,
+  createSales
 } = useTransaction()
 
 const amount = ref()
@@ -99,6 +100,7 @@ async function onPay(): Promise<void> {
     return
   }
   error_msg.value = ''
+  await createSales() //save to sales
   emit('close')
 }
 </script>

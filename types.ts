@@ -68,3 +68,14 @@ export interface IItemResponse<T> {
   items: T[]
   total: number
 }
+
+export interface ITransaction {
+  transaction: string
+  status: TransactionStatus
+}
+
+export enum TransactionStatus {
+  PENDING = 'pending',
+  PAID = 'paid',
+  CANCELLED = 'cancelled'
+}

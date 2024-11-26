@@ -1,5 +1,6 @@
 import type { IProduct } from '~/types'
-import { useStorage } from '@vueuse/core'
+import { get, useStorage } from '@vueuse/core'
+import { generateHash } from '~/utils'
 
 const DATA_SERIALIZER = {
   serializer: {
@@ -22,18 +23,32 @@ const tenderAmount = ref(0)
 export function useTransaction() {
   const http = useHttp()
 
+  async function getOrCreateTransaction() {
+    const data = await http.post('/api/transactions', {
+      transaction_no: generateHash(22)
+    })
+  }
+
   async function findProduct({ barcode }: { barcode: string }) {
     const query = {
       barcode
     }
-    const data = await http.getOne<IProduct>(
+    const data = await http.post<IProduct, { barcode: string }>(
       `/api/products/find-by-barcode`,
       query
     )
-    if (data) {
-      product.value = data
-      items.value.push(data)
+    // if (data) {
+    //   product.value = data
+    //   items.value.push(data)
+    // }
+  }
+
+  async function createSales() {
+    const payload = {
+      items: items.value,
+      tender_amount: tenderAmount.value
     }
+    await http.post('/api/transactions/create-sales', payload)
   }
 
   const getTotal = computed<number>(() => {
@@ -45,7 +60,6 @@ export function useTransaction() {
       return acc + price * quantity
     }, 0)
   })
-
   const getChange = computed<number>(() => {
     const change = tenderAmount.value - getTotal.value
     return change > 0 ? change : 0
@@ -59,6 +73,8 @@ export function useTransaction() {
     getTotal,
     aboutToPay,
     tenderAmount,
-    getChange
+    getChange,
+    createSales,
+    getOrCreateTransaction
   }
 }
