@@ -1,6 +1,5 @@
-import type { IProduct } from '~/types'
-import { get, useStorage } from '@vueuse/core'
-import { generateHash } from '~/utils'
+import type { IProduct, ITransaction, ITransactionFormRequest } from '~/types'
+import { useStorage } from '@vueuse/core'
 
 const DATA_SERIALIZER = {
   serializer: {
@@ -19,24 +18,34 @@ const product = useStorage<IProduct | null>(
 const items = useStorage<IProduct[]>('items', [], undefined, DATA_SERIALIZER)
 const aboutToPay = ref(false)
 const tenderAmount = ref(0)
+const transaction = useStorage<ITransaction>(
+  'transaction',
+  null,
+  undefined,
+  DATA_SERIALIZER
+)
 
 export function useTransaction() {
   const http = useHttp()
 
   async function getOrCreateTransaction() {
-    const data = await http.post('/api/transactions', {
-      transaction_no: generateHash(22)
-    })
+    const data = await http.post<ITransaction, null>('/api/transactions', null)
+    if (!data) return null
+    transaction.value = data as ITransaction
   }
 
   async function findProduct({ barcode }: { barcode: string }) {
-    const query = {
-      barcode
+    const body = {
+      barcode,
+      transaction_no: transaction.value?.transaction_no
     }
-    const data = await http.post<IProduct, { barcode: string }>(
+    const data = await http.post<IProduct, ITransactionFormRequest>(
       `/api/products/find-by-barcode`,
-      query
+      body
     )
+
+    console.log(data)
+
     // if (data) {
     //   product.value = data
     //   items.value.push(data)
@@ -75,6 +84,7 @@ export function useTransaction() {
     tenderAmount,
     getChange,
     createSales,
-    getOrCreateTransaction
+    getOrCreateTransaction,
+    transaction
   }
 }

@@ -1,4 +1,6 @@
 <template>
+  <pre>{{ transaction }}</pre>
+
   <input
     v-model="barcode"
     class="py-1 px-2"
@@ -89,7 +91,8 @@ const {
   items,
   getTotal,
   aboutToPay,
-  getOrCreateTransaction
+  getOrCreateTransaction,
+  transaction
 } = useTransaction()
 
 type ModalValue = 'none' | 'form'

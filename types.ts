@@ -70,12 +70,26 @@ export interface IItemResponse<T> {
 }
 
 export interface ITransaction {
-  transaction: string
+  id: number
+  transaction_no: string
   status: TransactionStatus
+  created_at: Date
 }
+
+export interface ITransactionFormRequest extends Partial<ITransaction> {}
 
 export enum TransactionStatus {
   PENDING = 'pending',
   PAID = 'paid',
   CANCELLED = 'cancelled'
+}
+
+export interface IOrder {
+  created_at: Date
+  id: number
+  price: number
+  product_id: number
+  qty: number
+  subtotal: number
+  transaction_no: '9797521105240021815387'
 }
