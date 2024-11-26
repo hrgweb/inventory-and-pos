@@ -45,7 +45,17 @@ export function useHttp() {
     query?: Record<string, any>
   ): Promise<T[]> {
     try {
-      const data = await $fetch<T[]>(url, { method: 'GET', query })
+      const config = {
+        method: 'GET',
+        headers: {
+          ContentType: 'application/json',
+          Accept: 'application/json'
+        },
+        query
+      } as Record<string, any>
+
+      const data = await $fetch<T[]>(url, config)
+
       return data as T[]
     } catch (error) {
       throw error

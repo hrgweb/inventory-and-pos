@@ -1,4 +1,9 @@
-import type { IProduct, ITransaction, ITransactionFormRequest } from '~/types'
+import type {
+  IOrder,
+  IProduct,
+  ITransaction,
+  ITransactionFormRequest
+} from '~/types'
 import { useStorage } from '@vueuse/core'
 
 const DATA_SERIALIZER = {
@@ -15,7 +20,7 @@ const product = useStorage<IProduct | null>(
   undefined,
   DATA_SERIALIZER
 )
-const items = useStorage<IProduct[]>('items', [], undefined, DATA_SERIALIZER)
+const items = useStorage<IOrder[]>('items', [], undefined, DATA_SERIALIZER)
 const aboutToPay = ref(false)
 const tenderAmount = ref(0)
 const transaction = useStorage<ITransaction>(
@@ -30,7 +35,9 @@ export function useTransaction() {
 
   async function getOrCreateTransaction() {
     const data = await http.post<ITransaction, null>('/api/transactions', null)
+
     if (!data) return null
+
     transaction.value = data as ITransaction
   }
 
@@ -39,17 +46,16 @@ export function useTransaction() {
       barcode,
       transaction_no: transaction.value?.transaction_no
     }
+
     const data = await http.post<IProduct, ITransactionFormRequest>(
       `/api/products/find-by-barcode`,
       body
     )
 
-    console.log(data)
-
-    // if (data) {
-    //   product.value = data
-    //   items.value.push(data)
-    // }
+    if (data) {
+      product.value = data
+      items.value.push(data)
+    }
   }
 
   async function createSales() {
@@ -57,7 +63,14 @@ export function useTransaction() {
       items: items.value,
       tender_amount: tenderAmount.value
     }
+
     await http.post('/api/transactions/create-sales', payload)
+  }
+
+  async function fetchOrders() {
+    const query = { transaction_no: transaction.value?.transaction_no }
+    const data = await http.get<IOrder>('/api/orders', query)
+    items.value = data as IOrder[]
   }
 
   const getTotal = computed<number>(() => {
@@ -69,6 +82,7 @@ export function useTransaction() {
       return acc + price * quantity
     }, 0)
   })
+
   const getChange = computed<number>(() => {
     const change = tenderAmount.value - getTotal.value
     return change > 0 ? change : 0
@@ -85,6 +99,7 @@ export function useTransaction() {
     getChange,
     createSales,
     getOrCreateTransaction,
-    transaction
+    transaction,
+    fetchOrders
   }
 }

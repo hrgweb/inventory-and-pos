@@ -1,5 +1,5 @@
 <template>
-  <pre>{{ transaction }}</pre>
+  <pre>{{ product }}</pre>
 
   <input
     v-model="barcode"
@@ -21,7 +21,7 @@
     </div>
 
     <div class="flex bg-slate-200 flex-1">
-      <div class="flex w-[55%]">
+      <div class="flex w-[70%]">
         <UTable
           :rows="items"
           :columns="columns"
@@ -30,7 +30,7 @@
         >
           <template #item-data="{ row }">
             <span class="uppercase text-2xl text-slate-800">{{
-              row.name
+              row.product.name
             }}</span>
           </template>
           <template #qty-data="{ row }">
@@ -46,29 +46,7 @@
       </div>
 
       <div class="flex-1 shadow p-6 space-y-6">
-        <div class="flex justify-between items-end">
-          <span class="uppercase text-xl w-[100px] text-right pr-4">item</span>
-          <span
-            class="uppercase text-4xl bg-slate-800 text-white p-4 text-right w-full"
-            >{{ product?.barcode }}</span
-          >
-        </div>
-        <div class="flex justify-between items-end">
-          <span class="uppercase text-xl w-[100px] text-right pr-4">qty</span>
-          <span
-            class="uppercase text-4xl bg-slate-800 text-white p-3 text-right w-full"
-            >{{ qty }}</span
-          >
-        </div>
-        <div class="flex justify-between items-end">
-          <span class="uppercase text-xl w-[100px] text-right pr-4">price</span>
-
-          <SharedDisplayNumber
-            :value="product?.price?.toString() || '0'"
-            :show-currency="false"
-            class="text-4xl bg-slate-800 text-white p-3 w-full text-right"
-          />
-        </div>
+        <!-- TODO: will think what to put in here -->
       </div>
     </div>
 
@@ -92,16 +70,12 @@ const {
   getTotal,
   aboutToPay,
   getOrCreateTransaction,
-  transaction
+  fetchOrders
 } = useTransaction()
 
 type ModalValue = 'none' | 'form'
 
 const qty = ref(1)
-
-// const modal = ref<ModalValue>('none')
-// const show_modal = computed(() => (modal.value !== 'none' ? true : false))
-// const component_to_use = shallowRef(TenderAmount)
 
 const {
   modal,
@@ -140,7 +114,6 @@ const { ctrl, enter } = useMagicKeys()
 // Open
 watchEffect(() => {
   if (ctrl.value && enter.value) {
-    // alert('pressed the ctrl and enter keys')
     aboutToPay.value = true
     modal.value = 'form'
     component_to_use.value = TenderAmount
@@ -149,5 +122,6 @@ watchEffect(() => {
 
 onBeforeMount(async () => {
   await getOrCreateTransaction()
+  await fetchOrders()
 })
 </script>

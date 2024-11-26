@@ -1,6 +1,5 @@
 import { serverSupabaseClient } from '#supabase/server'
 import { IOrder, IProduct } from '~/types'
-import { crudHandler } from '~/server/utils/crud.handler'
 
 export default defineEventHandler(async (event) => {
   const client = await serverSupabaseClient(event)
@@ -20,6 +19,22 @@ export default defineEventHandler(async (event) => {
     product: IProduct,
     transaction_no?: string
   ): Promise<IOrder[]> {
+    // No product
+    if (!product) {
+      throw createError({
+        statusCode: 500,
+        statusMessage: 'Product not found'
+      })
+    }
+
+    // No transaction
+    if (!transaction_no) {
+      throw createError({
+        statusCode: 500,
+        statusMessage: 'Transaction number not found'
+      })
+    }
+
     const qty = 1 // default
     const payload = {
       transaction_no,
@@ -30,7 +45,9 @@ export default defineEventHandler(async (event) => {
     } as never
 
     const { data, error } = await client.from('orders').insert(payload).select()
+
     if (error) throw error
+
     return data as IOrder[]
   }
 
@@ -45,6 +62,7 @@ export default defineEventHandler(async (event) => {
 
     // Create an order
     const order = await createOrder(product, transaction_no)
+
     if (order && order.length) {
       return order[0] as IOrder
     }

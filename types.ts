@@ -11,7 +11,7 @@ export interface ISocialLink {
 }
 
 export interface IProduct {
-  id: string
+  id: number
   name: string
   description: string
   supplier_price: number
@@ -59,11 +59,6 @@ export interface IProductMapped extends IProduct {
   price_formatted: string
 }
 
-// export interface IProductResponse {
-//   items: IProduct[]
-//   total: number
-// }
-
 export interface IItemResponse<T> {
   items: T[]
   total: number
@@ -91,5 +86,7 @@ export interface IOrder {
   product_id: number
   qty: number
   subtotal: number
-  transaction_no: '9797521105240021815387'
+  transaction_no: string
 }
+
+export interface IOrderFormRequest extends Partial<IOrder> {}

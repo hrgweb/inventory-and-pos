@@ -3,21 +3,6 @@ import { ITransaction, TransactionStatus } from '~/types'
 import { generateHash } from '~/utils'
 
 export default defineEventHandler(async (event) => {
-  const client = await serverSupabaseClient(event)
-
-  const data = await getOne()
-
-  // If no transaction found
-  if (!data) {
-    // Create new transaction
-    const transaction = await create()
-    console.log('if: ', transaction)
-    return transaction
-  }
-
-  console.log('else: ', data)
-  return data
-
   async function getOne(): Promise<ITransaction> {
     const { data, error } = await client
       .from('transactions')
@@ -38,4 +23,17 @@ export default defineEventHandler(async (event) => {
     if (error) throw error
     return data[0]
   }
+
+  const client = await serverSupabaseClient(event)
+
+  const data = await getOne()
+
+  // If no transaction found
+  if (!data) {
+    // Create new transaction
+    const transaction = await create()
+    return transaction
+  }
+
+  return data
 })
