@@ -1,10 +1,8 @@
 <template>
-  <div class="md:w-[900px] flex gap-6 my-6">
-    <div class="flex-1">
+  <div class="md:w-[1000px] flex gap-6 my-6">
+    <div class="flex-1 overflow-auto">
       <UCard>
         <template #header>Cart ({{ items.length }})</template>
-
-        <pre>{{ items }}</pre>
 
         <UTable :rows="items" :columns="columns">
           <template #thumbnail-data="{ row }">
@@ -13,7 +11,10 @@
           <template #title-data="{ row }">
             <span>{{ row.product_name }}</span>
           </template>
-          <template #price-data="{ row, index }">
+          <template #price-data="{ row }">
+            <span>{{ row.price_formatted }}</span>
+          </template>
+          <template #qty-data="{ row, index }">
             <SharedAdjustQty
               :qty="row.qty"
               @update="updateQty(index, $event)"
@@ -37,9 +38,32 @@
       </UCard>
     </div>
 
-    <div class="w-[400px]">
-      <UCard>
+    <div class="w-[300px] flex shrink-0">
+      <UCard class="flex-1 space-y-3">
         <template #header>Order Summary</template>
+
+        <div class="space-y-3">
+          <div class="flex justify-between">
+            <span>Sub Total:</span>
+            <SharedDisplayNumber value="15" />
+          </div>
+          <div class="flex justify-between">
+            <span>Delivery Fee:</span>
+            <SharedDisplayNumber value="215" />
+          </div>
+        </div>
+        <div class="flex justify-between py-6">
+          <span class="text-xl">Grand Total:</span>
+          <SharedDisplayNumber class="text-xl" value="215" />
+        </div>
+
+        <UButton
+          class="w-full"
+          icon="heroicons:shopping-cart"
+          label="Proceed to Checkout"
+          size="lg"
+          color="blue"
+        />
       </UCard>
     </div>
   </div>
@@ -60,7 +84,7 @@ const columns = [
   },
   {
     key: 'product_name',
-    label: 'Product Name'
+    label: 'Product'
   },
   {
     key: 'price',
