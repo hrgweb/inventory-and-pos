@@ -24,7 +24,7 @@
       </div>
     </div>
 
-    <div class="flex justify-center m-auto sm:w-full md:w-full lg:w-[1200px]">
+    <div class="flex justify-center m-auto sm:w-full md:w-full">
       <div class="sidebar w-[250px] shrink-0">
         <AppNavigation />
       </div>
@@ -64,6 +64,12 @@ const nav_options = [
     label: 'Barcode',
     icon: '',
     to: '/barcode'
+  },
+  {
+    name: 'pos',
+    label: 'Pos',
+    icon: '',
+    to: '/pos'
   }
 ] as INavigationOptions[]
 

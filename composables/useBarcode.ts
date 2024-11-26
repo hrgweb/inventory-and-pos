@@ -12,8 +12,10 @@ const componentToUse = shallowRef(BarcodeChoose)
 
 export function useBarcode() {
   const barcodeSvg = ref<HTMLOrSVGElement | string | null>(null)
+  const barcode = ref('')
+  const barcodeSvgFile = ref<File | null>(null)
 
-  const quagga = useQuagga()
+  const quagga = useQuagga() // scanner
 
   watch(modal, (value) => {
     switch (value) {
@@ -63,7 +65,7 @@ export function useBarcode() {
     modal.value = 'scanner'
   }
 
-  function generateRandomCode(len = 12) {
+  function generateBarcode(len = 12) {
     const chars =
       // 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
       '0123456789'
@@ -86,8 +88,8 @@ export function useBarcode() {
       'svg'
     )
 
-    const code = generateRandomCode(10)
-
+    const code = generateBarcode(10)
+    barcode.value = code
     JsBarcode(svgNode, code, {
       xmlDocument: document,
       format: 'CODE128',
@@ -118,6 +120,7 @@ export function useBarcode() {
     choose,
     closeModal,
     chooseGenerate,
-    barcodeSvg
+    barcodeSvg,
+    barcode
   }
 }
