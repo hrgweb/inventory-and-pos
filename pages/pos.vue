@@ -126,9 +126,19 @@ const { focused } = useFocus(barcode_input, { initialValue: true })
 
 const { ctrl, enter } = useMagicKeys()
 
+const notification = useNotification()
+
 // Open
 watchEffect(() => {
   if (ctrl.value && enter.value) {
+    if (items.value.length === 0) {
+      notification.warning({
+        title: 'No items',
+        description: 'Please add an item first.'
+      })
+      return
+    }
+
     aboutToPay.value = true
     modal.value = 'form'
     component_to_use.value = TenderAmount
