@@ -39,6 +39,13 @@
               row.price
             }}</span>
           </template>
+          <template #action-data="{ row, index }">
+            <Icon
+              name="heroicons:trash"
+              class="cursor-pointer text-xl text-red-500"
+              @click="onRemove(row, index)"
+            />
+          </template>
           <template #empty-state>&nbsp;</template>
         </UTable>
       </div>
@@ -57,6 +64,7 @@
 <script setup lang="ts">
 import { useFocus, useMagicKeys } from '@vueuse/core'
 import TenderAmount from '~/components/transaction/TenderAmount.vue'
+import type { IOrderResponse } from '~/types'
 
 definePageMeta({ layout: 'none' })
 
@@ -67,7 +75,8 @@ const {
   getTotal,
   aboutToPay,
   getOrCreateTransaction,
-  fetchOrders
+  fetchOrders,
+  remove
 } = useTransaction()
 
 type ModalValue = 'none' | 'form'
@@ -84,17 +93,26 @@ const columns = [
   {
     key: 'item',
     label: 'Item',
-    class: 'w-[500px] shrink-0 text-lg'
+    class: 'w-[500px] shrink-0 text-lg',
+    rowClass: 'text-left'
   },
   {
     key: 'qty',
     label: 'Qty',
-    class: 'text-lg text-center'
+    class: 'text-lg text-center',
+    rowClass: 'text-center  w-20'
   },
   {
     key: 'price',
     label: 'Price',
-    class: 'text-lg text-center'
+    class: 'text-lg text-center',
+    rowClass: 'text-center w-28'
+  },
+  {
+    key: 'action',
+    label: '',
+    class: 'text-lg text-center',
+    rowClass: 'text-center w-10'
   }
 ]
 
@@ -121,4 +139,18 @@ onBeforeMount(async () => {
   await getOrCreateTransaction()
   await fetchOrders()
 })
+
+const { selectedIndex } = useOrder()
+
+async function onRemove(order: IOrderResponse, index: number): Promise<void> {
+  selectedIndex.value = index
+
+  if (!order) return
+
+  const removed = await remove(order.id!)
+
+  if (removed) {
+    items.value.splice(selectedIndex.value, 1)
+  }
+}
 </script>

@@ -4,27 +4,9 @@ import type {
   ITransactionFormRequest
 } from '~/types'
 import { useStorage } from '@vueuse/core'
-
-const DATA_SERIALIZER = {
-  serializer: {
-    read: (v: any) => (v ? JSON.parse(v) : null),
-    write: (v: any) => JSON.stringify(v)
-  }
-}
+import { DATA_SERIALIZER } from '~/utils'
 
 const barcode = ref('')
-const item = useStorage<IOrderResponse | null>(
-  'product',
-  null,
-  undefined,
-  DATA_SERIALIZER
-)
-const items = useStorage<IOrderResponse[]>(
-  'items',
-  [],
-  undefined,
-  DATA_SERIALIZER
-)
 const aboutToPay = ref(false)
 const tenderAmount = ref(0)
 const transaction = useStorage<ITransaction>(
@@ -36,6 +18,7 @@ const transaction = useStorage<ITransaction>(
 
 export function useTransaction() {
   const http = useHttp()
+  const { items, item } = useOrder()
 
   async function getOrCreateTransaction() {
     const data = await http.post<ITransaction, null>('/api/transactions', null)
@@ -71,6 +54,11 @@ export function useTransaction() {
     await http.post('/api/transactions/create-sales', payload)
   }
 
+  async function remove(orderId: number): Promise<boolean> {
+    await http.remove<IOrderResponse>(`/api/orders/${orderId}`)
+    return true
+  }
+
   async function fetchOrders() {
     const query = { transaction_no: transaction.value?.transaction_no }
     const data = await http.get<IOrderResponse>('/api/orders', query)
@@ -103,6 +91,7 @@ export function useTransaction() {
     createSales,
     getOrCreateTransaction,
     transaction,
-    fetchOrders
+    fetchOrders,
+    remove
   }
 }
