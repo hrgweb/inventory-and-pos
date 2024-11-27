@@ -93,15 +93,24 @@ watchEffect(() => {
 
 const error_msg = ref('')
 
+const { items } = useOrder()
+const { total, barcode } = useTransaction()
+
 async function onPay(): Promise<void> {
   if (getTotal.value > tender_amount.value) {
     focused.value = true
     error_msg.value = 'Tendered amount was insufficient.'
     return
   }
+
   error_msg.value = ''
+
   const completed = await createSales() //save to sales
+
   if (completed) {
+    barcode.value = ''
+    items.value = []
+    total.value = 0
     emit('close')
   }
 }

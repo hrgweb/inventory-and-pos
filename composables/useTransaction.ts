@@ -15,6 +15,7 @@ const transaction = useStorage<ITransaction>(
   undefined,
   DATA_SERIALIZER
 )
+const total = ref(0)
 
 export function useTransaction() {
   const http = useHttp()
@@ -75,11 +76,14 @@ export function useTransaction() {
   const getTotal = computed<number>(() => {
     if (!items.value?.length) return 0
 
-    return items.value.reduce((acc, item) => {
+    const _total = items.value.reduce((acc, item) => {
       const quantity = 1
       const price = item.price ?? 0
       return acc + price * quantity
     }, 0)
+
+    total.value = _total
+    return _total
   })
 
   const getChange = computed<number>(() => {
@@ -99,6 +103,7 @@ export function useTransaction() {
     getOrCreateTransaction,
     transaction,
     fetchOrders,
-    remove
+    remove,
+    total
   }
 }
