@@ -75,7 +75,7 @@ export interface ITransactionFormRequest extends Partial<ITransaction> {}
 
 export enum TransactionStatus {
   PENDING = 'pending',
-  PAID = 'paid',
+  COMPLETED = 'completed',
   CANCELLED = 'cancelled'
 }
 

@@ -45,13 +45,20 @@ export function useTransaction() {
     }
   }
 
-  async function createSales() {
+  async function createSales(): Promise<boolean> {
+    const _transaction = transaction.value
+    const _amount = tenderAmount.value
+
     const payload = {
-      items: items.value,
-      tender_amount: tenderAmount.value
+      transaction_no: _transaction.transaction_no,
+      tender_amount: _amount
     }
 
-    await http.post('/api/transactions/create-sales', payload)
+    const data = await http.post<unknown, Record<string, string | number>>(
+      '/api/transactions/create-sales',
+      payload
+    )
+    return data as boolean
   }
 
   async function remove(orderId: number): Promise<boolean> {

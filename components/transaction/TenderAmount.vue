@@ -100,7 +100,9 @@ async function onPay(): Promise<void> {
     return
   }
   error_msg.value = ''
-  await createSales() //save to sales
-  emit('close')
+  const completed = await createSales() //save to sales
+  if (completed) {
+    emit('close')
+  }
 }
 </script>

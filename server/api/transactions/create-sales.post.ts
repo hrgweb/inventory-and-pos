@@ -1,24 +1,45 @@
 import { serverSupabaseClient } from '#supabase/server'
+import { TransactionStatus } from '~/types'
 
 export default defineEventHandler(async (event) => {
   const client = await serverSupabaseClient(event)
-
-  const body = await readBody(event)
-
-  console.log(body)
+  const { transaction_no } = await readBody(event)
 
   try {
-    const { data, error } = await client.from('').insert(body).select()
+    const transactionPayload = { status: TransactionStatus.COMPLETED } as never
 
-    if (error) {
+    // Update transaction status to `completed`
+    const { error: transactionError } = await client
+      .from('transactions')
+      .update(transactionPayload)
+      .eq('transaction_no', transaction_no)
+      .eq('status', TransactionStatus.PENDING)
+
+    // Transaction fails
+    if (transactionError) {
       throw createError({
         statusCode: 500,
-        statusMessage: error.message
+        statusMessage: transactionError.message
       })
     }
 
-    const result = data && data.length ? data[0] : data
-    return result
+    const salesPayload = { transaction_no } as never
+
+    // Save to sales
+    const { error: salesError } = await client
+      .from('sales')
+      .insert(salesPayload)
+      .select()
+
+    // Sales fails
+    if (salesError) {
+      throw createError({
+        statusCode: 500,
+        statusMessage: salesError.message
+      })
+    }
+
+    return true
   } catch (error) {
     throw error
   }
