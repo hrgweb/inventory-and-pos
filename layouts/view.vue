@@ -20,7 +20,7 @@
         />
 
         <!-- Dropdown -->
-        <UserMenu :is-show="is_show_menu" @click="onShow" />
+        <AppUserMenu :is-show="is_show_menu" @click="onShow" />
       </div>
     </div>
 
@@ -32,7 +32,7 @@
 
 <script setup lang="ts">
 import type { INavigationOptions } from '~/types'
-import UserMenu from '~/components/UserMenu.vue'
+import UserMenu from '~/components/AppUserMenu.vue'
 
 const nav_options = [
   {

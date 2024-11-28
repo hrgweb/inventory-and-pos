@@ -7,8 +7,6 @@ export async function crudHandler(event: H3Event<EventHandlerRequest>) {
   async function create<T>(table: string): Promise<T | null> {
     const body = await readBody(event)
 
-    console.log('body: ', body)
-
     try {
       const { data, error } = await client.from(table).insert(body).select()
 
