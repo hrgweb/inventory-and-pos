@@ -21,7 +21,7 @@ const nav_options = [
     name: 'my_profile',
     label: 'My Profile',
     icon: '',
-    to: '/profile'
+    to: '/admin/profile'
   },
   {
     name: 'logout',

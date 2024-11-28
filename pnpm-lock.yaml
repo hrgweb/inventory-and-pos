@@ -20,6 +20,9 @@ importers:
       '@vueuse/nuxt':
         specifier: ^11.2.0
         version: 11.2.0(magicast@0.3.5)(nuxt@3.14.159(@parcel/watcher@2.5.0)(@types/node@22.9.0)(ioredis@5.4.1)(magicast@0.3.5)(rollup@4.27.2)(terser@5.36.0)(typescript@5.6.3)(vite@5.4.11(@types/node@22.9.0)(terser@5.36.0)))(rollup@4.27.2)(vue@3.5.13(typescript@5.6.3))
+      date-fns:
+        specifier: ^4.1.0
+        version: 4.1.0
       jsbarcode:
         specifier: ^3.11.6
         version: 3.11.6
@@ -1617,6 +1620,9 @@ packages:
 
   data-uri-to-buffer@0.0.3:
     resolution: {integrity: sha512-Cp+jOa8QJef5nXS5hU7M1DWzXPEIoVR3kbV0dQuVGwROZg8bGf1DcCnkmajBTnvghTtSNMUdRrPjgaT6ZQucbw==}
+
+  date-fns@4.1.0:
+    resolution: {integrity: sha512-Ukq0owbQXxa/U3EGtsdVBkR1w7KOQ5gIBqdH2hkvknzZPYvBxb/aa6E8L7tmjFtkwZBu3UXBbjIgPo/Ez4xaNg==}
 
   db0@0.2.1:
     resolution: {integrity: sha512-BWSFmLaCkfyqbSEZBQINMVNjCVfrogi7GQ2RSy1tmtfK9OXlsup6lUMwLsqSD7FbAjD04eWFdXowSHHUp6SE/Q==}
@@ -5657,6 +5663,8 @@ snapshots:
       assert-plus: 1.0.0
 
   data-uri-to-buffer@0.0.3: {}
+
+  date-fns@4.1.0: {}
 
   db0@0.2.1: {}
 

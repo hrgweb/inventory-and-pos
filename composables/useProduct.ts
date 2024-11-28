@@ -3,7 +3,7 @@ import type {
   ICategory,
   IProductFormRequest,
   IProductMapped,
-  IProductResponse
+  IItemResponse
 } from '~/types'
 import { formatNumber, mapItem } from '~/utils'
 
@@ -16,6 +16,7 @@ const page = ref(1)
 const selectedIndex = ref(0)
 
 export function useProduct() {
+  const http = useHttp()
   const notification = useNotification()
 
   function addToCart() {
@@ -37,66 +38,40 @@ export function useProduct() {
     return null
   }
 
-  async function update(
-    payload: IProductFormRequest
-  ): Promise<IProduct | null> {
-    try {
-      const data = await $fetch<IProduct>(`/api/products/${payload.id}`, {
-        method: 'PATCH',
-        body: JSON.stringify(payload)
-      })
-      const content = mapProduct(data)
-      list.value[selectedIndex.value] = content
-    } catch (error) {
-      console.log(error)
-    }
-    return null
+  async function update(payload: IProductFormRequest) {
+    const data = await http.update<IProduct, IProductFormRequest>(
+      `/api/products/${payload.id}`,
+      payload
+    )
+    const content = mapProduct(data)
+    list.value[selectedIndex.value] = content
   }
 
-  async function fetchCategories(): Promise<ICategory[]> {
-    try {
-      const data = await $fetch<ICategory[]>('/api/categories')
-      categories.value = data
-    } catch (error) {
-      console.log(error)
-    }
-    return []
+  async function fetchCategories() {
+    const data = await http.get<ICategory>('/api/categories')
+    categories.value = data
   }
 
-  async function fetchProducts({
-    search
-  }: {
-    search: string
-  }): Promise<IProductResponse | null> {
+  async function fetchProducts({ search }: { search: string }) {
     const _page = page.value
 
     if (!_page) return null
 
-    try {
-      const query = {
-        page: toValue(_page),
-        search
-      }
-      const data = await $fetch<IProductResponse>('/api/products', { query })
-      list.value = data.items.map((item) =>
-        mapProduct(item)
-      ) as IProductMapped[]
-      listCount.value = data.total
-    } catch (error) {
-      console.log(error)
+    const query = {
+      page: toValue(_page),
+      search
     }
-    return null
+    const data = await http.getCustom<IItemResponse<IProduct>>(
+      '/api/products',
+      query
+    )
+    list.value = data.items.map((item) => mapProduct(item)) as IProductMapped[]
+    listCount.value = data.total
   }
 
   async function remove(id: number): Promise<void> {
-    try {
-      await $fetch<void>(`/api/products/${id}`, {
-        method: 'DELETE'
-      })
-      list.value.splice(selectedIndex.value, 1)
-    } catch (error) {
-      console.log(error)
-    }
+    await http.remove<IProduct>(`/api/products/${id}`)
+    list.value.splice(selectedIndex.value, 1)
   }
 
   function mapProduct(item: IProduct): IProductMapped {

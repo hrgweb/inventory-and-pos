@@ -1,6 +1,5 @@
 import { serverSupabaseClient } from '#supabase/server'
-import { H3Event, EventHandlerRequest, H3Error } from 'h3'
-import type { ICategory } from '~/types'
+import { H3Event, EventHandlerRequest } from 'h3'
 
 export async function crudHandler(event: H3Event<EventHandlerRequest>) {
   const client = await serverSupabaseClient(event)
@@ -17,6 +16,7 @@ export async function crudHandler(event: H3Event<EventHandlerRequest>) {
           statusMessage: error.message
         })
       }
+
       const result = data && data.length ? data[0] : data
       return result as T
     } catch (error) {
@@ -24,9 +24,34 @@ export async function crudHandler(event: H3Event<EventHandlerRequest>) {
     }
   }
 
+  async function createMany<T>(table: string): Promise<T[]> {
+    const body = await readBody(event)
+    const items = body.items
+
+    console.log('items: ', items)
+
+    try {
+      const { data, error } = await client.from(table).insert(items).select()
+
+      console.log('data: ', data)
+
+      if (error) {
+        throw createError({
+          statusCode: 500,
+          statusMessage: error.message
+        })
+      }
+
+      return data as T[]
+    } catch (error) {
+      throw error
+    }
+  }
+
   async function findAll<T>(
     table: string,
-    select = '*'
+    select = '*',
+    { columnToFilter = 'name' }: { columnToFilter: string }
   ): Promise<{ items: T[]; total: number }> {
     const query = getQuery(event)
 
@@ -40,7 +65,7 @@ export async function crudHandler(event: H3Event<EventHandlerRequest>) {
       const { count } = await client
         .from('products')
         .select('*', { count: 'exact', head: true })
-        .ilike('name', `${search}%`)
+        .ilike(columnToFilter, `${search}%`)
 
       const { data, error } = await client
         .from(table)
@@ -65,12 +90,20 @@ export async function crudHandler(event: H3Event<EventHandlerRequest>) {
   async function findMany<T>(
     table: string,
     select = '*',
-    { column, order }: { column: string; order: string }
+    {
+      column,
+      order,
+      columnToFilter = 'name'
+    }: { column: string; order: string; columnToFilter?: string }
   ): Promise<T[]> {
+    const query = getQuery(event)
+    const search = query?.search || ''
+
     try {
       const { data, error } = await client
         .from(table)
         .select(select)
+        .ilike(columnToFilter, `${search}%`)
         .order(column, { ascending: order === 'asc' ? true : false })
 
       if (error) throw error
@@ -81,14 +114,17 @@ export async function crudHandler(event: H3Event<EventHandlerRequest>) {
     }
   }
 
-  async function update<T>(table: string): Promise<T | null> {
-    const productId = getRouterParam(event, 'productId')
+  async function update<T>(
+    table: string,
+    paramIdName: string
+  ): Promise<T | null> {
+    const itemId = getRouterParam(event, paramIdName)
     const body = (await readBody(event)) as never
 
-    if (!productId) {
+    if (!itemId) {
       throw createError({
         statusCode: 404,
-        statusMessage: 'Product not found'
+        statusMessage: 'Item not found'
       })
     }
 
@@ -96,7 +132,7 @@ export async function crudHandler(event: H3Event<EventHandlerRequest>) {
       const { data, error } = await client
         .from(table)
         .update(body)
-        .eq('id', productId)
+        .eq('id', itemId)
         .select()
 
       if (error) {
@@ -110,21 +146,18 @@ export async function crudHandler(event: H3Event<EventHandlerRequest>) {
     }
   }
 
-  async function remove<T>(table: string): Promise<T> {
-    const productId = getRouterParam(event, 'productId')
+  async function remove<T>(table: string, paramIdName: string): Promise<T> {
+    const itemId = getRouterParam(event, paramIdName)
 
-    if (!productId) {
+    if (!itemId) {
       throw createError({
         statusCode: 404,
-        statusMessage: 'Product not found'
+        statusMessage: 'Item not found'
       })
     }
 
     try {
-      const { data, error } = await client
-        .from(table)
-        .delete()
-        .eq('id', productId)
+      const { data, error } = await client.from(table).delete().eq('id', itemId)
 
       if (error) {
         throw error
@@ -136,5 +169,5 @@ export async function crudHandler(event: H3Event<EventHandlerRequest>) {
     }
   }
 
-  return { create, findAll, update, findMany, remove }
+  return { create, createMany, findAll, update, findMany, remove }
 }

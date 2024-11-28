@@ -1,9 +1,17 @@
 <template>
+  <input
+    v-model="barcode"
+    class="py-1 px-2"
+    type="text"
+    ref="barcode_input"
+    @input="onScan"
+  />
+
   <div class="flex flex-col w-full h-screen">
     <div
       class="bg-slate-800 text-white text-8xl p-6 font-medium flex justify-end"
     >
-      <SharedDisplayNumber value="150" />
+      <SharedDisplayNumber :value="getTotal.toString() || '0'" />
     </div>
 
     <div class="uppercase text-4xl bg-slate-600 font-medium text-white p-3">
@@ -11,101 +19,148 @@
     </div>
 
     <div class="flex bg-slate-200 flex-1">
-      <div class="w-[700px] flex">
+      <div class="flex w-[70%]">
         <UTable
           :rows="items"
           :columns="columns"
           :ui="{ td: { padding: 'py-1' } }"
-          class="overflow-y-auto shrink-0"
+          class="overflow-y-auto w-full"
         >
           <template #item-data="{ row }">
             <span class="uppercase text-2xl text-slate-800">{{
-              row.product_name
+              row.product.name
             }}</span>
           </template>
           <template #qty-data="{ row }">
-            <span class="uppercase text-2xl text-slate-800">{{ row.qty }}</span>
+            <span class="uppercase text-2xl text-slate-800">{{ qty }}</span>
           </template>
-          <template #subtotal-data="{ row }">
+          <template #price-data="{ row }">
             <span class="uppercase text-2xl text-slate-800">{{
-              row.subtotal_formatted
+              row.price
             }}</span>
           </template>
+          <template #action-data="{ row, index }">
+            <Icon
+              name="heroicons:trash"
+              class="cursor-pointer text-xl text-red-500"
+              @click="onRemove(row, index)"
+            />
+          </template>
+          <template #empty-state>&nbsp;</template>
         </UTable>
       </div>
 
       <div class="flex-1 shadow p-6 space-y-6">
-        <div class="flex justify-between items-end">
-          <span class="uppercase text-xl w-[100px] text-right pr-4">item</span>
-          <span
-            class="uppercase text-4xl bg-slate-800 text-white p-4 text-right w-full"
-            >248938483489343893</span
-          >
-        </div>
-        <div class="flex justify-between items-end">
-          <span class="uppercase text-xl w-[100px] text-right pr-4">qty</span>
-          <span
-            class="uppercase text-4xl bg-slate-800 text-white p-3 text-right w-full"
-            >1</span
-          >
-        </div>
-        <div class="flex justify-between items-end">
-          <span class="uppercase text-xl w-[100px] text-right pr-4">price</span>
-          <span
-            class="uppercase text-4xl bg-slate-800 text-white p-3 text-right w-full"
-            >150</span
-          >
-        </div>
-        <div class="flex justify-between items-end">
-          <span class="uppercase text-xl w-[100px] text-right pr-4">total</span>
-
-          <SharedDisplayNumber
-            value="1500"
-            :show-currency="false"
-            class="text-4xl bg-slate-800 text-white p-3 w-full text-right"
-          />
-        </div>
+        <!-- TODO: will think what to put in here -->
       </div>
     </div>
+
+    <UModal v-model="show_modal">
+      <component :is="component_to_use" @close="modal = 'none'" />
+    </UModal>
   </div>
 </template>
 
 <script setup lang="ts">
-import type { IItem } from '~/types'
-import { formatNumber } from '~/utils'
+import { useFocus, useMagicKeys } from '@vueuse/core'
+import TenderAmount from '~/components/transaction/TenderAmount.vue'
+import type { IOrderResponse } from '~/types'
 
 definePageMeta({ layout: 'none' })
+
+const {
+  barcode,
+  findProduct,
+  items,
+  getTotal,
+  aboutToPay,
+  getOrCreateTransaction,
+  fetchOrders,
+  remove
+} = useTransaction()
+
+type ModalValue = 'none' | 'form'
+
+const qty = ref(1)
+
+const {
+  modal,
+  showModal: show_modal,
+  componentToUse: component_to_use
+} = useModalCustom<ModalValue>()
 
 const columns = [
   {
     key: 'item',
     label: 'Item',
-    class: 'w-[500px] shrink-0 text-lg'
+    class: 'w-[500px] shrink-0 text-lg',
+    rowClass: 'text-left'
   },
   {
     key: 'qty',
     label: 'Qty',
-    class: 'text-lg'
+    class: 'text-lg text-center',
+    rowClass: 'text-center  w-20'
   },
   {
-    key: 'subtotal',
-    label: 'Subtotal',
-    class: 'text-lg'
+    key: 'price',
+    label: 'Price',
+    class: 'text-lg text-center',
+    rowClass: 'text-center w-28'
+  },
+  {
+    key: 'action',
+    label: '',
+    class: 'text-lg text-center',
+    rowClass: 'text-center w-10'
   }
 ]
 
-const items = ref<IItem[]>([])
+async function onScan() {
+  await findProduct({ barcode: barcode.value })
+  barcode.value = ''
+}
 
-const { getItems } = useCart()
+const barcode_input = ref()
+const { focused } = useFocus(barcode_input, { initialValue: true })
 
+const { ctrl, enter } = useMagicKeys()
+
+const notification = useNotification()
+
+// Open
 watchEffect(() => {
-  items.value = getItems.value
-  console.log('items: ', items.value)
+  if (ctrl.value && enter.value) {
+    if (items.value.length === 0) {
+      notification.warning({
+        title: 'No items',
+        description: 'Please add an item first.'
+      })
+      return
+    }
+
+    aboutToPay.value = true
+    modal.value = 'form'
+    component_to_use.value = TenderAmount
+  }
 })
 
-function updateQty(i: number, qty: number) {
-  items.value[i].qty = qty
-  items.value[i].subtotal = items.value[i].price! * qty
-  items.value[i].subtotal_formatted = formatNumber(items.value[i].price! * qty)
+onBeforeMount(async () => {
+  await getOrCreateTransaction()
+  await fetchOrders()
+})
+
+const { selectedIndex } = useOrder()
+
+async function onRemove(order: IOrderResponse, index: number): Promise<void> {
+  selectedIndex.value = index
+
+  if (!order) return
+
+  const removed = await remove(order.id!)
+
+  if (removed) {
+    items.value.splice(selectedIndex.value, 1)
+  }
 }
 </script>

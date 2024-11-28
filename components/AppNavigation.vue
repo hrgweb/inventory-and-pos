@@ -20,73 +20,73 @@ const nav_options = [
     name: 'categories',
     label: 'Categories',
     icon: '',
-    to: '/categories'
+    to: '/admin/categories'
   },
   {
     name: 'products',
     label: 'Products',
     icon: '',
-    to: '/products'
+    to: '/admin/products'
   },
   {
     name: 'all_products',
     label: 'All Products',
     icon: '',
-    to: '/all-products'
+    to: '/admin/all-products'
   },
   {
     name: 'payments',
     label: 'Payments',
     icon: '',
-    to: '/payments'
+    to: '/admin/payments'
   },
   {
     name: 'users',
     label: 'Users',
     icon: '',
-    to: '/users'
+    to: '/admin/users'
   },
   {
     name: 'insights',
     label: 'Insights',
     icon: '',
-    to: '/insights'
+    to: '/admin/insights'
   },
   {
     name: 'settings',
     label: 'Settings',
     icon: '',
-    to: '/settings'
+    to: '/admin/settings'
   },
   {
     name: 'personal',
     label: 'Personal',
     icon: '',
-    to: '/personal'
+    to: '/admin/personal'
   },
   {
     name: 'upgrades',
     label: 'Upgrades',
     icon: '',
-    to: '/upgrades'
+    to: '/admin/upgrades'
   },
   {
     name: 'guides',
     label: 'Guides',
     icon: '',
-    to: '/guides'
+    to: '/admin/guides'
   },
   {
     name: 'trainings',
     label: 'Trainings',
     icon: '',
-    to: '/trainings'
+    to: '/admin/trainings'
   },
   {
     name: 'logout',
     label: 'Logout',
     icon: '',
-    to: '/logout'
+    to: '/admin/logout'
   }
 ] as INavigationOptions[]
 </script>
