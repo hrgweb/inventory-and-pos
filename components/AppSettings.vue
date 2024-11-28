@@ -43,7 +43,7 @@ const state = reactive<State>({
   trial_period_days: 30
 })
 
-const { create } = useSetting()
+const { create } = useSettings()
 const notification = useNotification()
 
 async function onSubmit(event: FormSubmitEvent<Schema>) {
