@@ -1,4 +1,7 @@
 <template>
+  <!-- Trial period alert -->
+  <TrialPeriodAlert />
+
   <NuxtLayout>
     <NuxtPage />
 

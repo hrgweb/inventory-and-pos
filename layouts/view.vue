@@ -51,13 +51,13 @@ const nav_options = [
     name: 'cart',
     label: 'Cart',
     icon: '',
-    to: '/cart'
+    to: '/admin/cart'
   },
   {
     name: 'barcode',
     label: 'Barcode',
     icon: '',
-    to: '/barcode'
+    to: '/admin/barcode'
   }
 ] as INavigationOptions[]
 

@@ -14,7 +14,7 @@ const nav_options = [
     name: 'dashboard',
     label: 'Dashboard',
     icon: '',
-    to: '/admin'
+    to: '/'
   },
   {
     name: 'categories',

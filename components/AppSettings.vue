@@ -44,8 +44,10 @@ const state = reactive<State>({
 })
 
 const { create } = useSetting()
+const notification = useNotification()
 
 async function onSubmit(event: FormSubmitEvent<Schema>) {
   await create(event.data)
+  notification.success({ title: 'Settings saved successfully' })
 }
 </script>

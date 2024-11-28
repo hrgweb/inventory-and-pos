@@ -51,25 +51,25 @@ const nav_options = [
     name: 'shop',
     label: 'Shop',
     icon: '',
-    to: '/shop'
+    to: '/admin/shop'
   },
   {
     name: 'cart',
     label: 'Cart',
     icon: '',
-    to: '/cart'
+    to: '/admin/cart'
   },
   {
     name: 'barcode',
     label: 'Barcode',
     icon: '',
-    to: '/barcode'
+    to: '/admin/barcode'
   },
   {
     name: 'pos',
     label: 'Pos',
     icon: '',
-    to: '/pos'
+    to: '/admin/pos'
   }
 ] as INavigationOptions[]
 
