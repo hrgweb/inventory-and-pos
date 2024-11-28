@@ -11,7 +11,7 @@ export default defineNuxtConfig({
       login: '/login',
       callback: '/confirm',
       include: undefined,
-      exclude: ['/pos', '/playground', '/products', '/categories'],
+      exclude: ['/admin/*', '/pos'],
       cookieRedirect: false
     }
   }
