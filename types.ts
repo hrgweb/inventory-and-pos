@@ -94,3 +94,13 @@ export interface IOrderFormRequest extends Partial<IOrder> {}
 export interface IOrderResponse extends Partial<Omit<IOrder, 'product_id'>> {
   product: IProduct
 }
+
+export type TrialPeriodDays = 30 | 45 | 60 | 75 | 90
+
+export interface ISetting {
+  trial_period_days: TrialPeriodDays
+  trial_period_start: Date
+  triald_period_end: Date
+}
+
+export interface ISettingFormRequest extends Partial<ISetting> {}
