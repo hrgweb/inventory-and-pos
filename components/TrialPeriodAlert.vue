@@ -13,7 +13,7 @@
 import { format } from 'date-fns'
 
 interface Props {
-  endDate?: Date
+  endDate?: Date | string
   isShow?: boolean
 }
 

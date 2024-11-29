@@ -1,5 +1,7 @@
 <template>
   <div class="w-[400px] p-6 m-auto">
+    <h3 class="text-2xl font-medium pb-6 text-slate-800">Sign Up</h3>
+
     <UForm
       :schema="schema"
       :state="state"
@@ -14,6 +16,13 @@
       </UFormGroup>
       <div>
         <UButton type="submit" label="Save" />
+        <UButton
+          type="button"
+          variant="link"
+          color="white"
+          @click="navigateTo('/login')"
+          >Already have an account? Sign In</UButton
+        >
       </div>
     </UForm>
   </div>

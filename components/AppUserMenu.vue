@@ -50,7 +50,7 @@ async function onNavClick(nav: INavigationOptions) {
   if (nav.name === 'logout') {
     const result = await signOut()
     if (result) {
-      await navigateTo('/')
+      return navigateTo('/login')
     }
   }
 }

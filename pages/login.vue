@@ -19,8 +19,12 @@
       </UFormGroup>
       <div class="pt-2">
         <UButton type="submit"> Submit </UButton>
-        <UButton type="button" variant="soft" color="white" @click="onRegister"
-          >Register</UButton
+        <UButton
+          type="button"
+          variant="soft"
+          color="white"
+          @click="navigateTo('/register')"
+          >Sign Up</UButton
         >
       </div>
     </UForm>
@@ -32,7 +36,8 @@ import { z } from 'zod'
 import type { FormSubmitEvent } from '#ui/types'
 
 definePageMeta({
-  layout: 'none'
+  layout: 'none',
+  middleware: 'auth'
 })
 
 const schema = z.object({
@@ -56,11 +61,7 @@ const { signIn, _error } = useAuth()
 async function onSignIn(event: FormSubmitEvent<Schema>) {
   const data = await signIn(event.data)
   if (data) {
-    await navigateTo('/')
+    await navigateTo('/admin')
   }
-}
-
-async function onRegister() {
-  await navigateTo('/register')
 }
 </script>
