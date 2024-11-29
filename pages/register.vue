@@ -1,27 +1,19 @@
 <template>
   <div class="w-[400px] p-6 m-auto">
-    <h3 class="text-2xl font-medium pb-6 text-slate-800">Sign In</h3>
-
-    <UAlert
-      v-if="_error"
-      :title="_error?.message"
-      variant="solid"
-      color="red"
-      class="pt-6 mb-6"
-    />
-
-    <UForm :schema="schema" :state="state" class="space-y-4" @submit="onSignIn">
+    <UForm
+      :schema="schema"
+      :state="state"
+      class="space-y-4"
+      @submit="onRegister"
+    >
       <UFormGroup label="Email" name="email">
         <UInput v-model="state.email" />
       </UFormGroup>
       <UFormGroup label="Password" name="password">
         <UInput v-model="state.password" type="password" />
       </UFormGroup>
-      <div class="pt-2">
-        <UButton type="submit"> Submit </UButton>
-        <UButton type="button" variant="soft" color="white" @click="onRegister"
-          >Register</UButton
-        >
+      <div>
+        <UButton type="submit" label="Save" />
       </div>
     </UForm>
   </div>
@@ -51,16 +43,20 @@ const state = reactive({
   password: undefined
 })
 
-const { signIn, _error } = useAuth()
+const { register } = useAuth()
 
-async function onSignIn(event: FormSubmitEvent<Schema>) {
-  const data = await signIn(event.data)
+async function onRegister(event: FormSubmitEvent<Schema>) {
+  const data = await register(event.data)
   if (data) {
     await navigateTo('/')
+    reset()
   }
 }
 
-async function onRegister() {
-  await navigateTo('/register')
+function reset() {
+  state.email = undefined
+  state.password = undefined
 }
+
+onMounted(() => reset())
 </script>

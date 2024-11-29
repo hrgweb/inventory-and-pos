@@ -1,8 +1,5 @@
 <template>
-  <pre>here: {{ settings }}</pre>
-
-  <!-- Trial period alert -->
-  <TrialPeriodAlert />
+  <TrialPeriodAlert v-if="settings" :end-date="settings?.trial_period_end!" />
 
   <NuxtLayout>
     <NuxtPage />
