@@ -1,12 +1,4 @@
 <template>
-  <input
-    v-model="barcode"
-    class="py-1 px-2"
-    type="text"
-    ref="barcode_input"
-    @input="onScan"
-  />
-
   <div class="flex flex-col w-full h-screen">
     <div
       class="bg-slate-800 text-white text-8xl p-6 font-medium flex justify-end"
@@ -19,7 +11,7 @@
     </div>
 
     <div class="flex bg-slate-200 flex-1">
-      <div class="flex w-[70%]">
+      <div class="flex w-[60%]">
         <UTable
           :rows="items"
           :columns="columns"
@@ -51,7 +43,41 @@
       </div>
 
       <div class="flex-1 shadow p-6 space-y-6">
-        <!-- TODO: will think what to put in here -->
+        <div class="flex justify-between items-end">
+          <span class="uppercase text-xl w-[150px] text-right pr-4">item</span>
+          <input
+            v-model="barcode"
+            class="uppercase text-4xl bg-slate-800 text-white p-4 text-right w-full"
+            type="text"
+            ref="barcode_input"
+            @input="onScan"
+          />
+        </div>
+        <div class="flex justify-between items-end">
+          <span class="uppercase text-xl w-[150px] text-right pr-4"
+            >barcode</span
+          >
+          <span
+            class="uppercase text-4xl bg-slate-800 text-white p-4 text-right w-full"
+            >{{ getProduct?.barcode }}</span
+          >
+        </div>
+        <div class="flex justify-between items-end">
+          <span class="uppercase text-xl w-[150px] text-right pr-4">qty</span>
+          <span
+            class="uppercase text-4xl bg-slate-800 text-white p-3 text-right w-full"
+            >{{ qty }}</span
+          >
+        </div>
+        <div class="flex justify-between items-end">
+          <span class="uppercase text-xl w-[150px] text-right pr-4">price</span>
+
+          <SharedDisplayNumber
+            :value="getProduct?.price?.toString() || '0'"
+            :show-currency="false"
+            class="text-4xl bg-slate-800 text-white p-3 w-full text-right"
+          />
+        </div>
       </div>
     </div>
 
@@ -150,7 +176,7 @@ onBeforeMount(async () => {
   await fetchOrders()
 })
 
-const { selectedIndex } = useOrder()
+const { selectedIndex, item } = useOrder()
 
 async function onRemove(order: IOrderResponse, index: number): Promise<void> {
   selectedIndex.value = index
@@ -163,4 +189,6 @@ async function onRemove(order: IOrderResponse, index: number): Promise<void> {
     items.value.splice(selectedIndex.value, 1)
   }
 }
+
+const getProduct = computed(() => item.value?.product)
 </script>
