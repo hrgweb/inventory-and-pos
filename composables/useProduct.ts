@@ -9,12 +9,12 @@ import { formatNumber, mapItem } from '~/utils'
 
 export function useProduct() {
   const list = useState<IProduct[] | IProductMapped[]>('products', () => [])
-  const isAdd = ref(false)
-  const selected = ref<IProduct | null>(null)
+  const isAdd = useState('product_is_add', () => false)
+  const selected = useState<IProduct | null>('product_selected', () => null)
   const categories = ref<ICategory[]>([])
   const listCount = ref(0)
   const page = ref(1)
-  const selectedIndex = ref(0)
+  const selectedIndex = useState('product_selected_index', () => 0)
 
   const http = useHttp()
   const notification = useNotification()

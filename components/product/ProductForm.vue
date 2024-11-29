@@ -1,6 +1,4 @@
 <template>
-  <pre>{{ list }}</pre>
-
   <div>
     <div class="flex justify-between items-center pb-6">
       <AppPageTitle title="New Product" />
@@ -107,7 +105,7 @@ import type { FormSubmitEvent } from '#ui/types'
 import type { IProductFormRequest } from '~/types'
 
 const { choose, chooseGenerate, barcode, barcodeSvg } = useBarcode()
-const { create, getCategories, isAdd, selected, update, list } = useProduct()
+const { create, getCategories, isAdd, selected, update } = useProduct()
 
 const schema = z.object({
   name: z.string().min(1, { message: 'Product name is required' }),
