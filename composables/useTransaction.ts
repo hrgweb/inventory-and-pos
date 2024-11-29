@@ -8,7 +8,7 @@ import { DATA_SERIALIZER } from '~/utils'
 
 export function useTransaction() {
   const barcode = ref('')
-  const aboutToPay = ref(false)
+  const aboutToPay = useState('about_to_pay', () => false)
   const tenderAmount = ref(0)
   const transaction = useStorage<ITransaction>(
     'transaction',
