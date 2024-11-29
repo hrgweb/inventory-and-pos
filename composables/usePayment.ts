@@ -1,6 +1,5 @@
-const modal = ref(false)
-
 export function usePayment() {
+  const modal = ref(false)
   const isAdd = ref(false)
 
   function add() {

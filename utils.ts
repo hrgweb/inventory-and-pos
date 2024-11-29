@@ -51,3 +51,10 @@ export function generateHash(len = 12) {
   }
   return result
 }
+
+export const DATA_SERIALIZER = {
+  serializer: {
+    read: (v: any) => (v ? JSON.parse(v) : null),
+    write: (v: any) => JSON.stringify(v)
+  }
+}

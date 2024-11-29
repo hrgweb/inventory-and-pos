@@ -75,7 +75,7 @@ export interface ITransactionFormRequest extends Partial<ITransaction> {}
 
 export enum TransactionStatus {
   PENDING = 'pending',
-  PAID = 'paid',
+  COMPLETED = 'completed',
   CANCELLED = 'cancelled'
 }
 
@@ -93,4 +93,23 @@ export interface IOrderFormRequest extends Partial<IOrder> {}
 
 export interface IOrderResponse extends Partial<Omit<IOrder, 'product_id'>> {
   product: IProduct
+}
+
+export type TrialPeriodDays = 30 | 45 | 60 | 75 | 90
+
+export interface ISetting {
+  trial_period_days: TrialPeriodDays
+  trial_period_start: Date | null
+  trial_period_end: Date | null
+}
+
+export interface ISettingFormRequest extends Partial<ISetting> {}
+
+export interface ISettingResponse extends Partial<ISetting> {}
+
+export interface IDaysRemaining {
+  days: number
+  hours: number
+  minutes: number
+  seconds: number
 }

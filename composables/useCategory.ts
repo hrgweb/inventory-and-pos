@@ -1,12 +1,12 @@
 import type { ICategory, ICategoryFormRequest } from '~/types'
 
-const isAdd = ref(false)
-const selected = ref<ICategory | null>(null)
-const list = ref<ICategory[]>([])
-const listCount = ref(0)
-const selectedIndex = ref(0)
-
 export function useCategory() {
+  const isAdd = ref(false)
+  const selected = ref<ICategory | null>(null)
+  const list = ref<ICategory[]>([])
+  const listCount = ref(0)
+  const selectedIndex = ref(0)
+
   const http = useHttp()
 
   async function fetchCategories({ search }: { search: string }) {

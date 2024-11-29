@@ -7,10 +7,9 @@ import type { BarcodeOptions } from '~/types'
 import JsBarcode from 'jsbarcode'
 import { DOMImplementation, XMLSerializer } from 'xmldom'
 
-const modal = ref<BarcodeOptions>('none')
-const componentToUse = shallowRef(BarcodeChoose)
-
 export function useBarcode() {
+  const modal = ref<BarcodeOptions>('none')
+  const componentToUse = shallowRef(BarcodeChoose)
   const barcodeSvg = ref<HTMLOrSVGElement | string | null>(null)
   const barcode = ref('')
   const barcodeSvgFile = ref<File | null>(null)

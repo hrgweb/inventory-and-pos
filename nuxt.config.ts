@@ -7,11 +7,12 @@ export default defineNuxtConfig({
     url: process.env.SUPABASE_URL,
     key: process.env.SUPABASE_KEY,
     serviceKey: process.env.SUPABASE_SERVICE_KEY,
+    redirect: false,
     redirectOptions: {
       login: '/login',
       callback: '/confirm',
       include: undefined,
-      exclude: ['/pos', '/playground', '/products', '/categories'],
+      exclude: ['/register', '/pos'],
       cookieRedirect: false
     }
   }

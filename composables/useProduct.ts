@@ -7,15 +7,15 @@ import type {
 } from '~/types'
 import { formatNumber, mapItem } from '~/utils'
 
-const isAdd = ref(false)
-const selected = ref<IProduct | null>(null)
-const list = ref<IProduct[] | IProductMapped[]>([])
-const categories = ref<ICategory[]>([])
-const listCount = ref(0)
-const page = ref(1)
-const selectedIndex = ref(0)
-
 export function useProduct() {
+  const list = useState<IProduct[] | IProductMapped[]>('products', () => [])
+  const isAdd = ref(false)
+  const selected = ref<IProduct | null>(null)
+  const categories = ref<ICategory[]>([])
+  const listCount = ref(0)
+  const page = ref(1)
+  const selectedIndex = ref(0)
+
   const http = useHttp()
   const notification = useNotification()
 
@@ -65,6 +65,9 @@ export function useProduct() {
       '/api/products',
       query
     )
+
+    if (!data.items || data.items.length === 0) return []
+
     list.value = data.items.map((item) => mapProduct(item)) as IProductMapped[]
     listCount.value = data.total
   }

@@ -12,6 +12,14 @@ export default defineEventHandler(async (event) => {
 
     if (error) throw error
 
+    // No product foun by barcode
+    if (!data.length) {
+      throw createError({
+        statusCode: 404,
+        statusMessage: 'Product not found'
+      })
+    }
+
     return data[0] as IProduct
   }
 

@@ -31,7 +31,7 @@
         <input
           v-model.number="tender_amount"
           id="amount"
-          ref="amount"
+          ref="amountInput"
           type="text"
           class="text-4xl p-6 relative block w-full disabled:cursor-not-allowed disabled:opacity-75 focus:outline-none border-0 form-input rounded-md placeholder-gray-400 dark:placeholder-gray-500 px-2.5 py-1.5 shadow-sm bg-white dark:bg-gray-900 text-gray-900 dark:text-white ring-1 ring-inset ring-gray-300 dark:ring-gray-700 focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400"
           :class="[error_msg ? 'focus:ring-red-500' : 'ring-1 ring-gray-300']"
@@ -63,11 +63,14 @@ const {
   aboutToPay,
   tenderAmount: tender_amount,
   getChange,
-  createSales
+  createSales,
+  total,
+  barcode,
+  getOrCreateTransaction
 } = useTransaction()
 
-const amount = ref()
-const { focused } = useFocus(amount, { initialValue: true })
+const amountInput = ref()
+const { focused } = useFocus(amountInput, { initialValue: true })
 
 const { enter, escape } = useMagicKeys()
 
@@ -76,7 +79,7 @@ const emit = defineEmits<{
 }>()
 
 // Press ENTER and must be the modal tender amount is open
-watchEffect(() => {
+const stopPay = watchEffect(() => {
   if (aboutToPay.value && enter.value) {
     focused.value = true
     onPay()
@@ -93,14 +96,28 @@ watchEffect(() => {
 
 const error_msg = ref('')
 
+const { items } = useOrder()
+
 async function onPay(): Promise<void> {
   if (getTotal.value > tender_amount.value) {
     focused.value = true
     error_msg.value = 'Tendered amount was insufficient.'
     return
   }
+
+  stopPay()
+
   error_msg.value = ''
-  await createSales() //save to sales
-  emit('close')
+
+  const completed = await createSales() //save to sales
+
+  if (completed) {
+    barcode.value = ''
+    items.value = []
+    total.value = 0
+    tender_amount.value = 0
+    await getOrCreateTransaction()
+    emit('close')
+  }
 }
 </script>

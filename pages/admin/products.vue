@@ -33,6 +33,8 @@ import ProductBarcode from '~/components/product/ProductBarcode.vue'
 import type { IProduct } from '~/types'
 import { useDebounceFn } from '@vueuse/core'
 
+definePageMeta({ middleware: 'auth' })
+
 const { isAdd, selected, fetchCategories, fetchProducts, list, page } =
   useProduct()
 

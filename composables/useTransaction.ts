@@ -4,38 +4,22 @@ import type {
   ITransactionFormRequest
 } from '~/types'
 import { useStorage } from '@vueuse/core'
-
-const DATA_SERIALIZER = {
-  serializer: {
-    read: (v: any) => (v ? JSON.parse(v) : null),
-    write: (v: any) => JSON.stringify(v)
-  }
-}
-
-const barcode = ref('')
-const item = useStorage<IOrderResponse | null>(
-  'product',
-  null,
-  undefined,
-  DATA_SERIALIZER
-)
-const items = useStorage<IOrderResponse[]>(
-  'items',
-  [],
-  undefined,
-  DATA_SERIALIZER
-)
-const aboutToPay = ref(false)
-const tenderAmount = ref(0)
-const transaction = useStorage<ITransaction>(
-  'transaction',
-  null,
-  undefined,
-  DATA_SERIALIZER
-)
+import { DATA_SERIALIZER } from '~/utils'
 
 export function useTransaction() {
+  const barcode = ref('')
+  const aboutToPay = ref(false)
+  const tenderAmount = ref(0)
+  const transaction = useStorage<ITransaction>(
+    'transaction',
+    null,
+    undefined,
+    DATA_SERIALIZER
+  )
+  const total = ref(0)
+
   const http = useHttp()
+  const { items, item } = useOrder()
 
   async function getOrCreateTransaction() {
     const data = await http.post<ITransaction, null>('/api/transactions', null)
@@ -62,13 +46,25 @@ export function useTransaction() {
     }
   }
 
-  async function createSales() {
+  async function createSales(): Promise<boolean> {
+    const _transaction = transaction.value
+    const _amount = tenderAmount.value
+
     const payload = {
-      items: items.value,
-      tender_amount: tenderAmount.value
+      transaction_no: _transaction.transaction_no,
+      tender_amount: _amount
     }
 
-    await http.post('/api/transactions/create-sales', payload)
+    const data = await http.post<unknown, Record<string, string | number>>(
+      '/api/transactions/create-sales',
+      payload
+    )
+    return data as boolean
+  }
+
+  async function remove(orderId: number): Promise<boolean> {
+    await http.remove<IOrderResponse>(`/api/orders/${orderId}`)
+    return true
   }
 
   async function fetchOrders() {
@@ -80,11 +76,14 @@ export function useTransaction() {
   const getTotal = computed<number>(() => {
     if (!items.value?.length) return 0
 
-    return items.value.reduce((acc, item) => {
+    const _total = items.value.reduce((acc, item) => {
       const quantity = 1
       const price = item.price ?? 0
       return acc + price * quantity
     }, 0)
+
+    total.value = _total
+    return _total
   })
 
   const getChange = computed<number>(() => {
@@ -103,6 +102,8 @@ export function useTransaction() {
     createSales,
     getOrCreateTransaction,
     transaction,
-    fetchOrders
+    fetchOrders,
+    remove,
+    total
   }
 }
