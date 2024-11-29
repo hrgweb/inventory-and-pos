@@ -33,7 +33,8 @@ import { z } from 'zod'
 import type { FormSubmitEvent } from '#ui/types'
 
 definePageMeta({
-  layout: 'none'
+  layout: 'none',
+  middleware: 'auth'
 })
 
 const schema = z.object({

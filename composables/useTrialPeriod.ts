@@ -48,7 +48,6 @@ export function useTrialPeriod() {
     // Trial period expired
     if (days <= 0 && hours <= 0 && minutes <= 0 && seconds <= 0) {
       expired.value = true
-      return
     }
   }
 

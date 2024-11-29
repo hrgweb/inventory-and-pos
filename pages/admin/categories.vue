@@ -32,6 +32,8 @@ import type { ICategory } from '~/types'
 import { useDebounceFn } from '@vueuse/core'
 import CategoryForm from '~/components/category/CategoryForm.vue'
 
+definePageMeta({ middleware: 'auth' })
+
 const { isAdd, selected, fetchCategories, list } = useCategory()
 
 type ModalValue = 'none' | 'form'

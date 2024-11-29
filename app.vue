@@ -1,6 +1,6 @@
 <template>
   <TrialPeriodAlert
-    v-if="tenDaysBeforeExpiry"
+    v-if="tenDaysBeforeExpiry && !expired"
     :end-date="settings?.trial_period_end!"
   />
 

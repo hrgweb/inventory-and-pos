@@ -74,7 +74,8 @@ import type { IItem } from '~/types'
 import { formatNumber } from '~/utils'
 
 definePageMeta({
-  layout: 'view'
+  layout: 'view',
+  middleware: 'auth'
 })
 
 const columns = [

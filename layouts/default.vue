@@ -69,7 +69,7 @@ const nav_options = [
     name: 'pos',
     label: 'Pos',
     icon: '',
-    to: '/admin/pos'
+    to: '/pos'
   }
 ] as INavigationOptions[]
 

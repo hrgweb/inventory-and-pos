@@ -1,6 +1,4 @@
 <template>
-  <pre>{{ list }}</pre>
-
   <div class="p-6">
     <div class="flex items-center justify-between pb-6">
       <div class="flex justify-between items-center gap-4">
@@ -34,6 +32,8 @@ import ProductForm from '~/components/product/ProductForm.vue'
 import ProductBarcode from '~/components/product/ProductBarcode.vue'
 import type { IProduct } from '~/types'
 import { useDebounceFn } from '@vueuse/core'
+
+definePageMeta({ middleware: 'auth' })
 
 const { isAdd, selected, fetchCategories, fetchProducts, list, page } =
   useProduct()

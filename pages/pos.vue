@@ -66,7 +66,7 @@ import { useFocus, useMagicKeys } from '@vueuse/core'
 import TenderAmount from '~/components/transaction/TenderAmount.vue'
 import type { IOrderResponse } from '~/types'
 
-definePageMeta({ layout: 'none' })
+definePageMeta({ layout: 'none', middleware: 'auth' })
 
 const {
   barcode,
