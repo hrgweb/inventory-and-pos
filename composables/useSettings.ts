@@ -29,15 +29,9 @@ export function useSettings() {
     if (!data) return null
 
     settings.value = data as ISettingResponse
+
+    return data
   }
-
-  // const getTrialPeriodEndDate = computed<Date | null>(() => {
-  //   const _settings = settings.value
-
-  //   return _settings && _settings.trial_period_end
-  //     ? parseISO(_settings.trial_period_end.toISOString())
-  //     : null
-  // })
 
   return { create, getSettings, settings }
 }

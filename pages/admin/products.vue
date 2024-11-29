@@ -1,4 +1,6 @@
 <template>
+  <pre>{{ list }}</pre>
+
   <div class="p-6">
     <div class="flex items-center justify-between pb-6">
       <div class="flex justify-between items-center gap-4">

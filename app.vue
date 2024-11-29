@@ -1,5 +1,8 @@
 <template>
-  <TrialPeriodAlert v-if="settings" :end-date="settings?.trial_period_end!" />
+  <TrialPeriodAlert
+    v-if="tenDaysBeforeExpiry"
+    :end-date="settings?.trial_period_end!"
+  />
 
   <NuxtLayout>
     <NuxtPage />
@@ -9,9 +12,10 @@
 </template>
 
 <script setup lang="ts">
-const { getSettings, settings } = useSettings()
+const { settings } = useSettings()
+const { tenDaysBeforeExpiry, getTrialPeriod, expired } = useTrialPeriod()
 
 onBeforeMount(async () => {
-  await getSettings()
+  await getTrialPeriod()
 })
 </script>
