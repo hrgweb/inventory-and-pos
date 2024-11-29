@@ -1,9 +1,9 @@
 import type { ISetting, ISettingFormRequest, ISettingResponse } from '~/types'
 import { addDays, parseISO } from 'date-fns'
 
-const settings = ref<ISettingResponse | null>(null)
-
 export function useSettings() {
+  const settings = ref<ISettingResponse | null>(null)
+
   const http = useHttp()
 
   async function create({ trial_period_days }: ISettingFormRequest) {

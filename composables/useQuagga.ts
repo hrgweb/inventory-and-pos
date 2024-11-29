@@ -1,8 +1,7 @@
 import Quagga from 'quagga' // ES6
 
-const data = ref(null)
-
 export function useQuagga() {
+  const data = ref(null)
   const _this = ref<Quagga | null>(Quagga)
 
   function init(element: HTMLDivElement | null): void {

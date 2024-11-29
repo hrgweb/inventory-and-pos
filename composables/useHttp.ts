@@ -1,8 +1,8 @@
 type HttpMethod = 'GET' | 'POST' | 'PATCH' | 'PUT' | 'DELETE'
 
-const isLoading = ref(false)
-
 export function useHttp() {
+  const isLoading = ref(false)
+
   async function create<T, B>(
     url: string,
     method: HttpMethod,

@@ -4,14 +4,7 @@ import {
   differenceInMinutes,
   differenceInSeconds
 } from 'date-fns'
-import type { ISetting } from '~/types'
-
-interface IDaysRemaining {
-  days: number
-  hours: number
-  minutes: number
-  seconds: number
-}
+import type { ISetting, IDaysRemaining } from '~/types'
 
 export function useTrialPeriod() {
   const expired = useState('trial_period_expired', () => false)

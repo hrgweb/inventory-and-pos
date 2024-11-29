@@ -6,18 +6,18 @@ import type {
 import { useStorage } from '@vueuse/core'
 import { DATA_SERIALIZER } from '~/utils'
 
-const barcode = ref('')
-const aboutToPay = ref(false)
-const tenderAmount = ref(0)
-const transaction = useStorage<ITransaction>(
-  'transaction',
-  null,
-  undefined,
-  DATA_SERIALIZER
-)
-const total = ref(0)
-
 export function useTransaction() {
+  const barcode = ref('')
+  const aboutToPay = ref(false)
+  const tenderAmount = ref(0)
+  const transaction = useStorage<ITransaction>(
+    'transaction',
+    null,
+    undefined,
+    DATA_SERIALIZER
+  )
+  const total = ref(0)
+
   const http = useHttp()
   const { items, item } = useOrder()
 

@@ -3,9 +3,9 @@ interface ILoginError {
   message: string
 }
 
-const _error = ref<ILoginError | null>(null)
-
 export function useAuth() {
+  const _error = ref<ILoginError | null>(null)
+
   const supabase = useSupabaseClient()
 
   async function register(payload: { email: string; password: string }) {

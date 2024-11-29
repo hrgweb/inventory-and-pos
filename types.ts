@@ -106,3 +106,10 @@ export interface ISetting {
 export interface ISettingFormRequest extends Partial<ISetting> {}
 
 export interface ISettingResponse extends Partial<ISetting> {}
+
+export interface IDaysRemaining {
+  days: number
+  hours: number
+  minutes: number
+  seconds: number
+}
