@@ -50,10 +50,14 @@ export function useTransaction() {
   async function createSales(): Promise<boolean> {
     const _transaction = transaction.value
     const _amount = tenderAmount.value
+    const _total = getTotal.value
+    const _change = getChange.value
 
     const payload = {
       transaction_no: _transaction.transaction_no,
-      tender_amount: _amount
+      amount: _amount,
+      total: _total,
+      change: _change
     }
 
     const data = await http.post<unknown, Record<string, string | number>>(

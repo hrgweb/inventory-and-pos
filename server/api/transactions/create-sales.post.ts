@@ -3,7 +3,7 @@ import { TransactionStatus } from '~/types'
 
 export default defineEventHandler(async (event) => {
   const client = await serverSupabaseClient(event)
-  const { transaction_no } = await readBody(event)
+  const { transaction_no, amount, total, change } = await readBody(event)
 
   try {
     const transactionPayload = { status: TransactionStatus.COMPLETED } as never
@@ -16,14 +16,9 @@ export default defineEventHandler(async (event) => {
       .eq('status', TransactionStatus.PENDING)
 
     // Transaction fails
-    if (transactionError) {
-      throw createError({
-        statusCode: 500,
-        statusMessage: transactionError.message
-      })
-    }
+    if (transactionError) throw transactionError
 
-    const salesPayload = { transaction_no } as never
+    const salesPayload = { transaction_no, amount, total, change } as never
 
     // Save to sales
     const { error: salesError } = await client
