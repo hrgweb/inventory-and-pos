@@ -43,11 +43,19 @@ const state = reactive<State>({
   trial_period_days: 30
 })
 
-const { create } = useSettings()
+const { settings, create, update } = useSettings()
 const notification = useNotification()
 
 async function onSubmit(event: FormSubmitEvent<Schema>) {
-  await create(event.data)
-  notification.success({ title: 'Settings saved successfully' })
+  // Create settings
+  if (!settings.value) {
+    await create(event.data)
+    notification.success({ title: 'Settings saved successfully' })
+    return
+  }
+
+  // Update settings
+  await update(event.data)
+  notification.info({ title: 'Settings updated successfully' })
 }
 </script>
