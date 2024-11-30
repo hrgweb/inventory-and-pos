@@ -17,6 +17,7 @@ export function useTransaction() {
     DATA_SERIALIZER
   )
   const total = ref(0)
+  const change = useState('transaction_change', () => 0)
 
   const http = useHttp()
   const { items, item } = useOrder()
@@ -87,8 +88,11 @@ export function useTransaction() {
   })
 
   const getChange = computed<number>(() => {
-    const change = tenderAmount.value - getTotal.value
-    return change > 0 ? change : 0
+    let _change = tenderAmount.value - getTotal.value
+    _change = _change > 0 ? _change : 0
+
+    change.value = _change
+    return _change
   })
 
   return {
@@ -104,6 +108,7 @@ export function useTransaction() {
     transaction,
     fetchOrders,
     remove,
-    total
+    total,
+    change
   }
 }

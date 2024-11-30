@@ -6,8 +6,18 @@
       <SharedDisplayNumber :value="getTotal.toString() || '0'" />
     </div>
 
-    <div class="uppercase text-4xl bg-slate-600 font-medium text-white p-3">
-      My awesome store
+    <div
+      class="uppercase text-4xl bg-slate-600 font-medium text-white p-3 flex justify-between items-center"
+    >
+      <h3>My awesome store</h3>
+
+      <div class="flex items-center">
+        <span>Change:</span>
+        <SharedDisplayNumber
+          class="text-5xl font-semibold text-right pl-12"
+          :value="change.toString() || '0'"
+        />
+      </div>
     </div>
 
     <div class="flex bg-slate-200 flex-1">
@@ -102,7 +112,8 @@ const {
   aboutToPay,
   getOrCreateTransaction,
   fetchOrders,
-  remove
+  remove,
+  change
 } = useTransaction()
 
 type ModalValue = 'none' | 'form'
