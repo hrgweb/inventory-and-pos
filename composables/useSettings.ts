@@ -1,8 +1,8 @@
 import type { ISetting, ISettingFormRequest, ISettingResponse } from '~/types'
-import { addDays, parseISO } from 'date-fns'
+import { addDays } from 'date-fns'
 
 export function useSettings() {
-  const settings = ref<ISettingResponse | null>(null)
+  const settings = useState<ISettingResponse | null>('settings', () => null)
 
   const http = useHttp()
 
