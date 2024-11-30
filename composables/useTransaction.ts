@@ -3,21 +3,15 @@ import type {
   ITransaction,
   ITransactionFormRequest
 } from '~/types'
-import { useStorage } from '@vueuse/core'
-import { DATA_SERIALIZER } from '~/utils'
 
 export function useTransaction() {
   const barcode = ref('')
   const aboutToPay = useState('about_to_pay', () => false)
   const tenderAmount = ref(0)
-  const transaction = useStorage<ITransaction>(
-    'transaction',
-    null,
-    undefined,
-    DATA_SERIALIZER
-  )
+  const transaction = useState<ITransaction | null>('transaction', () => null)
   const total = ref(0)
   const change = useState('transaction_change', () => 0)
+  const completed = useState('transaction_completed', () => false)
 
   const http = useHttp()
   const { items, item } = useOrder()
@@ -28,6 +22,8 @@ export function useTransaction() {
     if (!data) return null
 
     transaction.value = data as ITransaction
+
+    return data
   }
 
   async function findProduct({ barcode }: { barcode: string }) {
@@ -48,13 +44,13 @@ export function useTransaction() {
   }
 
   async function createSales(): Promise<boolean> {
-    const _transaction = transaction.value
+    const { transaction_no } = transaction.value as ITransaction
     const _amount = tenderAmount.value
     const _total = getTotal.value
     const _change = getChange.value
 
     const payload = {
-      transaction_no: _transaction.transaction_no,
+      transaction_no,
       amount: _amount,
       total: _total,
       change: _change
@@ -65,6 +61,14 @@ export function useTransaction() {
       payload
     )
     return data as boolean
+  }
+
+  function reset() {
+    barcode.value = ''
+    items.value = []
+    item.value = null
+    total.value = 0
+    tenderAmount.value = 0
   }
 
   async function remove(orderId: number): Promise<boolean> {
@@ -113,6 +117,8 @@ export function useTransaction() {
     fetchOrders,
     remove,
     total,
-    change
+    change,
+    completed,
+    reset
   }
 }

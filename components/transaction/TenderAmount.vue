@@ -56,6 +56,7 @@
 
 <script setup lang="ts">
 import { useFocus, useMagicKeys } from '@vueuse/core'
+import type { ModalValue } from '~/types'
 import { formatNumber } from '~/utils'
 
 const {
@@ -66,7 +67,8 @@ const {
   createSales,
   total,
   barcode,
-  getOrCreateTransaction
+  getOrCreateTransaction,
+  completed: transaction_completed
 } = useTransaction()
 
 const amountInput = ref()
@@ -96,7 +98,8 @@ watchEffect(() => {
 
 const error_msg = ref('')
 
-const { items } = useOrder()
+const { items, item } = useOrder()
+const { modal } = useModalCustom<ModalValue>()
 
 async function onPay(): Promise<void> {
   if (getTotal.value > tender_amount.value) {
@@ -112,10 +115,8 @@ async function onPay(): Promise<void> {
   const completed = await createSales() //save to sales
 
   if (completed) {
-    barcode.value = ''
-    items.value = []
-    total.value = 0
-    tender_amount.value = 0
+    modal.value = 'completed'
+    transaction_completed.value = true
     await getOrCreateTransaction()
     emit('close')
   }

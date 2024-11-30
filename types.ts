@@ -113,3 +113,5 @@ export interface IDaysRemaining {
   minutes: number
   seconds: number
 }
+
+export type ModalValue = 'none' | 'form' | 'completed'

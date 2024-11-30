@@ -11,13 +11,13 @@
     >
       <h3>My awesome store</h3>
 
-      <div class="flex items-center">
+      <!-- <div class="flex items-center">
         <span>Change:</span>
         <SharedDisplayNumber
           class="text-5xl font-semibold text-right pl-12"
           :value="change.toString() || '0'"
         />
-      </div>
+      </div> -->
     </div>
 
     <div class="flex bg-slate-200 flex-1">
@@ -100,7 +100,8 @@
 <script setup lang="ts">
 import { useFocus, useMagicKeys } from '@vueuse/core'
 import TenderAmount from '~/components/transaction/TenderAmount.vue'
-import type { IOrderResponse } from '~/types'
+import Completed from '~/components/transaction/Completed.vue'
+import type { IOrderResponse, ModalValue } from '~/types'
 
 definePageMeta({ layout: 'none', middleware: 'auth' })
 
@@ -113,10 +114,10 @@ const {
   getOrCreateTransaction,
   fetchOrders,
   remove,
-  change
+  change,
+  completed: transaction_completed,
+  transaction
 } = useTransaction()
-
-type ModalValue = 'none' | 'form'
 
 const qty = ref(1)
 
@@ -178,7 +179,15 @@ watchEffect(() => {
 
     aboutToPay.value = true
     modal.value = 'form'
+  }
+})
+
+watch(modal, (value) => {
+  if (value === 'form') {
     component_to_use.value = TenderAmount
+  }
+  if (value === 'completed') {
+    component_to_use.value = Completed
   }
 })
 
@@ -202,4 +211,16 @@ async function onRemove(order: IOrderResponse, index: number): Promise<void> {
 }
 
 const getProduct = computed(() => item.value?.product)
+
+watch(transaction_completed, () => {
+  focused.value = true
+})
+
+onMounted(() => {
+  document.addEventListener('click', focusToBarcoceInput)
+})
+
+function focusToBarcoceInput() {
+  focused.value = true
+}
 </script>
