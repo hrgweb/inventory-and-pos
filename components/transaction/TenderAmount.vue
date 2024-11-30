@@ -65,8 +65,6 @@ const {
   tenderAmount: tender_amount,
   getChange,
   createSales,
-  total,
-  barcode,
   getOrCreateTransaction,
   completed: transaction_completed
 } = useTransaction()
@@ -98,7 +96,6 @@ watchEffect(() => {
 
 const error_msg = ref('')
 
-const { items, item } = useOrder()
 const { modal } = useModalCustom<ModalValue>()
 
 async function onPay(): Promise<void> {

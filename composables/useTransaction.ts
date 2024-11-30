@@ -14,7 +14,7 @@ export function useTransaction() {
   const completed = useState('transaction_completed', () => false)
 
   const http = useHttp()
-  const { items, item } = useOrder()
+  const { items, item, qty } = useOrder()
 
   async function getOrCreateTransaction() {
     const data = await http.post<ITransaction, null>('/api/transactions', null)
@@ -40,6 +40,7 @@ export function useTransaction() {
     if (data) {
       item.value = data
       items.value.push(data)
+      qty.value = 1
     }
   }
 
@@ -67,6 +68,7 @@ export function useTransaction() {
     barcode.value = ''
     items.value = []
     item.value = null
+    qty.value = 0
     total.value = 0
     tenderAmount.value = 0
   }

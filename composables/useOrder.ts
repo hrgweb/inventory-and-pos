@@ -1,22 +1,11 @@
 import type { IOrderResponse } from '~/types'
-import { useStorage } from '@vueuse/core'
-import { DATA_SERIALIZER } from '~/utils'
 
 export function useOrder() {
-  const items = useStorage<IOrderResponse[]>(
-    'items',
-    [],
-    undefined,
-    DATA_SERIALIZER
-  )
-  const item = useStorage<IOrderResponse | null>(
-    'product',
-    null,
-    undefined,
-    DATA_SERIALIZER
-  )
+  const items = useState<IOrderResponse[]>('order_items', () => [])
+  const item = useState<IOrderResponse | null>('order_item', () => null)
+  const qty = useState('order_qty', () => 0)
 
   const selectedIndex = ref(0)
 
-  return { selectedIndex, items, item }
+  return { selectedIndex, items, item, qty }
 }

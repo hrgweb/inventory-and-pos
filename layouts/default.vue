@@ -45,7 +45,7 @@ const nav_options = [
     name: 'home',
     label: 'Home',
     icon: '',
-    to: '/'
+    to: '/admin'
   },
   {
     name: 'shop',

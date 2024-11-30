@@ -57,7 +57,7 @@
           <span class="uppercase text-xl w-[150px] text-right pr-4">item</span>
           <input
             v-model="barcode"
-            class="uppercase text-4xl bg-slate-800 text-white p-4 text-right w-full"
+            class="uppercase text-4xl bg-slate-800 text-white p-4 text-right w-full h-[70px]"
             type="text"
             ref="barcode_input"
             @input="onScan"
@@ -68,14 +68,14 @@
             >barcode</span
           >
           <span
-            class="uppercase text-4xl bg-slate-800 text-white p-4 text-right w-full"
+            class="uppercase text-4xl bg-slate-800 text-white p-4 text-right w-full h-[70px]"
             >{{ getProduct?.barcode }}</span
           >
         </div>
         <div class="flex justify-between items-end">
           <span class="uppercase text-xl w-[150px] text-right pr-4">qty</span>
           <span
-            class="uppercase text-4xl bg-slate-800 text-white p-3 text-right w-full"
+            class="uppercase text-4xl bg-slate-800 text-white p-3 text-right w-full h-[70px]"
             >{{ qty }}</span
           >
         </div>
@@ -85,7 +85,7 @@
           <SharedDisplayNumber
             :value="getProduct?.price?.toString() || '0'"
             :show-currency="false"
-            class="text-4xl bg-slate-800 text-white p-3 w-full text-right"
+            class="text-4xl bg-slate-800 text-white p-3 w-full text-right h-[70px]"
           />
         </div>
       </div>
@@ -118,8 +118,6 @@ const {
   completed: transaction_completed,
   transaction
 } = useTransaction()
-
-const qty = ref(1)
 
 const {
   modal,
@@ -196,7 +194,7 @@ onBeforeMount(async () => {
   await fetchOrders()
 })
 
-const { selectedIndex, item } = useOrder()
+const { selectedIndex, item, qty } = useOrder()
 
 async function onRemove(order: IOrderResponse, index: number): Promise<void> {
   selectedIndex.value = index
