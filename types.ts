@@ -14,13 +14,14 @@ export interface IProduct {
   id: number
   name: string
   description: string
-  supplier_price: number
-  markup: number | string
-  price: number
-  price_formatted: string
+  cost_price: number
+  selling_price: number
+  selling_price_formatted: string
   category_id: number | string
-  qty: number
   barcode: string
+  barcode_img?: string
+  stock_qty: number
+  reorder_level: number
 }
 
 export type ProductSortBy = 'Latest Added' | 'Product Name'

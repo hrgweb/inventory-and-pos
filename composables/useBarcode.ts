@@ -87,7 +87,7 @@ export function useBarcode() {
       'svg'
     )
 
-    const code = generateBarcode(10)
+    const code = generateBarcode(12)
     barcode.value = code
     JsBarcode(svgNode, code, {
       xmlDocument: document,
