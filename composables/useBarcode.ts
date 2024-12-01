@@ -11,7 +11,7 @@ export function useBarcode() {
   const modal = ref<BarcodeOptions>('none')
   const componentToUse = shallowRef(BarcodeChoose)
   const barcodeSvg = ref<HTMLOrSVGElement | string | null>(null)
-  const barcode = ref('')
+  const barcode = useState('product_barcode', () => '')
   const barcodeSvgFile = ref<File | null>(null)
 
   const quagga = useQuagga() // scanner

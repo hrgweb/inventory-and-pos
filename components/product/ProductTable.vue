@@ -4,8 +4,11 @@
       <template #name-data="{ row }">
         <span>{{ row.name }}</span>
       </template>
-      <template #price-data="{ row }">
-        <span>{{ row.price_formatted }}</span>
+      <template #cost_price-data="{ row }">
+        <span>{{ row.cost_price_formatted }}</span>
+      </template>
+      <template #selling_price-data="{ row }">
+        <span>{{ row.selling_price_formatted }}</span>
       </template>
       <template #subtotal-data="{ row }">
         <span>{{ row.subtotal_formatted }}</span>
@@ -77,12 +80,20 @@ const columns = [
     label: 'Product'
   },
   {
-    key: 'price',
-    label: 'Price'
+    key: 'cost_price',
+    label: 'Cost Price'
   },
   {
-    key: 'qty',
-    label: 'Qty'
+    key: 'selling_price',
+    label: 'Selling Price'
+  },
+  {
+    key: 'reorder_level',
+    label: 'Reorder Level'
+  },
+  {
+    key: 'stock_qty',
+    label: 'Stock Qty'
   },
   {
     key: 'actions',

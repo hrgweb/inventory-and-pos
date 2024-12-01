@@ -16,10 +16,8 @@ export interface IProduct {
   description: string
   cost_price: number
   selling_price: number
-  selling_price_formatted: string
   category_id: number | string
   barcode: string
-  barcode_img?: string
   stock_qty: number
   reorder_level: number
 }
@@ -57,7 +55,8 @@ export interface ICategoryFormRequest
   extends Partial<Record<keyof ICategory, string | number | undefined>> {}
 
 export interface IProductMapped extends IProduct {
-  price_formatted: string
+  cost_price_formatted: string
+  selling_price_formatted: string
 }
 
 export interface IItemResponse<T> {

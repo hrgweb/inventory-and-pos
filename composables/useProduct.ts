@@ -79,7 +79,12 @@ export function useProduct() {
 
   function mapProduct(item: IProduct): IProductMapped {
     let newObj = mapItem(item) as IProductMapped
-    newObj['selling_price_formatted'] = formatNumber(item.selling_price)
+    newObj['cost_price_formatted'] = item.cost_price
+      ? formatNumber(item.cost_price)
+      : '0'
+    newObj['selling_price_formatted'] = item.selling_price
+      ? formatNumber(item.selling_price)
+      : '0'
     return newObj
   }
 

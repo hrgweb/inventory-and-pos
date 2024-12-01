@@ -12,7 +12,13 @@
       />
     </div>
 
-    <UForm :schema="schema" :state="form" class="space-y-4" @submit="onSubmit">
+    <UForm
+      ref="productForm"
+      :schema="schema"
+      :state="form"
+      class="space-y-4"
+      @submit="onSubmit"
+    >
       <UFormGroup label="Barcode" name="barcode">
         <div class="flex">
           <UInput v-model="form.barcode" size="xl" class="w-full" />
@@ -33,7 +39,7 @@
       </UFormGroup>
       <UFormGroup label="Category" name="category_id">
         <USelect
-          v-model="form.category_id"
+          v-model.number="form.category_id"
           :options="categories"
           size="xl"
           option-attribute="name"
@@ -56,14 +62,11 @@
       </UFormGroup>
 
       <div class="text-left space-x-3 pt-6">
-        <UButton v-if="isAdd" type="submit" size="lg" label="Save Record" />
         <UButton
-          v-else
-          type="button"
+          type="submit"
           size="lg"
-          label="Update Record"
-          color="orange"
-          @click="onUpdate"
+          :label="`${isAdd ? 'Save' : 'Update'} Record`"
+          :color="`${isAdd ? 'green' : 'orange'}`"
         />
         <UButton
           type="button"
@@ -91,7 +94,7 @@ const schema = z.object({
   barcode: z.string().min(1, { message: 'Barcode is required' }),
   name: z.string().min(1, { message: 'Product name is required' }),
   description: z.string(),
-  category_id: z.string({ message: 'Category is required' }).min(1),
+  category_id: z.number({ message: 'Category is required' }).min(1),
   cost_price: z.number().min(1, { message: 'Cost price is required' }),
   selling_price: z.number().min(1, { message: 'Selling price is required' }),
   stock_qty: z.number().min(1, { message: 'Stock qty is required' }),
@@ -153,25 +156,9 @@ function reset() {
 
 const notification = useNotification()
 
-async function onSubmit(event: FormSubmitEvent<Schema>) {
-  const payload = {
-    barcode_img: state.barcode_img,
-    ...event.data
-  }
-  await create(event.data)
-  notification.success({ title: '1 product saved successfully' })
-  setTimeout(() => reset(), 100)
-  onClose()
-}
-
 const emit = defineEmits<{
   close: [void]
 }>()
-
-function onClose() {
-  isAdd.value = false
-  emit('close')
-}
 
 const form = computed(() => (isAdd.value ? state : editState))
 
@@ -185,6 +172,7 @@ watchEffect(() => {
   // Edit
   const product = selected.value
   editState.id = product?.id
+  editState.barcode = product?.barcode
   editState.name = product?.name
   editState.description = product?.description
   editState.cost_price = product?.cost_price
@@ -195,15 +183,32 @@ watchEffect(() => {
   editState.stock_qty = product?.stock_qty
 })
 
-async function onUpdate() {
-  const product = editState
-  await update(product)
-  notification.info({ title: 'Product updated successfully' })
+async function onSubmit(event: FormSubmitEvent<Schema>) {
+  // Create
+  if (isAdd.value) {
+    const { ...body } = event.data
+    await create(body)
+    notification.success({ title: '1 product created successfully' })
+  }
+  // Update
+  else {
+    const { ...body } = editState
+    await update(body)
+    notification.info({ title: '1 product updated successfully' })
+  }
+
+  setTimeout(() => reset(), 100)
+  onClose()
+}
+
+function onClose() {
+  isAdd.value = false
   emit('close')
 }
 
 function onBarcodeGenerate() {
   chooseGenerate()
   state.barcode = barcode.value as string
+  editState.barcode = barcode.value as string
 }
 </script>

@@ -57,7 +57,6 @@
 <script setup lang="ts">
 import ProductForm from '~/components/product/ProductForm.vue'
 import CategoryForm from '~/components/category/CategoryForm.vue'
-import ProductBarcode from '~/components/product/ProductBarcode.vue'
 import type { ICategory, IProduct } from '~/types'
 
 definePageMeta({ middleware: 'auth' })
