@@ -37,16 +37,16 @@
       <UFormGroup label="Supplier Price" name="supplier_price">
         <UInput v-model.number="form.supplier_price" size="xl" />
       </UFormGroup>
-      <UFormGroup label="Mark-up (%)" name="mark_up">
+      <!-- <UFormGroup label="Mark-up (%)" name="mark_up">
         <UInput v-model.number="form.markup" size="xl" />
-      </UFormGroup>
+      </UFormGroup> -->
       <UFormGroup label="Final Price" name="price">
         <UInput v-model.number="form.price" size="xl" />
       </UFormGroup>
       <UFormGroup label="Category" name="category_id">
         <USelect
           v-model="form.category_id"
-          :options="getCategories"
+          :options="categories"
           size="xl"
           option-attribute="name"
           value-attribute="id"
@@ -60,13 +60,13 @@
         <!-- Barcode SVG -->
         <div v-if="barcode" class="pb-6" v-html="barcodeSvg"></div>
         <div class="flex gap-3">
-          <UButton
+          <!-- <UButton
             label="Scan"
             color="orange"
             icon="heroicons:finger-print-20-solid"
             size="lg"
             @click="choose"
-          />
+          /> -->
           <UButton
             label="Generate"
             color="blue"
@@ -76,7 +76,7 @@
           />
         </div>
       </UFormGroup>
-      <div class="text-left space-x-3">
+      <div class="text-left space-x-3 pt-6">
         <UButton v-if="isAdd" type="submit" size="lg" label="Save Record" />
         <UButton
           v-else
@@ -105,7 +105,8 @@ import type { FormSubmitEvent } from '#ui/types'
 import type { IProductFormRequest } from '~/types'
 
 const { choose, chooseGenerate, barcode, barcodeSvg } = useBarcode()
-const { create, getCategories, isAdd, selected, update } = useProduct()
+const { create, isAdd, selected, update } = useProduct()
+const { list: categories } = useCategory()
 
 const schema = z.object({
   name: z.string().min(1, { message: 'Product name is required' }),

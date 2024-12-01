@@ -1,7 +1,8 @@
 import type { ICategory, ICategoryFormRequest } from '~/types'
+import { useDebounceFn } from '@vueuse/core'
 
 export function useCategory() {
-  const isAdd = ref(false)
+  const isAdd = useState('category_is_add', () => false)
   const selected = ref<ICategory | null>(null)
   const list = useState<ICategory[]>('categories', () => [])
   const listCount = ref(0)
@@ -12,6 +13,7 @@ export function useCategory() {
   async function fetchCategories({ search }: { search: string }) {
     const data = await http.get<ICategory>('/api/categories', { search })
     list.value = data
+    return data
   }
 
   async function create(payload: ICategoryFormRequest) {
@@ -35,11 +37,13 @@ export function useCategory() {
     list.value.splice(selectedIndex.value, 1)
   }
 
-  const getCategories = computed<ICategory[]>(() => list.value)
+  const search = useDebounceFn(async (q: string) => {
+    list.value = []
+    await fetchCategories({ search: q })
+  }, 500)
 
   return {
     create,
-    getCategories,
     isAdd,
     selected,
     update,
@@ -47,6 +51,7 @@ export function useCategory() {
     list,
     listCount,
     selectedIndex,
-    remove
+    remove,
+    search
   }
 }

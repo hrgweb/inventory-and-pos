@@ -1,19 +1,18 @@
 import type {
   IProduct,
-  ICategory,
   IProductFormRequest,
   IProductMapped,
   IItemResponse
 } from '~/types'
 import { formatNumber, mapItem } from '~/utils'
+import { useDebounceFn } from '@vueuse/core'
 
 export function useProduct() {
   const list = useState<IProduct[] | IProductMapped[]>('products', () => [])
   const isAdd = useState('product_is_add', () => false)
   const selected = useState<IProduct | null>('product_selected', () => null)
-  const categories = useState<ICategory[]>('product_categories', () => [])
-  const listCount = ref(0)
-  const page = ref(1)
+  const listCount = useState('product_count', () => 0)
+  const page = useState('product_page', () => 1)
   const selectedIndex = useState('product_selected_index', () => 0)
 
   const http = useHttp()
@@ -47,10 +46,11 @@ export function useProduct() {
     list.value[selectedIndex.value] = content
   }
 
-  async function fetchCategories() {
-    const data = await http.get<ICategory>('/api/categories')
-    categories.value = data
-  }
+  const search = useDebounceFn(async (q: string) => {
+    list.value = []
+    page.value = 1
+    await fetchProducts({ search: q })
+  }, 500)
 
   async function fetchProducts({ search }: { search: string }) {
     const _page = page.value
@@ -83,7 +83,6 @@ export function useProduct() {
     return newObj
   }
 
-  const getCategories = computed<ICategory[]>(() => categories.value)
   const getProducts = computed<IProductMapped[]>(() => {
     if (!list.value || list.value.length === 0) {
       return []
@@ -94,17 +93,16 @@ export function useProduct() {
   return {
     addToCart,
     create,
-    getCategories,
     getProducts,
     isAdd,
     selected,
     update,
-    fetchCategories,
     fetchProducts,
     list,
     listCount,
     page,
     selectedIndex,
-    remove
+    remove,
+    search
   }
 }

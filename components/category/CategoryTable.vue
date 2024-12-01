@@ -49,7 +49,7 @@
 <script setup lang="ts">
 import type { ICategory } from '~/types'
 
-const { getCategories: items, selectedIndex, remove } = useCategory()
+const { list: items, selectedIndex, remove } = useCategory()
 
 const columns = [
   {

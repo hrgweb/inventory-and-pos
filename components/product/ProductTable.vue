@@ -54,7 +54,7 @@
       v-model="page"
       class="pt-3"
       :page-count="5"
-      :total="listCount"
+      :total="list_count"
       @update:model-value="page = $event"
     />
   </UCard>
@@ -66,7 +66,7 @@ import type { IProduct } from '~/types'
 const {
   getProducts: items,
   page,
-  listCount,
+  listCount: list_count,
   selectedIndex,
   remove
 } = useProduct()
