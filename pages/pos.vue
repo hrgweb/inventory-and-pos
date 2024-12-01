@@ -187,6 +187,7 @@ watch(modal, (value) => {
   if (value === 'completed') {
     component_to_use.value = Completed
   }
+  setTimeout(() => (focused.value = true), 500)
 })
 
 onBeforeMount(async () => {
