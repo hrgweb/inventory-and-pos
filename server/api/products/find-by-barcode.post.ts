@@ -1,36 +1,42 @@
 import { serverSupabaseClient } from '#supabase/server'
-import type { IOrder, IOrderResponse, IProduct } from '~/types'
+import type { IOrderResponse, IProduct } from '~/types'
 
 export default defineEventHandler(async (event) => {
   const client = await serverSupabaseClient(event)
 
-  async function findProduct(barcode: string): Promise<IProduct | null> {
+  async function findProduct(barcode: string) {
     const { data, error } = await client
       .from('products')
-      .select('*')
+      .select('id, name, selling_price, barcode')
       .like('barcode', barcode)
 
     if (error) throw error
 
-    // No product foun by barcode
-    if (!data.length) {
+    // No product found by barcode
+    if (!data || data.length === 0) {
       throw createError({
         statusCode: 404,
         statusMessage: 'Product not found'
       })
     }
 
-    return data[0] as IProduct
+    // Check if data is an array
+    if (Array.isArray(data)) {
+      return data[0]
+    }
+
+    // Else object
+    return data
   }
 
   async function createOrder(
-    product: IProduct,
+    product: Pick<IProduct, 'id' | 'selling_price'>,
     transaction_no?: string
-  ): Promise<IOrderResponse[]> {
+  ) {
     // No product
     if (!product) {
       throw createError({
-        statusCode: 500,
+        statusCode: 404,
         statusMessage: 'Product not found'
       })
     }
@@ -38,18 +44,19 @@ export default defineEventHandler(async (event) => {
     // No transaction
     if (!transaction_no) {
       throw createError({
-        statusCode: 500,
+        statusCode: 404,
         statusMessage: 'Transaction number not found'
       })
     }
 
     const qty = 1 // default
+    const sellingPrice = product.selling_price!
     const payload = {
       transaction_no,
       product_id: product.id,
-      price: product.price,
+      price: sellingPrice,
       qty,
-      subtotal: product.price * qty
+      subtotal: sellingPrice! * qty
     } as never
 
     const { data, error } = await client
@@ -62,7 +69,7 @@ export default defineEventHandler(async (event) => {
       products (
         id,
         name,
-        price,
+        selling_price,
         barcode
       ),
       price,
@@ -99,8 +106,9 @@ export default defineEventHandler(async (event) => {
     if (order && order.length) {
       return order[0] as IOrderResponse
     }
+
+    return order
   } catch (error) {
     throw error
   }
-  return null
 })
