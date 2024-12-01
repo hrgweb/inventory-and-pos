@@ -54,7 +54,8 @@ export function useTransaction() {
       transaction_no,
       amount: _amount,
       total: _total,
-      change: _change
+      change: _change,
+      orders: items.value
     }
 
     const data = await http.post<unknown, Record<string, string | number>>(

@@ -34,7 +34,7 @@
             }}</span>
           </template>
           <template #qty-data="{ row }">
-            <span class="uppercase text-2xl text-slate-800">{{ qty }}</span>
+            <span class="uppercase text-2xl text-slate-800">{{ row.qty }}</span>
           </template>
           <template #price-data="{ row }">
             <span class="uppercase text-2xl text-slate-800">{{
@@ -83,7 +83,7 @@
           <span class="uppercase text-xl w-[150px] text-right pr-4">price</span>
 
           <SharedDisplayNumber
-            :value="getProduct?.price?.toString() || '0'"
+            :value="getProduct?.selling_price?.toString() || '0'"
             :show-currency="false"
             class="text-4xl bg-slate-800 text-white p-3 w-full text-right h-[70px]"
           />

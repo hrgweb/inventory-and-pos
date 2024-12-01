@@ -24,7 +24,9 @@ export default defineEventHandler(async (event) => {
         name,
         selling_price,
         barcode
-      )
+      ),
+      qty,
+      price
     `
     )
     .eq('transaction_no', transaction_no)
