@@ -38,7 +38,7 @@
           </template>
           <template #price-data="{ row }">
             <span class="uppercase text-2xl text-slate-800">{{
-              row.price
+              row.product.selling_price
             }}</span>
           </template>
           <template #action-data="{ row, index }">
@@ -199,11 +199,8 @@ const { selectedIndex, item, qty } = useOrder()
 
 async function onRemove(order: IOrderResponse, index: number): Promise<void> {
   selectedIndex.value = index
-
   if (!order) return
-
   const removed = await remove(order.id!)
-
   if (removed) {
     items.value.splice(selectedIndex.value, 1)
   }

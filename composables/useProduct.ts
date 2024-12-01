@@ -85,6 +85,7 @@ export function useProduct() {
     newObj['selling_price_formatted'] = item.selling_price
       ? formatNumber(item.selling_price)
       : '0'
+    newObj['reorder_level'] = item.reorder_level || 0
     return newObj
   }
 

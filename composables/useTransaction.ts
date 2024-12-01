@@ -90,7 +90,7 @@ export function useTransaction() {
 
     const _total = items.value.reduce((acc, item) => {
       const quantity = 1
-      const price = item.price ?? 0
+      const price = item.product.selling_price ?? 0
       return acc + price * quantity
     }, 0)
 

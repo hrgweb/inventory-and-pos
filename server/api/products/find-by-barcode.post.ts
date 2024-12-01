@@ -54,7 +54,6 @@ export default defineEventHandler(async (event) => {
     const payload = {
       transaction_no,
       product_id: product.id,
-      price: sellingPrice,
       qty,
       subtotal: sellingPrice! * qty
     } as never
@@ -72,7 +71,6 @@ export default defineEventHandler(async (event) => {
         selling_price,
         barcode
       ),
-      price,
       qty,
       subtotal
     `

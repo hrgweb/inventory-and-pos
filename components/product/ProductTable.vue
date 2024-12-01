@@ -1,6 +1,9 @@
 <template>
   <UCard>
     <UTable :rows="items" :columns="columns">
+      <template #barcode-data="{ row }">
+        <span>{{ row.barcode }}</span>
+      </template>
       <template #name-data="{ row }">
         <span>{{ row.name }}</span>
       </template>
@@ -67,7 +70,7 @@
     <UPagination
       v-model="page"
       class="pt-3"
-      :page-count="5"
+      :page-count="15"
       :total="list_count"
       @update:model-value="page = $event"
     />
@@ -89,6 +92,10 @@ const columns = [
   {
     key: 'name',
     label: 'Product'
+  },
+  {
+    key: 'barcode',
+    label: 'Barcode'
   },
   {
     key: 'cost_price',
