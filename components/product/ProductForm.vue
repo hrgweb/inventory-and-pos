@@ -202,7 +202,6 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
 }
 
 function onClose() {
-  isAdd.value = false
   emit('close')
 }
 

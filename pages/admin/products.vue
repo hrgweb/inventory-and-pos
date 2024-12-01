@@ -45,13 +45,15 @@
         </div>
       </template>
     </UTabs>
+  </div>
 
+  <Teleport to="#teleports">
     <UModal v-model="show_modal">
       <div class="p-6">
         <component :is="component_to_use" @close="modal = 'none'" />
       </div>
     </UModal>
-  </div>
+  </Teleport>
 </template>
 
 <script setup lang="ts">

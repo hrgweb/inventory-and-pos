@@ -12,26 +12,17 @@
       />
     </div>
 
-    <UForm :schema="schema" :state="form" class="space-y-4">
+    <UForm :schema="schema" :state="form" class="space-y-4" @submit="onSubmit">
       <UFormGroup label="Category Name" name="name">
         <UInput v-model="form.name" size="xl" />
       </UFormGroup>
 
       <div class="text-left space-x-3">
         <UButton
-          v-if="isAdd"
-          type="button"
+          type="submit"
           size="lg"
-          label="Save Record"
-          @click="onSubmit"
-        />
-        <UButton
-          v-else
-          type="button"
-          size="lg"
-          label="Update Record"
-          color="orange"
-          @click="onUpdate"
+          :label="`${isAdd ? 'Save' : 'Update'} Record`"
+          :color="`${isAdd ? 'green' : 'orange'}`"
         />
         <UButton
           type="button"
@@ -79,8 +70,19 @@ function reset() {
 const notification = useNotification()
 
 async function onSubmit(event: FormSubmitEvent<Schema>) {
-  await create({ ...state }) // save category
-  notification.success({ title: 'Category saved successfully' })
+  // Create
+  if (isAdd.value) {
+    const { ...body } = event.data
+    await create(body)
+    notification.success({ title: '1 category created successfully' })
+  }
+  // Update
+  else {
+    const { ...body } = editState
+    await update(body)
+    notification.info({ title: '1 category updated successfully' })
+  }
+
   setTimeout(() => reset(), 100)
   onClose()
 }
@@ -90,7 +92,6 @@ const emit = defineEmits<{
 }>()
 
 function onClose() {
-  isAdd.value = false
   emit('close')
 }
 
@@ -108,11 +109,4 @@ watchEffect(() => {
   editState.id = category?.id
   editState.name = category?.name
 })
-
-async function onUpdate() {
-  const category = editState
-  await update(category)
-  notification.info({ title: 'Category updated successfully' })
-  emit('close')
-}
 </script>
