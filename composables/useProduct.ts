@@ -11,7 +11,7 @@ export function useProduct() {
   const list = useState<IProduct[] | IProductMapped[]>('products', () => [])
   const isAdd = useState('product_is_add', () => false)
   const selected = useState<IProduct | null>('product_selected', () => null)
-  const categories = ref<ICategory[]>([])
+  const categories = useState<ICategory[]>('product_categories', () => [])
   const listCount = ref(0)
   const page = ref(1)
   const selectedIndex = useState('product_selected_index', () => 0)

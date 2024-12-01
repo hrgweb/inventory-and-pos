@@ -3,7 +3,7 @@ import type { ICategory, ICategoryFormRequest } from '~/types'
 export function useCategory() {
   const isAdd = ref(false)
   const selected = ref<ICategory | null>(null)
-  const list = ref<ICategory[]>([])
+  const list = useState<ICategory[]>('categories', () => [])
   const listCount = ref(0)
   const selectedIndex = ref(0)
 
