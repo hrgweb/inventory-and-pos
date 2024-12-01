@@ -17,7 +17,7 @@
         <span
           class="block"
           :class="[
-            +row.stock_qty <= row.reorder_level
+            +row.stock_qty <= +row.reorder_level
               ? 'bg-red-500 text-white p-1 rounded'
               : ''
           ]"
