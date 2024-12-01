@@ -7,9 +7,9 @@ import type {
 export function useTransaction() {
   const barcode = ref('')
   const aboutToPay = useState('about_to_pay', () => false)
-  const tenderAmount = ref(0)
   const transaction = useState<ITransaction | null>('transaction', () => null)
-  const total = ref(0)
+  const tenderAmount = useState('transaction_amount', () => 0)
+  const total = useState('transaction_total', () => 0)
   const change = useState('transaction_change', () => 0)
   const completed = useState('transaction_completed', () => false)
 
