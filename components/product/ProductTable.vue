@@ -13,6 +13,17 @@
       <template #subtotal-data="{ row }">
         <span>{{ row.subtotal_formatted }}</span>
       </template>
+      <template #reorder_level-data="{ row }">
+        <span
+          class="block"
+          :class="[
+            +row.stock_qty <= row.reorder_level
+              ? 'bg-red-500 text-white p-1 rounded'
+              : ''
+          ]"
+          >{{ row.reorder_level }}</span
+        >
+      </template>
       <template #actions-data="{ row, index }">
         <div class="flex gap-3">
           <Icon
