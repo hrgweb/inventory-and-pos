@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="flex justify-between items-center pb-6">
-      <AppPageTitle :title="`${isAdd ? 'New ' : 'Edit '} Product`" />
+      <AppPageTitle :title="`${isAdd ? 'New ' : 'Edit '} Category`" />
 
       <UButton
         class="rounded-full"
@@ -12,13 +12,19 @@
       />
     </div>
 
-    <UForm :schema="schema" :state="form" class="space-y-4" @submit="onSubmit">
+    <UForm :schema="schema" :state="form" class="space-y-4">
       <UFormGroup label="Category Name" name="name">
         <UInput v-model="form.name" size="xl" />
       </UFormGroup>
 
       <div class="text-left space-x-3">
-        <UButton v-if="isAdd" type="submit" size="lg" label="Save Record" />
+        <UButton
+          v-if="isAdd"
+          type="button"
+          size="lg"
+          label="Save Record"
+          @click="onSubmit"
+        />
         <UButton
           v-else
           type="button"
@@ -73,12 +79,8 @@ function reset() {
 const notification = useNotification()
 
 async function onSubmit(event: FormSubmitEvent<Schema>) {
-  const formData = {
-    ...event.data,
-    barcode_img: state.barcode_img
-  }
-  await create(formData) // save product
-  notification.success({ title: 'Product saved successfully' })
+  await create({ ...state }) // save category
+  notification.success({ title: 'Category saved successfully' })
   setTimeout(() => reset(), 100)
   onClose()
 }
@@ -108,9 +110,9 @@ watchEffect(() => {
 })
 
 async function onUpdate() {
-  const product = editState
-  await update(product)
-  notification.info({ title: 'Product updated successfully' })
+  const category = editState
+  await update(category)
+  notification.info({ title: 'Category updated successfully' })
   emit('close')
 }
 </script>

@@ -89,7 +89,8 @@ const {
 const {
   search: categorySearch,
   fetchCategories,
-  isAdd: is_add_category
+  isAdd: is_add_category,
+  selected: category_selected
 } = useCategory()
 
 type ModalValue = 'none' | 'form' | 'category-form'
@@ -125,7 +126,11 @@ function onNewCategory() {
   is_add_category.value = true
 }
 
-function onEditCategory(category: ICategory) {}
+function onEditCategory(category: ICategory) {
+  modal.value = 'category-form'
+  is_add_category.value = false
+  category_selected.value = category
+}
 
 onBeforeMount(async () => {
   fetchCategories({ search: '' })

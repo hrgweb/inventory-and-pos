@@ -3,10 +3,10 @@ import { useDebounceFn } from '@vueuse/core'
 
 export function useCategory() {
   const isAdd = useState('category_is_add', () => false)
-  const selected = ref<ICategory | null>(null)
+  const selected = useState<ICategory | null>('category_selected', () => null)
   const list = useState<ICategory[]>('categories', () => [])
   const listCount = ref(0)
-  const selectedIndex = ref(0)
+  const selectedIndex = useState('category_selected_index', () => 0)
 
   const http = useHttp()
 
