@@ -14,13 +14,7 @@ const nav_options = [
     name: 'dashboard',
     label: 'Dashboard',
     icon: '',
-    to: '/'
-  },
-  {
-    name: 'categories',
-    label: 'Categories',
-    icon: '',
-    to: '/admin/categories'
+    to: '/admin'
   },
   {
     name: 'products',
@@ -29,64 +23,71 @@ const nav_options = [
     to: '/admin/products'
   },
   {
-    name: 'all_products',
-    label: 'All Products',
+    name: 'sales',
+    label: 'Sales',
     icon: '',
-    to: '/admin/all-products'
+    to: '/admin/sales'
   },
-  {
-    name: 'payments',
-    label: 'Payments',
-    icon: '',
-    to: '/admin/payments'
-  },
-  {
-    name: 'users',
-    label: 'Users',
-    icon: '',
-    to: '/admin/users'
-  },
-  {
-    name: 'insights',
-    label: 'Insights',
-    icon: '',
-    to: '/admin/insights'
-  },
+
+  // {
+  //   name: 'all_products',
+  //   label: 'All Products',
+  //   icon: '',
+  //   to: '/admin/all-products'
+  // },
+  // {
+  //   name: 'payments',
+  //   label: 'Payments',
+  //   icon: '',
+  //   to: '/admin/payments'
+  // },
+  // {
+  //   name: 'users',
+  //   label: 'Users',
+  //   icon: '',
+  //   to: '/admin/users'
+  // },
+  // {
+  //   name: 'insights',
+  //   label: 'Insights',
+  //   icon: '',
+  //   to: '/admin/insights'
+  // },
   {
     name: 'settings',
     label: 'Settings',
     icon: '',
     to: '/admin/settings'
-  },
-  {
-    name: 'personal',
-    label: 'Personal',
-    icon: '',
-    to: '/admin/personal'
-  },
-  {
-    name: 'upgrades',
-    label: 'Upgrades',
-    icon: '',
-    to: '/admin/upgrades'
-  },
-  {
-    name: 'guides',
-    label: 'Guides',
-    icon: '',
-    to: '/admin/guides'
-  },
-  {
-    name: 'trainings',
-    label: 'Trainings',
-    icon: '',
-    to: '/admin/trainings'
-  },
-  {
-    name: 'logout',
-    label: 'Logout',
-    icon: '',
-    to: '/admin/logout'
   }
+  // {
+  //   name: 'personal',
+  //   label: 'Personal',
+  //   icon: '',
+  //   to: '/admin/personal'
+  // },
+  // {
+  //   name: 'upgrades',
+  //   label: 'Upgrades',
+  //   icon: '',
+  //   to: '/admin/upgrades'
+  // },
+  // {
+  //   name: 'guides',
+  //   label: 'Guides',
+  //   icon: '',
+  //   to: '/admin/guides'
+  // },
+  // {
+  //   name: 'trainings',
+  //   label: 'Trainings',
+  //   icon: '',
+  //   to: '/admin/trainings'
+  // },
+  // {
+  //   name: 'logout',
+  //   label: 'Logout',
+  //   icon: '',
+  //   to: '/admin/logout'
+  // }
 ] as INavigationOptions[]
 </script>
