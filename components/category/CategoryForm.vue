@@ -45,7 +45,7 @@ import type { IProductFormRequest } from '~/types'
 const { create, isAdd, selected, update } = useCategory()
 
 const schema = z.object({
-  name: z.string().min(1, { message: 'Product name is required' })
+  name: z.string().min(1, { message: 'Category name is required' })
 })
 
 type Schema = z.output<typeof schema>

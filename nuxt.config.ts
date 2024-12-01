@@ -4,7 +4,7 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   modules: ['@nuxt/ui', '@vueuse/nuxt', '@nuxtjs/supabase'],
   supabase: {
-    url: process.env.SUPABASE_URL,
+    url: process.env.SUPABASEL_URL,
     key: process.env.SUPABASE_KEY,
     serviceKey: process.env.SUPABASE_SERVICE_KEY,
     redirect: false,
