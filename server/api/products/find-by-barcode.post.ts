@@ -58,23 +58,18 @@ export default defineEventHandler(async (event) => {
       subtotal: sellingPrice! * qty
     } as never
 
-    const { data, error } = await client
-      .from('orders')
-      .insert(payload)
-      .select(
-        `
-      id,
-      transaction_no,
-      products (
-        id,
-        name,
-        selling_price,
-        barcode
-      ),
-      qty,
-      subtotal
-    `
-      )
+    const { data, error } = await client.from('orders').insert(payload).select(`
+id,
+transaction_no,
+products (
+  id,
+  name,
+  selling_price,
+  barcode
+),
+qty,
+subtotal
+    `)
 
     if (error) throw error
 
