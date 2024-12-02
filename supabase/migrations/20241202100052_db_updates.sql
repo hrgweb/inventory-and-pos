@@ -1,7 +1,3 @@
-alter table "public"."settings" drop constraint "settings_pkey";
-
-drop index if exists "public"."settings_pkey";
-
 alter table "public"."categories" alter column "id" set not null;
 
 alter table "public"."categories" disable row level security;
@@ -32,13 +28,8 @@ alter table "public"."products" alter column "id" set not null;
 
 alter table "public"."sales" alter column "id" set not null;
 
-alter table "public"."settings" alter column "id" set default gen_random_uuid();
-
-alter table "public"."settings" alter column "id" drop identity;
-
-alter table "public"."settings" alter column "id" drop not null;
-
-alter table "public"."settings" alter column "id" set data type uuid using "id"::uuid;
+alter table "public"."settings" drop column "id";
+alter table "public"."settings" add column "id" uuid default gen_random_uuid();
 
 alter table "public"."transactions" alter column "id" set not null;
 
@@ -69,5 +60,3 @@ alter table "public"."orders" validate constraint "orders_product_id_fkey";
 alter table "public"."products" add constraint "products_category_id_fkey" FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE CASCADE not valid;
 
 alter table "public"."products" validate constraint "products_category_id_fkey";
-
-
