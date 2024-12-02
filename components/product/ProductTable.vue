@@ -1,6 +1,6 @@
 <template>
   <UCard>
-    <UTable :rows="items" :columns="columns">
+    <UTable :rows="items" :columns="columns" :ui="{ td: { padding: 'py-2' } }">
       <template #barcode-data="{ row }">
         <span>{{ row.barcode }}</span>
       </template>
@@ -30,15 +30,15 @@
       <template #actions-data="{ row, index }">
         <div class="flex gap-3">
           <Icon
-            class="cursor-pointer text-xl text-orange-500"
-            name="heroicons:pencil"
+            class="cursor-pointer text-xl text-zinc-400"
+            name="lucide:pencil"
             @click="onEdit(row, index)"
           />
 
           <UPopover>
             <Icon
-              class="cursor-pointer text-xl text-red-500"
-              name="heroicons:trash"
+              class="cursor-pointer text-xl text-red-400"
+              name="lucide:trash"
             />
 
             <template #panel="{ close }">
@@ -91,31 +91,38 @@ const {
 const columns = [
   {
     key: 'name',
-    label: 'Product'
+    label: 'Product Name',
+    class: 'text-slate-500 text-xs'
   },
   {
     key: 'barcode',
-    label: 'Barcode'
+    label: 'Barcode',
+    class: 'text-slate-500 text-xs'
   },
   {
     key: 'cost_price',
-    label: 'Cost Price'
+    label: 'Cost Price',
+    class: 'text-slate-500 text-xs'
   },
   {
     key: 'selling_price',
-    label: 'Selling Price'
+    label: 'Selling Price',
+    class: 'text-slate-500 text-xs'
   },
   {
     key: 'reorder_level',
-    label: 'Reorder Level'
+    label: 'Reorder Level',
+    class: 'text-slate-500 text-xs'
   },
   {
     key: 'stock_qty',
-    label: 'Stock Qty'
+    label: 'Stocks',
+    class: 'text-slate-500 text-xs'
   },
   {
     key: 'actions',
-    label: 'Actions'
+    label: 'Actions',
+    class: 'text-slate-500 text-xs'
   }
 ]
 

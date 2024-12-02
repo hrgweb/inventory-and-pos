@@ -1,17 +1,24 @@
 <template>
   <div class="flex items-center gap-2 cursor-pointer relative text-slate-800">
-    <Icon name="heroicons:user-20-solid" />
-    <span>John Doe</span>
+    <div class="flex items-center gap-4">
+      <UAvatar alt="John Doe" size="md" />
+      <div class="flex flex-col">
+        <h3 class="text-md font-semibold">John Doe</h3>
+        <span class="text-sm font-light">johndoe@gmail.com</span>
+      </div>
+      <Icon name="lucide:chevron-down" />
+    </div>
 
-    <UCard v-if="isShow" class="absolute top-12 right-0 w-48">
+    <UCard v-if="isShow" class="absolute top-14 right-0 w-48">
       <div class="flex flex-col space-y-3">
         <NuxtLink
           v-for="(nav, i) in nav_options"
           :key="i"
           :to="`${nav.to}`"
           @click.prevent="onNavClick(nav)"
-          >{{ nav.label }}</NuxtLink
         >
+          <span class="text-sm">{{ nav.label }}</span>
+        </NuxtLink>
       </div>
     </UCard>
   </div>

@@ -1,21 +1,21 @@
 <template>
   <UCard>
-    <UTable :rows="items" :columns="columns">
+    <UTable :rows="items" :columns="columns" :ui="{ td: { padding: 'py-2' } }">
       <template #name-data="{ row }">
         <span>{{ row.name }}</span>
       </template>
       <template #actions-data="{ row, index }">
         <div class="flex gap-3">
           <Icon
-            class="cursor-pointer text-xl text-orange-500"
-            name="heroicons:pencil"
+            class="cursor-pointer text-xl text-zinc-400"
+            name="lucide:pencil"
             @click="onEdit(row, index)"
           />
 
           <UPopover>
             <Icon
-              class="cursor-pointer text-xl text-red-500"
-              name="heroicons:trash"
+              class="cursor-pointer text-xl text-orange-400"
+              name="lucide:trash"
             />
 
             <template #panel="{ close }">
@@ -58,7 +58,8 @@ const columns = [
   },
   {
     key: 'actions',
-    label: 'Actions'
+    label: 'Actions',
+    class: 'w-[100px]'
   }
 ]
 

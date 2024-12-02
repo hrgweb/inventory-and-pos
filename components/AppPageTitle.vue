@@ -1,5 +1,5 @@
 <template>
-  <h2 class="text-lg font-medium">{{ title }}</h2>
+  <h2 class="text-2xl font-semibold">{{ title }}</h2>
 </template>
 
 <script setup lang="ts">
