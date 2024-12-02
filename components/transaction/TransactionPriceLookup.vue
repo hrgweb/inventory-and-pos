@@ -32,12 +32,12 @@ const { escape } = useMagicKeys()
 
 const columns = [
   {
-    key: 'name',
-    label: 'Product Name'
-  },
-  {
     key: 'barcode',
     label: 'Barcode'
+  },
+  {
+    key: 'name',
+    label: 'Product Name'
   },
   {
     key: 'selling_price',
@@ -66,6 +66,8 @@ const product_barcode = ref('')
 const products = ref<IProduct[]>([])
 
 const priceLookup = useDebounceFn(async () => {
+  products.value = []
+
   // Check if input characters are less than 10 then return
   if (product_barcode.value.length < 10) return
 
@@ -73,12 +75,9 @@ const priceLookup = useDebounceFn(async () => {
     barcode: product_barcode.value,
     transaction_no: transaction.value?.transaction_no
   }
-  const data = await http.post<
-    { product: IProduct },
-    { barcode: string; transaction_no: string }
-  >(`/api/products/find-by-barcode`, body)
+  const data = await http.getOne<IProduct>(`/api/pos/price-lookup`, body)
   if (data) {
-    products.value.push(data.product)
+    products.value.push(data)
     product_barcode.value = ''
   }
 }, 200)
