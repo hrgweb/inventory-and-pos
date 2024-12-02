@@ -5,7 +5,7 @@ import type {
 } from '~/types'
 
 export function useTransaction() {
-  const barcode = ref('')
+  const barcode = useState('transaction_barcode', () => '')
   const aboutToPay = useState('about_to_pay', () => false)
   const transaction = useState<ITransaction | null>('transaction', () => null)
   const tenderAmount = useState('transaction_amount', () => 0)

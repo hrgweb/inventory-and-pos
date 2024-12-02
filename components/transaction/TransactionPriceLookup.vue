@@ -1,49 +1,21 @@
 <template>
   <UCard>
     <UInput
+      v-model="product_barcode"
       ref="lookup_input"
       class="w-full mb-6"
       size="xl"
       icon="heroicons:magnifying-glass"
       placeholder="Scan product barcode"
+      @input="priceLookup"
     />
 
-    <UTable :rows="items" :columns="columns">
+    <UTable :rows="products" :columns="columns">
       <template #name-data="{ row }">
         <span>{{ row.name }}</span>
       </template>
-      <template #actions-data="{ row, index }">
-        <div class="flex gap-3">
-          <Icon
-            class="cursor-pointer text-xl text-orange-500"
-            name="heroicons:pencil"
-          />
-
-          <UPopover>
-            <Icon
-              class="cursor-pointer text-xl text-red-500"
-              name="heroicons:trash"
-            />
-
-            <template #panel="{ close }">
-              <div class="p-4">
-                <p>
-                  Delete <b>{{ row.name }}?</b>?
-                </p>
-
-                <div>
-                  <UButton label="Yes" color="red" />
-                  <UButton
-                    label="No"
-                    color="white"
-                    variant="ghost"
-                    @click="close"
-                  />
-                </div>
-              </div>
-            </template>
-          </UPopover>
-        </div>
+      <template #selling_price-data="{ row }">
+        <span>{{ formatNumber(row.selling_price) }}</span>
       </template>
     </UTable>
   </UCard>
@@ -51,6 +23,8 @@
 
 <script setup lang="ts">
 import { useFocus, useMagicKeys } from '@vueuse/core'
+import type { IProduct } from '~/types'
+import { formatNumber } from '~/utils'
 
 const lookup_input = ref()
 const { focused } = useFocus(lookup_input, { initialValue: true })
@@ -67,11 +41,9 @@ const columns = [
   },
   {
     key: 'selling_price',
-    label: 'Selling Price'
+    label: ' Price'
   }
 ]
-
-const items = ref([])
 
 const emit = defineEmits<{
   close: [void]
@@ -86,4 +58,28 @@ watchEffect(() => {
 onMounted(() => {
   focused.value = true
 })
+
+const { transaction } = useTransaction()
+const http = useHttp()
+
+const product_barcode = ref('')
+const products = ref<IProduct[]>([])
+
+const priceLookup = useDebounceFn(async () => {
+  // Check if input characters are less than 10 then return
+  if (product_barcode.value.length < 10) return
+
+  const body = {
+    barcode: product_barcode.value,
+    transaction_no: transaction.value?.transaction_no
+  }
+  const data = await http.post<
+    { product: IProduct },
+    { barcode: string; transaction_no: string }
+  >(`/api/products/find-by-barcode`, body)
+  if (data) {
+    products.value.push(data.product)
+    product_barcode.value = ''
+  }
+}, 200)
 </script>
