@@ -16,7 +16,7 @@ export interface IProduct {
   description: string
   cost_price: number
   selling_price: number
-  category_id: number | string
+  category_id: string
   barcode: string
   stock_qty: number
   reorder_level: number

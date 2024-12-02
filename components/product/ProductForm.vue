@@ -39,7 +39,7 @@
       </UFormGroup>
       <UFormGroup label="Category" name="category_id">
         <USelect
-          v-model.number="form.category_id"
+          v-model="form.category_id"
           :options="categories"
           size="xl"
           option-attribute="name"
@@ -94,7 +94,7 @@ const schema = z.object({
   barcode: z.string().min(1, { message: 'Barcode is required' }),
   name: z.string().min(1, { message: 'Product name is required' }),
   description: z.string(),
-  category_id: z.number({ message: 'Category is required' }).min(1),
+  category_id: z.string({ message: 'Category is required' }).min(1),
   cost_price: z.number().min(1, { message: 'Cost price is required' }),
   selling_price: z.number().min(1, { message: 'Selling price is required' }),
   stock_qty: z.number().min(1, { message: 'Stock qty is required' }),
@@ -110,7 +110,7 @@ const state = reactive<IProductFormRequest>({
   selling_price: 0,
   stock_qty: 0,
   reorder_level: 0,
-  category_id: undefined,
+  category_id: '',
   barcode: '',
   barcode_img: null
 })
@@ -123,7 +123,7 @@ const editState = reactive<IProductFormRequest>({
   selling_price: 0,
   stock_qty: 0,
   reorder_level: 0,
-  category_id: undefined,
+  category_id: '',
   barcode: '',
   barcode_img: null
 })
