@@ -90,17 +90,20 @@
         </div>
       </div>
     </div>
+  </div>
 
+  <Template to="body">
     <UModal v-model="show_modal">
       <component :is="component_to_use" @close="modal = 'none'" />
     </UModal>
-  </div>
+  </Template>
 </template>
 
 <script setup lang="ts">
-import { useFocus, useMagicKeys } from '@vueuse/core'
-import TenderAmount from '~/components/transaction/TenderAmount.vue'
-import Completed from '~/components/transaction/Completed.vue'
+import { useFocus, useMagicKeys, useDebounceFn } from '@vueuse/core'
+import TenderAmount from '~/components/transaction/TransactionTenderAmount.vue'
+import Completed from '~/components/transaction/TransactionCompleted.vue'
+import PriceLookup from '~/components/transaction/TransactionPriceLookup.vue'
 import type { IOrderResponse, ModalValue } from '~/types'
 
 definePageMeta({ layout: 'none', middleware: 'auth' })
@@ -152,19 +155,22 @@ const columns = [
   }
 ]
 
-async function onScan() {
+const onScan = useDebounceFn(async () => {
+  // Check if input characters are less than 10 then return
+  if (barcode.value.length < 10) return
+
   await findProduct({ barcode: barcode.value })
   barcode.value = ''
-}
+}, 500)
 
 const barcode_input = ref()
 const { focused } = useFocus(barcode_input, { initialValue: true })
 
-const { ctrl, enter } = useMagicKeys()
+const { ctrl, enter, f } = useMagicKeys()
 
 const notification = useNotification()
 
-// Open
+// Open the pay modal
 watchEffect(() => {
   if (ctrl.value && enter.value) {
     if (items.value.length === 0) {
@@ -180,12 +186,22 @@ watchEffect(() => {
   }
 })
 
+// Open modal for price lookup
+watchEffect(() => {
+  if (ctrl.value && f.value) {
+    modal.value = 'lookup'
+  }
+})
+
 watch(modal, (value) => {
   if (value === 'form') {
     component_to_use.value = TenderAmount
   }
   if (value === 'completed') {
     component_to_use.value = Completed
+  }
+  if (value === 'lookup') {
+    component_to_use.value = PriceLookup
   }
   setTimeout(() => (focused.value = true), 500)
 })
