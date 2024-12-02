@@ -5,5 +5,5 @@
 </template>
 
 <script setup lang="ts">
-definePageMeta({ layout: 'none' })
+definePageMeta({ layout: 'none', middleware: 'auth' })
 </script>

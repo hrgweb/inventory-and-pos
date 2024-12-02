@@ -4,7 +4,7 @@ interface ILoginError {
 }
 
 export function useAuth() {
-  const _error = ref<ILoginError | null>(null)
+  const _error = useState<ILoginError | null>('auth_error', () => null)
 
   const supabase = useSupabaseClient()
 

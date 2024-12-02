@@ -1,6 +1,6 @@
 <template>
   <UCard>
-    <UTable :rows="items" :columns="columns">
+    <UTable :rows="items" :columns="columns" :ui="{ td: { padding: 'py-2' } }">
       <template #transaction_no-data="{ row }">
         <span>{{ row.transactions.transaction_no }}</span>
       </template>
@@ -49,43 +49,53 @@ const { list: items, page, listCount: list_count } = useSales()
 const columns = [
   {
     key: 'transaction_no',
-    label: 'Transaction No'
+    label: 'Transaction No',
+    class: 'text-slate-500 text-xs'
   },
   {
     key: 'product_name',
-    label: 'Product Name'
+    label: 'Product Name',
+    class: 'text-slate-500 text-xs'
   },
   {
     key: 'barcode',
-    label: 'Barcode'
+    label: 'Barcode',
+    class: 'text-slate-500 text-xs'
   },
   {
     key: 'product_name',
-    label: 'Product Name'
+    label: 'Product Name',
+    class: 'text-slate-500 text-xs'
   },
   {
     key: 'product_name',
-    label: 'Product Name'
+    label: 'Product Name',
+    class: 'text-slate-500 text-xs'
   },
   {
     key: 'cost_price',
-    label: 'Cost Price'
+    label: 'Cost Price',
+    class: 'text-slate-500 text-xs'
   },
   {
     key: 'selling_price',
-    label: 'Selling Price'
+    label: 'Selling Price',
+    class: 'text-slate-500 text-xs'
   },
   {
     key: 'reorder_level',
-    label: 'Reorder Level'
+    label: 'Reorder Level',
+    class: 'text-slate-500 text-xs'
   },
   {
     key: 'stock_qty',
-    label: 'Stock Qty'
+    label: 'Stock Qty',
+    class: 'text-slate-500 text-xs'
   },
   {
     key: 'actions',
-    label: 'Actions'
+    label: 'Actions',
+    class: 'text-slate-500 text-xs'
   }
 ]
 </script>

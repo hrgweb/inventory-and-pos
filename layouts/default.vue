@@ -17,6 +17,17 @@
             :ui="{ rounded: 'rounded-full', shadow: 'shadow-2xl' }"
           />
 
+          <div>
+            <!-- Go to pos -->
+            <UButton
+              icon="lucide:monitor"
+              color="blue"
+              variant="soft"
+              class="rounded-full px-3 py-[.6rem]"
+              to="/pos"
+            />
+          </div>
+
           <!-- Dropdown -->
           <AppUserMenu :is-show="is_show_menu" @click="onShow" />
         </div>

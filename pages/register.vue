@@ -16,13 +16,13 @@
       </UFormGroup>
       <div>
         <UButton type="submit" label="Save" />
-        <UButton
+        <!-- <UButton
           type="button"
           variant="link"
           color="white"
           @click="navigateTo('/login')"
           >Already have an account? Sign In</UButton
-        >
+        > -->
       </div>
     </UForm>
   </div>
