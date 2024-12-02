@@ -117,3 +117,11 @@ export interface IDaysRemaining {
 }
 
 export type ModalValue = 'none' | 'form' | 'completed' | 'lookup'
+
+export interface ISales {
+  transaction: ITransaction
+  orders: IOrderResponse[]
+  amount: number
+  total: number
+  change: number
+}
