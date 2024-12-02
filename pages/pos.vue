@@ -92,11 +92,11 @@
     </div>
   </div>
 
-  <Template to="body">
+  <Teleport to="body">
     <UModal v-model="show_modal">
       <component :is="component_to_use" @close="modal = 'none'" />
     </UModal>
-  </Template>
+  </Teleport>
 </template>
 
 <script setup lang="ts">
