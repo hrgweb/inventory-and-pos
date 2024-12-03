@@ -2,10 +2,11 @@ import { serverSupabaseClient } from '#supabase/server'
 import type { IOrderResponse, IProduct } from '~/types'
 
 export default defineEventHandler(async (event) => {
-  const client = await serverSupabaseClient(event)
+  const supabase = await serverSupabaseClient(event)
+  const body = await readBody(event)
 
   async function findProduct(barcode: string) {
-    const { data, error } = await client
+    const { data, error } = await supabase
       .from('products')
       .select('id, name, selling_price, barcode')
       .like('barcode', barcode)
@@ -52,13 +53,15 @@ export default defineEventHandler(async (event) => {
     const qty = 1 // default
     const sellingPrice = product.selling_price!
     const payload = {
+      user_id: body.user_id,
       transaction_no,
       product_id: product.id,
       qty,
       subtotal: sellingPrice! * qty
     } as never
 
-    const { data, error } = await client.from('orders').insert(payload).select(`
+    const { data, error } = await supabase.from('orders').insert(payload)
+      .select(`
 id,
 transaction_no,
 products (
