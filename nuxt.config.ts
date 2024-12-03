@@ -15,5 +15,9 @@ export default defineNuxtConfig({
       exclude: ['/pos'],
       cookieRedirect: false
     }
+  },
+  colorMode: {
+    preference: 'light',
+    fallback: 'light'
   }
 })
