@@ -2,7 +2,7 @@
   <div>
     <AppPageTitle title="Settings" class="pb-6" />
 
-    <AppSettings />
+    <AppSettings v-if="false" />
   </div>
 </template>
 
