@@ -12,7 +12,9 @@
           item.transactions.transaction_no
         }}</span>
       </template>
-
+      <template #total-data="{ row: item }">
+        <span>{{ formatNumber(item.total) }}</span>
+      </template>
       <template #created_at-data="{ row: item }">
         <span>{{ format(item.transactions.created_at, 'PP') }}</span>
       </template>
@@ -71,6 +73,11 @@ const columns = [
   {
     key: 'transaction_no',
     label: 'Transaction No',
+    class: 'text-slate-500 text-xs'
+  },
+  {
+    key: 'total',
+    label: 'Total',
     class: 'text-slate-500 text-xs'
   },
   {

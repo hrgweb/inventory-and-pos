@@ -29,6 +29,15 @@
           class="rounded-full px-3 py-[.6rem]"
           to="/admin"
         />
+
+        <!-- Signout -->
+        <UButton
+          icon="lucide:log-out"
+          color="blue"
+          variant="soft"
+          class="rounded-full px-3 py-[.6rem]"
+          @click="onSignOut"
+        />
       </div>
     </div>
 
@@ -282,5 +291,12 @@ onMounted(() => {
 
 function focusToBarcoceInput() {
   focused.value = true
+}
+
+const { signOut } = useAuth()
+
+async function onSignOut() {
+  await signOut()
+  return navigateTo('/login')
 }
 </script>

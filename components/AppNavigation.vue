@@ -28,12 +28,12 @@ const nav_options = [
     icon: 'lucide:briefcase-business',
     to: '/admin/products'
   },
-  {
-    name: 'orders',
-    label: 'Orders',
-    icon: 'lucide:shopping-cart',
-    to: '/admin/orders'
-  },
+  // {
+  //   name: 'orders',
+  //   label: 'Orders',
+  //   icon: 'lucide:shopping-cart',
+  //   to: '/admin/orders'
+  // },
   {
     name: 'sales',
     label: 'Sales',

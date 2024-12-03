@@ -38,7 +38,7 @@ const nav_options = [
     name: 'logout',
     label: 'Logout',
     icon: '',
-    to: null
+    to: ''
   }
 ] as INavigationOptions[]
 
@@ -55,10 +55,8 @@ const { signOut } = useAuth()
 
 async function onNavClick(nav: INavigationOptions) {
   if (nav.name === 'logout') {
-    const result = await signOut()
-    if (result) {
-      return navigateTo('/login')
-    }
+    await signOut()
+    return navigateTo('/login')
   }
 }
 </script>
