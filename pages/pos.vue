@@ -1,20 +1,33 @@
 <template>
   <div class="flex flex-col w-full h-screen p-3 space-y-3">
     <div
-      class="flex bg-slate-50 justify-between items-end rounded-lg p-3 shadow w-full"
+      class="flex bg-slate-50 items-center justify-between rounded-lg p-3 shadow w-full gap-6 px-6"
     >
+      <h2 class="font-medium text-xl">Awesome Store</h2>
+
       <div class="relative w-[50%]">
         <Icon
           name="lucide:scan-barcode"
-          class="absolute z-10 w-5 h-5 left-3 top-2.5 text-gray-400"
+          class="absolute z-10 w-5 h-5 left-3 top-3.5 text-gray-400"
         />
         <input
           v-model="barcode"
           type="text"
-          placeholder="Scan product barcode"
-          class="w-[500px] relative block w-full disabled:cursor-not-allowed disabled:opacity-75 focus:outline-none border-0 form-input rounded-md placeholder-gray-400 dark:placeholder-gray-500 text-xl px-2.5 py-1.5 shadow-sm bg-white dark:bg-gray-900 text-gray-900 dark:text-white ring-1 ring-inset ring-gray-300 dark:ring-gray-700 focus:ring-2 focus:ring-gray-300 dark:focus:ring-gray-400 ps-9"
+          placeholder="Scan product barcode here "
+          class="w-[500px] relative block w-full disabled:cursor-not-allowed disabled:opacity-75 focus:outline-none border-0 form-input placeholder-gray-400 dark:placeholder-gray-500 text-xl px-2.5 py-2.5 shadow-sm bg-white dark:bg-gray-900 text-gray-900 dark:text-white ring-1 ring-inset ring-gray-300 dark:ring-gray-700 focus:ring-2 focus:ring-gray-300 dark:focus:ring-gray-400 ps-9 rounded-full"
           ref="barcode_input"
           @input="onScan"
+        />
+      </div>
+
+      <div>
+        <!-- Go to admin -->
+        <UButton
+          icon="lucide:layout-dashboard"
+          color="blue"
+          variant="soft"
+          class="rounded-full px-3 py-[.6rem]"
+          to="/admin"
         />
       </div>
     </div>
