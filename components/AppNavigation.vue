@@ -1,8 +1,14 @@
 <template>
-  <div class="flex flex-col space-y-3 p-6">
-    <NuxtLink v-for="(nav, i) in nav_options" :key="i" :to="`${nav.to}`">{{
-      nav.label
-    }}</NuxtLink>
+  <div class="flex flex-col px-12 py-8">
+    <a href="/admin" class="text-2xl font-medium">Company</a>
+    <br />
+
+    <NuxtLink v-for="(nav, i) in nav_options" :key="i" :to="`${nav.to}`">
+      <div class="flex items-center gap-3 px-3 py-3">
+        <Icon class="w-5 h-5" :name="nav.icon" />
+        <span>{{ nav.label }}</span>
+      </div>
+    </NuxtLink>
   </div>
 </template>
 
@@ -13,80 +19,93 @@ const nav_options = [
   {
     name: 'dashboard',
     label: 'Dashboard',
-    icon: '',
-    to: '/'
-  },
-  {
-    name: 'categories',
-    label: 'Categories',
-    icon: '',
-    to: '/admin/categories'
+    icon: 'lucide:layout-dashboard',
+    to: '/admin'
   },
   {
     name: 'products',
     label: 'Products',
-    icon: '',
+    icon: 'lucide:briefcase-business',
     to: '/admin/products'
   },
   {
-    name: 'all_products',
-    label: 'All Products',
-    icon: '',
-    to: '/admin/all-products'
+    name: 'orders',
+    label: 'Orders',
+    icon: 'lucide:shopping-cart',
+    to: '/admin/orders'
   },
   {
-    name: 'payments',
-    label: 'Payments',
-    icon: '',
-    to: '/admin/payments'
+    name: 'sales',
+    label: 'Sales',
+    icon: 'lucide:dollar-sign',
+    to: '/admin/sales'
   },
-  {
-    name: 'users',
-    label: 'Users',
-    icon: '',
-    to: '/admin/users'
-  },
-  {
-    name: 'insights',
-    label: 'Insights',
-    icon: '',
-    to: '/admin/insights'
-  },
+
+  // {
+  //   name: 'all_products',
+  //   label: 'All Products',
+  //   icon: '',
+  //   to: '/admin/all-products'
+  // },
+  // {
+  //   name: 'payments',
+  //   label: 'Payments',
+  //   icon: '',
+  //   to: '/admin/payments'
+  // },
+  // {
+  //   name: 'users',
+  //   label: 'Users',
+  //   icon: '',
+  //   to: '/admin/users'
+  // },
+  // {
+  //   name: 'insights',
+  //   label: 'Insights',
+  //   icon: '',
+  //   to: '/admin/insights'
+  // },
   {
     name: 'settings',
     label: 'Settings',
-    icon: '',
+    icon: 'lucide:settings',
     to: '/admin/settings'
-  },
-  {
-    name: 'personal',
-    label: 'Personal',
-    icon: '',
-    to: '/admin/personal'
-  },
-  {
-    name: 'upgrades',
-    label: 'Upgrades',
-    icon: '',
-    to: '/admin/upgrades'
-  },
-  {
-    name: 'guides',
-    label: 'Guides',
-    icon: '',
-    to: '/admin/guides'
-  },
-  {
-    name: 'trainings',
-    label: 'Trainings',
-    icon: '',
-    to: '/admin/trainings'
-  },
-  {
-    name: 'logout',
-    label: 'Logout',
-    icon: '',
-    to: '/admin/logout'
   }
+  // {
+  //   name: 'personal',
+  //   label: 'Personal',
+  //   icon: '',
+  //   to: '/admin/personal'
+  // },
+  // {
+  //   name: 'upgrades',
+  //   label: 'Upgrades',
+  //   icon: '',
+  //   to: '/admin/upgrades'
+  // },
+  // {
+  //   name: 'guides',
+  //   label: 'Guides',
+  //   icon: '',
+  //   to: '/admin/guides'
+  // },
+  // {
+  //   name: 'trainings',
+  //   label: 'Trainings',
+  //   icon: '',
+  //   to: '/admin/trainings'
+  // },
+  // {
+  //   name: 'logout',
+  //   label: 'Logout',
+  //   icon: '',
+  //   to: '/admin/logout'
+  // }
 ] as INavigationOptions[]
 </script>
+
+<style>
+.router-link-active {
+  @apply bg-blue-500 text-white rounded-lg shadow-lg;
+}
+</style>

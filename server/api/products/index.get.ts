@@ -6,7 +6,7 @@ export default defineEventHandler(async (event) => {
   const query = getQuery(event)
 
   let page = (query?.page as number) || 1
-  let itemsPerPage = 5
+  let itemsPerPage = 15
   let totalCount = 0
   const search = query?.search || ''
 

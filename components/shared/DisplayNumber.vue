@@ -1,8 +1,8 @@
 <template>
-  <span class="text-orange-500">
+  <div class="text-orange-500">
     <span v-if="showCurrency">&#8369;</span>
     {{ value ? formatNumber(Number(value)) : '0.00' }}
-  </span>
+  </div>
 </template>
 
 <script setup lang="ts">

@@ -1,6 +1,4 @@
 <template>
-  <pre>{{ list }}</pre>
-
   <div>
     <div class="flex justify-between items-center pb-6">
       <AppPageTitle title="New Product" />
@@ -14,79 +12,61 @@
       />
     </div>
 
-    <UForm :schema="schema" :state="form" class="space-y-4" @submit="onSubmit">
-      <!-- <img
-        v-show="fileUploaded"
-        id="image-preview"
-        src=""
-        alt="Image Preview"
-        :style="{ width: '100%', height: '300px' }"
-      /> -->
-      <!-- Thumbnail -->
-      <!-- <UInput
-        type="file"
-        size="sm"
-        icon="i-heroicons-folder"
-        id="image-input"
-        @change="onUpload"
-      /> -->
+    <UForm
+      ref="productForm"
+      :schema="schema"
+      :state="form"
+      class="space-y-4"
+      @submit="onSubmit"
+    >
+      <UFormGroup label="Barcode" name="barcode">
+        <div class="flex">
+          <UInput v-model="form.barcode" size="xl" class="w-full" />
+          <UButton
+            label="Generate"
+            color="white"
+            icon="heroicons:viewfinder-circle"
+            size="lg"
+            @click="onBarcodeGenerate"
+          />
+        </div>
+      </UFormGroup>
       <UFormGroup label="Product Name" name="name">
         <UInput v-model="form.name" size="xl" />
       </UFormGroup>
       <UFormGroup label="Description" name="description">
         <UInput v-model="form.description" size="xl" />
       </UFormGroup>
-      <UFormGroup label="Supplier Price" name="supplier_price">
-        <UInput v-model.number="form.supplier_price" size="xl" />
-      </UFormGroup>
-      <UFormGroup label="Mark-up (%)" name="mark_up">
-        <UInput v-model.number="form.markup" size="xl" />
-      </UFormGroup>
-      <UFormGroup label="Final Price" name="price">
-        <UInput v-model.number="form.price" size="xl" />
-      </UFormGroup>
       <UFormGroup label="Category" name="category_id">
         <USelect
           v-model="form.category_id"
-          :options="getCategories"
+          :options="categories"
           size="xl"
           option-attribute="name"
           value-attribute="id"
           placeholder="Select category"
         />
       </UFormGroup>
-      <UFormGroup label="Quantity" name="qty">
-        <UInput v-model.number="form.qty" size="xl" />
+      <UFormGroup label="Cost Price" name="cost_price">
+        <UInput v-model.number="form.cost_price" size="xl" />
       </UFormGroup>
-      <UFormGroup v-if="isAdd" label="Barcode" name="barcode">
-        <!-- Barcode SVG -->
-        <div v-if="barcode" class="pb-6" v-html="barcodeSvg"></div>
-        <div class="flex gap-3">
-          <UButton
-            label="Scan"
-            color="orange"
-            icon="heroicons:finger-print-20-solid"
-            size="lg"
-            @click="choose"
-          />
-          <UButton
-            label="Generate"
-            color="blue"
-            icon="heroicons:viewfinder-circle"
-            size="lg"
-            @click="chooseGenerate"
-          />
-        </div>
+      <UFormGroup label="Selling Price" name="selling_price">
+        <UInput v-model.number="form.selling_price" size="xl" />
       </UFormGroup>
-      <div class="text-left space-x-3">
-        <UButton v-if="isAdd" type="submit" size="lg" label="Save Record" />
+
+      <UFormGroup label="Stock Qty" name="stock_qty">
+        <UInput v-model.number="form.stock_qty" size="xl" />
+      </UFormGroup>
+      <UFormGroup label="Reorder Level" name="reorder_level">
+        <UInput v-model.number="form.reorder_level" size="xl" />
+      </UFormGroup>
+
+      <div class="text-left space-x-3 pt-6">
         <UButton
-          v-else
-          type="button"
+          type="submit"
           size="lg"
-          label="Update Record"
-          color="orange"
-          @click="onUpdate"
+          :label="`${isAdd ? 'Save' : 'Update'} Record`"
+          :color="`${isAdd ? 'green' : 'orange'}`"
         />
         <UButton
           type="button"
@@ -106,18 +86,19 @@ import { z } from 'zod'
 import type { FormSubmitEvent } from '#ui/types'
 import type { IProductFormRequest } from '~/types'
 
-const { choose, chooseGenerate, barcode, barcodeSvg } = useBarcode()
-const { create, getCategories, isAdd, selected, update, list } = useProduct()
+const { chooseGenerate, barcode, barcodeSvg } = useBarcode()
+const { create, isAdd, selected, update } = useProduct()
+const { list: categories } = useCategory()
 
 const schema = z.object({
+  barcode: z.string().min(1, { message: 'Barcode is required' }),
   name: z.string().min(1, { message: 'Product name is required' }),
   description: z.string(),
-  supplier_price: z.number(),
-  markup: z.number(),
-  price: z.number(),
   category_id: z.string({ message: 'Category is required' }).min(1),
-  qty: z.number(),
-  barcode: z.string().min(1, { message: 'Barcode is required' })
+  cost_price: z.number().min(1, { message: 'Cost price is required' }),
+  selling_price: z.number().min(1, { message: 'Selling price is required' }),
+  stock_qty: z.number().min(1, { message: 'Stock qty is required' }),
+  reorder_level: z.number().min(1, { message: 'Reorder Level is required' })
 })
 
 type Schema = z.output<typeof schema>
@@ -125,11 +106,11 @@ type Schema = z.output<typeof schema>
 const state = reactive<IProductFormRequest>({
   name: '',
   description: '',
-  supplier_price: 0,
-  markup: 0,
-  price: 0,
-  category_id: undefined,
-  qty: 0,
+  cost_price: 0,
+  selling_price: 0,
+  stock_qty: 0,
+  reorder_level: 0,
+  category_id: '',
   barcode: '',
   barcode_img: null
 })
@@ -138,105 +119,46 @@ const editState = reactive<IProductFormRequest>({
   id: '',
   name: '',
   description: '',
-  supplier_price: 0,
-  markup: 0,
-  price: 0,
-  category_id: undefined,
-  qty: 0
-})
-
-// Add this watch effect to capture the SVG when it changes
-watch(barcodeSvg, (svg) => {
-  if (svg) {
-    const svgString = svg.toString()
-    const base64Svg = btoa(svgString)
-    const dataUrl = `data:image/svg+xml;base64,${base64Svg}`
-
-    // Convert base64 to Blob then to File
-    fetch(dataUrl)
-      .then((res) => res.blob())
-      .then((blob) => {
-        state.barcode = barcode.value
-        state.barcode_img = new File([blob], 'barcode.svg', {
-          type: 'image/svg+xml'
-        })
-      })
-  }
+  cost_price: 0,
+  selling_price: 0,
+  stock_qty: 0,
+  reorder_level: 0,
+  category_id: '',
+  barcode: '',
+  barcode_img: null
 })
 
 function reset() {
   // Add
   state.name = ''
   state.description = ''
-  state.supplier_price = 0
-  state.markup = 0
-  state.price = 0
+  state.cost_price = 0
+  state.selling_price = 0
+  state.stock_qty = 0
+  state.reorder_level = 0
   state.category_id = undefined
-  state.qty = 0
   state.barcode = ''
   state.barcode_img = null
 
   // Edit
   editState.name = ''
   editState.description = ''
-  editState.supplier_price = 0
-  editState.markup = 0
-  editState.price = 0
+  editState.cost_price = 0
+  editState.selling_price = 0
+  editState.stock_qty = 0
+  editState.reorder_level = 0
   editState.category_id = undefined
-  editState.qty = 0
+  editState.barcode = ''
+  editState.barcode_img = null
 
   barcode.value = ''
 }
 
 const notification = useNotification()
 
-async function onSubmit(event: FormSubmitEvent<Schema>) {
-  const formData = {
-    ...event.data,
-    barcode_img: state.barcode_img
-  }
-  await create(formData) // save product
-  notification.success({ title: 'Product saved successfully' })
-  setTimeout(() => reset(), 100)
-  onClose()
-}
-
-const fileUploaded = ref(false)
-function onUpload(event: Event) {
-  const imageInput = document.getElementById('image-input') as HTMLInputElement
-  const imagePreview = document.getElementById(
-    'image-preview'
-  ) as HTMLImageElement
-
-  if (!imageInput || !imagePreview) {
-    console.log('No image or preview element found')
-    return
-  }
-
-  if (imageInput.files && imageInput.files.length) {
-    const file = imageInput.files[0]!
-    const reader = new FileReader()
-
-    reader.onload = (event) => {
-      imagePreview.src = event?.target?.result as string
-      fileUploaded.value = true
-    }
-
-    reader.readAsDataURL(file)
-  } else {
-    fileUploaded.value = false
-    // handle the case where no files are selected
-  }
-}
-
 const emit = defineEmits<{
   close: [void]
 }>()
-
-function onClose() {
-  isAdd.value = false
-  emit('close')
-}
 
 const form = computed(() => (isAdd.value ? state : editState))
 
@@ -250,19 +172,42 @@ watchEffect(() => {
   // Edit
   const product = selected.value
   editState.id = product?.id
+  editState.barcode = product?.barcode
   editState.name = product?.name
   editState.description = product?.description
-  editState.supplier_price = product?.supplier_price
-  editState.markup = product?.markup
-  editState.price = product?.price
+  editState.cost_price = product?.cost_price
+  editState.selling_price = product?.selling_price
+  editState.stock_qty = product?.stock_qty
+  editState.reorder_level = product?.reorder_level
   editState.category_id = product?.category_id
-  editState.qty = product?.qty
+  editState.stock_qty = product?.stock_qty
 })
 
-async function onUpdate() {
-  const product = editState
-  await update(product)
-  notification.info({ title: 'Product updated successfully' })
+async function onSubmit(event: FormSubmitEvent<Schema>) {
+  // Create
+  if (isAdd.value) {
+    const { ...body } = event.data
+    await create(body)
+    notification.success({ title: '1 product created successfully' })
+  }
+  // Update
+  else {
+    const { ...body } = editState
+    await update(body)
+    notification.info({ title: '1 product updated successfully' })
+  }
+
+  setTimeout(() => reset(), 100)
+  onClose()
+}
+
+function onClose() {
   emit('close')
+}
+
+function onBarcodeGenerate() {
+  chooseGenerate()
+  state.barcode = barcode.value as string
+  editState.barcode = barcode.value as string
 }
 </script>

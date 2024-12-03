@@ -1,78 +1,46 @@
 <template>
-  <div class="bg-slate-300 text-slate-800">
-    <!-- Navbar -->
-    <div
-      class="flex justify-between items-center bg-slate-500 text-white px-6 py-3"
-    >
-      <div class="flex gap-3">
-        <NuxtLink v-for="(nav, i) in nav_options" :key="i" :to="`${nav.to}`">{{
-          nav.label
-        }}</NuxtLink>
-      </div>
-
-      <div class="flex items-center gap-6">
-        <UInput
-          v-model="search"
-          class="md:w-96"
-          size="xl"
-          icon="heroicons:magnifying-glass"
-          placeholder="Search"
-        />
-
-        <!-- Dropdown -->
-        <AppUserMenu :is-show="is_show_menu" @click="onShow" />
-      </div>
-    </div>
-
-    <div class="flex justify-center m-auto sm:w-full md:w-full">
-      <div class="sidebar w-[250px] shrink-0">
+  <div class="bg-slate-300 text-slate-800 min-h-screen">
+    <div class="flex justify-center m-auto sm:w-full md:w-full h-screen">
+      <div class="sidebar w-[250px] shrink-0 bg-slate-50 shadow-2xl">
         <AppNavigation />
       </div>
 
-      <div class="content flex-1 bg-slate-100">
-        <slot />
+      <div class="content flex-1 bg-zinc-200 py-8 px-12">
+        <!-- Header -->
+        <div class="flex justify-between items-center text-white">
+          <UInput
+            v-model="search"
+            class="md:w-[60%]"
+            size="xl"
+            icon="lucide:search"
+            placeholder="Search"
+            :ui="{ rounded: 'rounded-full', shadow: 'shadow-2xl' }"
+          />
+
+          <div>
+            <!-- Go to pos -->
+            <UButton
+              icon="lucide:monitor"
+              color="blue"
+              variant="soft"
+              class="rounded-full px-3 py-[.6rem]"
+              to="/pos"
+            />
+          </div>
+
+          <!-- Dropdown -->
+          <AppUserMenu :is-show="is_show_menu" @click="onShow" />
+        </div>
+
+        <div class="pt-8">
+          <slot />
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import type { INavigationOptions } from '~/types'
-import UserMenu from '~/components/AppUserMenu.vue'
-
-const nav_options = [
-  {
-    name: 'home',
-    label: 'Home',
-    icon: '',
-    to: '/'
-  },
-  {
-    name: 'shop',
-    label: 'Shop',
-    icon: '',
-    to: '/admin/shop'
-  },
-  {
-    name: 'cart',
-    label: 'Cart',
-    icon: '',
-    to: '/admin/cart'
-  },
-  {
-    name: 'barcode',
-    label: 'Barcode',
-    icon: '',
-    to: '/admin/barcode'
-  },
-  {
-    name: 'pos',
-    label: 'Pos',
-    icon: '',
-    to: '/pos'
-  }
-] as INavigationOptions[]
-
 const search = ref('')
 
 const is_show_menu = ref(false)

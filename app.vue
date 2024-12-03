@@ -1,14 +1,16 @@
 <template>
-  <TrialPeriodAlert
-    v-if="tenDaysBeforeExpiry && !expired"
-    :end-date="settings?.trial_period_end!"
-  />
-
   <NuxtLayout>
     <NuxtPage />
 
     <UNotifications />
   </NuxtLayout>
+
+  <Teleport to="body">
+    <TrialPeriodAlert
+      v-if="tenDaysBeforeExpiry && !expired"
+      :end-date="settings?.trial_period_end!"
+    />
+  </Teleport>
 </template>
 
 <script setup lang="ts">

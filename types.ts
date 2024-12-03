@@ -14,13 +14,12 @@ export interface IProduct {
   id: number
   name: string
   description: string
-  supplier_price: number
-  markup: number | string
-  price: number
-  price_formatted: string
-  category_id: number | string
-  qty: number
+  cost_price: number
+  selling_price: number
+  category_id: string
   barcode: string
+  stock_qty: number
+  reorder_level: number
 }
 
 export type ProductSortBy = 'Latest Added' | 'Product Name'
@@ -56,7 +55,8 @@ export interface ICategoryFormRequest
   extends Partial<Record<keyof ICategory, string | number | undefined>> {}
 
 export interface IProductMapped extends IProduct {
-  price_formatted: string
+  cost_price_formatted: string
+  selling_price_formatted: string
 }
 
 export interface IItemResponse<T> {
@@ -93,11 +93,13 @@ export interface IOrderFormRequest extends Partial<IOrder> {}
 
 export interface IOrderResponse extends Partial<Omit<IOrder, 'product_id'>> {
   product: IProduct
+  product_id_count?: number
 }
 
 export type TrialPeriodDays = 30 | 45 | 60 | 75 | 90
 
 export interface ISetting {
+  id?: number
   trial_period_days: TrialPeriodDays
   trial_period_start: Date | null
   trial_period_end: Date | null
@@ -112,4 +114,14 @@ export interface IDaysRemaining {
   hours: number
   minutes: number
   seconds: number
+}
+
+export type ModalValue = 'none' | 'form' | 'completed' | 'lookup'
+
+export interface ISales {
+  transaction: ITransaction
+  orders: IOrderResponse[]
+  amount: number
+  total: number
+  change: number
 }

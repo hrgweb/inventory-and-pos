@@ -9,7 +9,7 @@ export default defineEventHandler(async (event) => {
   if (!transaction_no) {
     throw createError({
       statusCode: 500,
-      statusMessage: 'Transaction number not found'
+      statusMessage: `Transaction no ${transaction_no} not found`
     })
   }
 
@@ -22,12 +22,10 @@ export default defineEventHandler(async (event) => {
       products (
         id,
         name,
-        price,
+        selling_price,
         barcode
       ),
-      price,
-      qty,
-      subtotal
+      qty
     `
     )
     .eq('transaction_no', transaction_no)

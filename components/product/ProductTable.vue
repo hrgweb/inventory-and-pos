@@ -1,27 +1,44 @@
 <template>
   <UCard>
-    <UTable :rows="items" :columns="columns">
+    <UTable :rows="items" :columns="columns" :ui="{ td: { padding: 'py-2' } }">
+      <template #barcode-data="{ row }">
+        <span>{{ row.barcode }}</span>
+      </template>
       <template #name-data="{ row }">
         <span>{{ row.name }}</span>
       </template>
-      <template #price-data="{ row }">
-        <span>{{ row.price_formatted }}</span>
+      <template #cost_price-data="{ row }">
+        <span>{{ row.cost_price_formatted }}</span>
+      </template>
+      <template #selling_price-data="{ row }">
+        <span>{{ row.selling_price_formatted }}</span>
       </template>
       <template #subtotal-data="{ row }">
         <span>{{ row.subtotal_formatted }}</span>
       </template>
+      <template #reorder_level-data="{ row }">
+        <span
+          class="block"
+          :class="[
+            +row.stock_qty <= +row.reorder_level
+              ? 'bg-red-500 text-white p-1 rounded'
+              : ''
+          ]"
+          >{{ row.reorder_level }}</span
+        >
+      </template>
       <template #actions-data="{ row, index }">
         <div class="flex gap-3">
           <Icon
-            class="cursor-pointer text-xl text-orange-500"
-            name="heroicons:pencil"
+            class="cursor-pointer text-xl text-zinc-400"
+            name="lucide:pencil"
             @click="onEdit(row, index)"
           />
 
           <UPopover>
             <Icon
-              class="cursor-pointer text-xl text-red-500"
-              name="heroicons:trash"
+              class="cursor-pointer text-xl text-red-400"
+              name="lucide:trash"
             />
 
             <template #panel="{ close }">
@@ -53,8 +70,8 @@
     <UPagination
       v-model="page"
       class="pt-3"
-      :page-count="5"
-      :total="listCount"
+      :page-count="15"
+      :total="list_count"
       @update:model-value="page = $event"
     />
   </UCard>
@@ -66,7 +83,7 @@ import type { IProduct } from '~/types'
 const {
   getProducts: items,
   page,
-  listCount,
+  listCount: list_count,
   selectedIndex,
   remove
 } = useProduct()
@@ -74,19 +91,38 @@ const {
 const columns = [
   {
     key: 'name',
-    label: 'Product'
+    label: 'Product Name',
+    class: 'text-slate-500 text-xs'
   },
   {
-    key: 'price',
-    label: 'Price'
+    key: 'barcode',
+    label: 'Barcode',
+    class: 'text-slate-500 text-xs'
   },
   {
-    key: 'qty',
-    label: 'Qty'
+    key: 'cost_price',
+    label: 'Cost Price',
+    class: 'text-slate-500 text-xs'
+  },
+  {
+    key: 'selling_price',
+    label: 'Selling Price',
+    class: 'text-slate-500 text-xs'
+  },
+  {
+    key: 'reorder_level',
+    label: 'Reorder Level',
+    class: 'text-slate-500 text-xs'
+  },
+  {
+    key: 'stock_qty',
+    label: 'Stocks',
+    class: 'text-slate-500 text-xs'
   },
   {
     key: 'actions',
-    label: 'Actions'
+    label: 'Actions',
+    class: 'text-slate-500 text-xs'
   }
 ]
 

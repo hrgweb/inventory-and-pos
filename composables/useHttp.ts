@@ -80,7 +80,21 @@ export function useHttp() {
   ): Promise<T> {
     try {
       const data = await $fetch<T>(url, { method: 'GET', query })
-      return data as T
+
+      // Check if data is an array
+      if (Array.isArray(data)) {
+        return data[0] as T
+      }
+
+      // Check if data is an object
+      if (typeof data === 'object' && data !== null) {
+        return data as T
+      }
+
+      throw createError({
+        statusCode: 500,
+        statusMessage: 'Response must be an array or object'
+      })
     } catch (error) {
       throw error
     }

@@ -1,33 +1,38 @@
 <template>
-  <div class="w-[400px] p-6 m-auto">
-    <h3 class="text-2xl font-medium pb-6 text-slate-800">Sign In</h3>
-
-    <UAlert
-      v-if="_error"
-      :title="_error?.message"
-      variant="solid"
-      color="red"
-      class="pt-6 mb-6"
-    />
-
-    <UForm :schema="schema" :state="state" class="space-y-4" @submit="onSignIn">
-      <UFormGroup label="Email" name="email">
-        <UInput v-model="state.email" />
-      </UFormGroup>
-      <UFormGroup label="Password" name="password">
-        <UInput v-model="state.password" type="password" />
-      </UFormGroup>
-      <div class="pt-2">
-        <UButton type="submit"> Submit </UButton>
-        <UButton
-          type="button"
-          variant="soft"
-          color="white"
-          @click="navigateTo('/register')"
-          >Sign Up</UButton
-        >
-      </div>
-    </UForm>
+  <div class="h-screen pt-24">
+    <UCard class="w-[400px] p-6 m-auto shadow-2xl bg-slate-50">
+      <h3 class="text-2xl font-medium pb-6 text-slate-800">Sign In</h3>
+      <UAlert
+        v-if="_error"
+        :title="_error?.message"
+        variant="solid"
+        color="red"
+        class="pt-6 mb-6"
+      />
+      <UForm
+        :schema="schema"
+        :state="state"
+        class="space-y-4"
+        @submit="onSignIn"
+      >
+        <UFormGroup label="Email" name="email">
+          <UInput v-model="state.email" />
+        </UFormGroup>
+        <UFormGroup label="Password" name="password">
+          <UInput v-model="state.password" type="password" />
+        </UFormGroup>
+        <div class="pt-2">
+          <UButton type="submit"> Submit </UButton>
+          <!-- <UButton
+              type="button"
+              variant="soft"
+              color="white"
+              @click="navigateTo('/register')"
+              >Sign Up</UButton
+            > -->
+        </div>
+      </UForm>
+    </UCard>
   </div>
 </template>
 

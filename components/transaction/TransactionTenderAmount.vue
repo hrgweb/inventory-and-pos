@@ -1,5 +1,5 @@
 <template>
-  <UCard class="bg-slate-700">
+  <UCard class="bg-slate-50">
     <UAlert
       v-if="error_msg"
       icon="i-heroicons-exclamation-triangle"
@@ -12,9 +12,7 @@
     <div class="space-y-6">
       <!-- Total -->
       <div>
-        <label for="amount" class="text-white text-2xl uppercase pb-1 block">
-          Total</label
-        >
+        <label for="amount" class="text-xl pb-1 block"> Total</label>
         <input
           type="text"
           class="text-4xl p-6 relative block w-full disabled:cursor-not-allowed disabled:opacity-75 focus:outline-none border-0 form-input rounded-md placeholder-gray-400 dark:placeholder-gray-500 px-2.5 py-1.5 shadow-sm bg-white dark:bg-gray-900 text-gray-900 dark:text-white ring-1 ring-inset ring-gray-300 dark:ring-gray-700 focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400"
@@ -25,9 +23,7 @@
 
       <!-- Amount -->
       <div>
-        <label for="amount" class="text-white text-2xl uppercase pb-1 block">
-          Amount</label
-        >
+        <label for="amount" class="text-xl pb-1 block"> Amount</label>
         <input
           v-model.number="tender_amount"
           id="amount"
@@ -40,9 +36,7 @@
 
       <!-- Change -->
       <div>
-        <label for="amount" class="text-white text-2xl uppercase pb-1 block"
-          >Change</label
-        >
+        <label for="amount" class="text-xl pb-1 block">Change</label>
         <input
           type="text"
           class="text-4xl p-6 relative block w-full disabled:cursor-not-allowed disabled:opacity-75 focus:outline-none border-0 form-input rounded-md placeholder-gray-400 dark:placeholder-gray-500 px-2.5 py-1.5 shadow-sm bg-white dark:bg-gray-900 text-gray-900 dark:text-white ring-1 ring-inset ring-gray-300 dark:ring-gray-700 focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400"
@@ -56,6 +50,7 @@
 
 <script setup lang="ts">
 import { useFocus, useMagicKeys } from '@vueuse/core'
+import type { ModalValue } from '~/types'
 import { formatNumber } from '~/utils'
 
 const {
@@ -64,9 +59,8 @@ const {
   tenderAmount: tender_amount,
   getChange,
   createSales,
-  total,
-  barcode,
-  getOrCreateTransaction
+  getOrCreateTransaction,
+  completed: transaction_completed
 } = useTransaction()
 
 const amountInput = ref()
@@ -96,7 +90,7 @@ watchEffect(() => {
 
 const error_msg = ref('')
 
-const { items } = useOrder()
+const { modal } = useModalCustom<ModalValue>()
 
 async function onPay(): Promise<void> {
   if (getTotal.value > tender_amount.value) {
@@ -112,10 +106,8 @@ async function onPay(): Promise<void> {
   const completed = await createSales() //save to sales
 
   if (completed) {
-    barcode.value = ''
-    items.value = []
-    total.value = 0
-    tender_amount.value = 0
+    modal.value = 'completed'
+    transaction_completed.value = true
     await getOrCreateTransaction()
     emit('close')
   }

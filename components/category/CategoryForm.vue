@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="flex justify-between items-center pb-6">
-      <AppPageTitle :title="`${isAdd ? 'New ' : 'Edit '} Product`" />
+      <AppPageTitle :title="`${isAdd ? 'New ' : 'Edit '} Category`" />
 
       <UButton
         class="rounded-full"
@@ -18,14 +18,11 @@
       </UFormGroup>
 
       <div class="text-left space-x-3">
-        <UButton v-if="isAdd" type="submit" size="lg" label="Save Record" />
         <UButton
-          v-else
-          type="button"
+          type="submit"
           size="lg"
-          label="Update Record"
-          color="orange"
-          @click="onUpdate"
+          :label="`${isAdd ? 'Save' : 'Update'} Record`"
+          :color="`${isAdd ? 'green' : 'orange'}`"
         />
         <UButton
           type="button"
@@ -48,7 +45,7 @@ import type { IProductFormRequest } from '~/types'
 const { create, isAdd, selected, update } = useCategory()
 
 const schema = z.object({
-  name: z.string().min(1, { message: 'Product name is required' })
+  name: z.string().min(1, { message: 'Category name is required' })
 })
 
 type Schema = z.output<typeof schema>
@@ -73,12 +70,19 @@ function reset() {
 const notification = useNotification()
 
 async function onSubmit(event: FormSubmitEvent<Schema>) {
-  const formData = {
-    ...event.data,
-    barcode_img: state.barcode_img
+  // Create
+  if (isAdd.value) {
+    const { ...body } = event.data
+    await create(body)
+    notification.success({ title: '1 category created successfully' })
   }
-  await create(formData) // save product
-  notification.success({ title: 'Product saved successfully' })
+  // Update
+  else {
+    const { ...body } = editState
+    await update(body)
+    notification.info({ title: '1 category updated successfully' })
+  }
+
   setTimeout(() => reset(), 100)
   onClose()
 }
@@ -88,7 +92,6 @@ const emit = defineEmits<{
 }>()
 
 function onClose() {
-  isAdd.value = false
   emit('close')
 }
 
@@ -106,11 +109,4 @@ watchEffect(() => {
   editState.id = category?.id
   editState.name = category?.name
 })
-
-async function onUpdate() {
-  const product = editState
-  await update(product)
-  notification.info({ title: 'Product updated successfully' })
-  emit('close')
-}
 </script>
