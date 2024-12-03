@@ -3,9 +3,8 @@ import { IOrder, IOrderResponse, TransactionStatus } from '~/types'
 
 export default defineEventHandler(async (event) => {
   const supabase = await serverSupabaseClient(event)
-  const { transaction_no, amount, total, change, orders } = await readBody(
-    event
-  )
+  const { transaction_no, amount, total, change, orders, user_id } =
+    await readBody(event)
 
   function mapItems(items: IOrderResponse[]) {
     const data = [...items]
@@ -79,7 +78,13 @@ export default defineEventHandler(async (event) => {
     // Transaction fails
     if (transactionError) throw transactionError
 
-    const salesPayload = { transaction_no, amount, total, change } as never
+    const salesPayload = {
+      user_id,
+      transaction_no,
+      amount,
+      total,
+      change
+    } as never
 
     // Save to sales
     const { error: salesError } = await supabase
