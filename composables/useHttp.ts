@@ -1,14 +1,14 @@
 type HttpMethod = 'GET' | 'POST' | 'PATCH' | 'PUT' | 'DELETE'
 
 export function useHttp() {
-  const isLoading = ref(false)
+  const isLoading = useState('http_is_loading', () => false)
 
   async function create<T, B>(
     url: string,
     method: HttpMethod,
     body: B | null
   ): Promise<T> {
-    isLoading.value = false
+    isLoading.value = true
 
     try {
       const config = {
@@ -36,7 +36,7 @@ export function useHttp() {
     } catch (error) {
       throw error
     } finally {
-      isLoading.value = true
+      isLoading.value = false
     }
   }
 
@@ -44,6 +44,8 @@ export function useHttp() {
     url: string,
     query?: Record<string, any>
   ): Promise<T[]> {
+    isLoading.value = true
+
     try {
       const config = {
         method: 'GET',
@@ -59,6 +61,8 @@ export function useHttp() {
       return data as T[]
     } catch (error) {
       throw error
+    } finally {
+      isLoading.value = false
     }
   }
 
@@ -66,11 +70,15 @@ export function useHttp() {
     url: string,
     query?: Record<string, any>
   ): Promise<T> {
+    isLoading.value = true
+
     try {
       const data = await $fetch<T[]>(url, { method: 'GET', query })
       return data as T
     } catch (error) {
       throw error
+    } finally {
+      isLoading.value = false
     }
   }
 
@@ -78,6 +86,8 @@ export function useHttp() {
     url: string,
     query?: Record<string, any>
   ): Promise<T> {
+    isLoading.value = true
+
     try {
       const data = await $fetch<T>(url, { method: 'GET', query })
 
@@ -97,6 +107,8 @@ export function useHttp() {
       })
     } catch (error) {
       throw error
+    } finally {
+      isLoading.value = false
     }
   }
 
@@ -117,5 +129,5 @@ export function useHttp() {
     }
   }
 
-  return { get, getCustom, getOne, post, update, remove }
+  return { get, getCustom, getOne, post, update, remove, isLoading }
 }

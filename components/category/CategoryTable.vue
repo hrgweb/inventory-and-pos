@@ -1,6 +1,11 @@
 <template>
   <UCard>
-    <UTable :rows="items" :columns="columns" :ui="{ td: { padding: 'py-2' } }">
+    <UTable
+      :loading="is_loading"
+      :rows="items"
+      :columns="columns"
+      :ui="{ td: { padding: 'py-2' } }"
+    >
       <template #name-data="{ row }">
         <span>{{ row.name }}</span>
       </template>
@@ -80,4 +85,6 @@ async function onDelete(category: ICategory, index: number, close: () => void) {
   notification.error({ title: 'Category removed successfully' })
   close()
 }
+
+const { isLoading: is_loading } = useHttp()
 </script>

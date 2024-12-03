@@ -50,6 +50,7 @@
           }"
         >
           <UTable
+            :loading="is_loading"
             :rows="items"
             :columns="columns"
             :ui="{ base: 'w-full', td: { padding: 'py-1' } }"
@@ -303,4 +304,6 @@ async function onSignOut() {
   await signOut()
   return navigateTo('/login')
 }
+
+const { isLoading: is_loading } = useHttp()
 </script>
