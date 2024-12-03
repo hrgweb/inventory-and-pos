@@ -1,93 +1,128 @@
 <template>
-  <div class="flex flex-col w-full h-screen">
+  <div class="flex flex-col w-full h-screen p-3 space-y-3">
     <div
-      class="bg-slate-800 text-white text-8xl p-6 font-medium flex justify-end"
+      class="flex bg-slate-50 justify-between items-end rounded-lg p-3 shadow w-full"
     >
-      <SharedDisplayNumber :value="getTotal.toString() || '0'" />
-    </div>
-
-    <div
-      class="uppercase text-4xl bg-slate-600 font-medium text-white p-3 flex justify-between items-center"
-    >
-      <h3>My awesome store</h3>
-
-      <!-- <div class="flex items-center">
-        <span>Change:</span>
-        <SharedDisplayNumber
-          class="text-5xl font-semibold text-right pl-12"
-          :value="change.toString() || '0'"
+      <div class="relative w-[50%]">
+        <Icon
+          name="lucide:scan-barcode"
+          class="absolute z-10 w-5 h-5 left-3 top-2.5 text-gray-400"
         />
-      </div> -->
+        <input
+          v-model="barcode"
+          type="text"
+          placeholder="Scan product barcode"
+          class="w-[500px] relative block w-full disabled:cursor-not-allowed disabled:opacity-75 focus:outline-none border-0 form-input rounded-md placeholder-gray-400 dark:placeholder-gray-500 text-xl px-2.5 py-1.5 shadow-sm bg-white dark:bg-gray-900 text-gray-900 dark:text-white ring-1 ring-inset ring-gray-300 dark:ring-gray-700 focus:ring-2 focus:ring-gray-300 dark:focus:ring-gray-400 ps-9"
+          ref="barcode_input"
+          @input="onScan"
+        />
+      </div>
     </div>
 
-    <div class="flex bg-slate-200 flex-1">
-      <div class="flex w-[60%]">
-        <UTable
-          :rows="items"
-          :columns="columns"
-          :ui="{ td: { padding: 'py-1' } }"
-          class="overflow-y-auto w-full"
+    <div class="flex flex-1 gap-3">
+      <div class="space-y-3 flex flex-col">
+        <UCard
+          class="flex flex-[6] bg-slate-50 basis-0 overflow-y-auto"
+          :ui="{
+            body: { base: 'p-0 ' }
+          }"
         >
-          <template #item-data="{ row }">
-            <span class="uppercase text-2xl text-slate-800">{{
-              row.product.name
-            }}</span>
-          </template>
-          <template #qty-data="{ row }">
-            <span class="uppercase text-2xl text-slate-800">{{ row.qty }}</span>
-          </template>
-          <template #price-data="{ row }">
-            <span class="uppercase text-2xl text-slate-800">{{
-              row.product.selling_price
-            }}</span>
-          </template>
-          <template #action-data="{ row, index }">
-            <Icon
-              name="heroicons:trash"
-              class="cursor-pointer text-xl text-red-500"
-              @click="onRemove(row, index)"
-            />
-          </template>
-          <template #empty-state>&nbsp;</template>
-        </UTable>
+          <UTable
+            :rows="items"
+            :columns="columns"
+            :ui="{ base: 'w-full', td: { padding: 'py-1' } }"
+          >
+            <template #item-data="{ row }">
+              <span class="text-lg">{{ row.product.name }}</span>
+            </template>
+            <template #qty-data="{ row }">
+              <span class="text-lg">{{ row.qty }}</span>
+            </template>
+            <template #price-data="{ row }">
+              <span class="text-lg">{{ row.product.selling_price }}</span>
+            </template>
+            <template #action-data="{ row, index }">
+              <Icon
+                name="lucide:trash"
+                class="cursor-pointer text-xl text-red-500"
+                @click="onRemove(row, index)"
+              />
+            </template>
+            <template #empty-state>&nbsp;</template>
+          </UTable>
+        </UCard>
+
+        <UCard
+          class="flex flex-1 bg-slate-50 shrink-0"
+          :ui="{
+            body: { base: 'w-full ', padding: 'p-0' }
+          }"
+        >
+          <div>
+            <div
+              class="flex justify-between items-center border-b border-slate-300 pb-4 text-slate-500"
+            >
+              <span class="text-lg">Sub Total:</span>
+              <SharedDisplayNumber
+                :value="getTotal.toString() || '0'"
+                class="text-xl text-slate-500"
+              />
+            </div>
+            <div
+              class="flex justify-between items-center border-slate-300 py-4 text-slate-500"
+            >
+              <span class="text-xl font-semibold">Grand Total:</span>
+              <SharedDisplayNumber
+                :value="getTotal.toString() || '0'"
+                class="text-xl text-slate-500 font-semibold"
+              />
+            </div>
+          </div>
+        </UCard>
       </div>
 
-      <div class="flex-1 shadow p-6 space-y-6">
-        <div class="flex justify-between items-end">
-          <span class="uppercase text-xl w-[150px] text-right pr-4">item</span>
-          <input
-            v-model="barcode"
-            class="uppercase text-4xl bg-slate-800 text-white p-4 text-right w-full h-[70px]"
-            type="text"
-            ref="barcode_input"
-            @input="onScan"
-          />
-        </div>
-        <div class="flex justify-between items-end">
-          <span class="uppercase text-xl w-[150px] text-right pr-4"
-            >barcode</span
-          >
-          <span
-            class="uppercase text-4xl bg-slate-800 text-white p-4 text-right w-full h-[70px]"
-            >{{ getProduct?.barcode }}</span
-          >
-        </div>
-        <div class="flex justify-between items-end">
-          <span class="uppercase text-xl w-[150px] text-right pr-4">qty</span>
-          <span
-            class="uppercase text-4xl bg-slate-800 text-white p-3 text-right w-full h-[70px]"
-            >{{ qty }}</span
-          >
-        </div>
-        <div class="flex justify-between items-end">
-          <span class="uppercase text-xl w-[150px] text-right pr-4">price</span>
+      <div class="shadow space-y-6 w-[400px] shrink-0 bg-zinc-200 rounded-lg">
+        <UCard v-if="false" class="basis-0 overflow-y-auto">
+          <div class="flex justify-between items-end">
+            <span class="uppercase text-xl w-[150px] text-right pr-4"
+              >item</span
+            >
+            <input
+              v-model="barcode"
+              class="uppercase text-4xl bg-slate-800 text-white p-4 text-right w-full h-[70px]"
+              type="text"
+              ref="barcode_input"
+              @input="onScan"
+            />
+          </div>
+          <div class="flex justify-between items-end">
+            <span class="uppercase text-xl w-[150px] text-right pr-4"
+              >barcode</span
+            >
+            <span
+              class="uppercase text-4xl bg-slate-800 text-white p-4 text-right w-full h-[70px]"
+              >{{ getProduct?.barcode }}</span
+            >
+          </div>
+          <div class="flex justify-between items-end">
+            <span class="uppercase text-xl w-[150px] text-right pr-4">qty</span>
+            <span
+              class="uppercase text-4xl bg-slate-800 text-white p-3 text-right w-full h-[70px]"
+              >{{ qty }}</span
+            >
+          </div>
+          <div class="flex justify-between items-end">
+            <span class="uppercase text-xl w-[150px] text-right pr-4"
+              >price</span
+            >
 
-          <SharedDisplayNumber
-            :value="getProduct?.selling_price?.toString() || '0'"
-            :show-currency="false"
-            class="text-4xl bg-slate-800 text-white p-3 w-full text-right h-[70px]"
-          />
-        </div>
+            <SharedDisplayNumber
+              :value="getProduct?.selling_price?.toString() || '0'"
+              :show-currency="false"
+              class="text-4xl bg-slate-800 text-white p-3 w-full text-right h-[70px]"
+            />
+          </div>
+        </UCard>
       </div>
     </div>
   </div>
@@ -132,25 +167,25 @@ const columns = [
   {
     key: 'item',
     label: 'Item',
-    class: 'w-[500px] shrink-0 text-lg',
+    class: 'text-slate-500 text-sm w-[500] shrnk-0',
     rowClass: 'text-left'
   },
   {
     key: 'qty',
     label: 'Qty',
-    class: 'text-lg text-center',
-    rowClass: 'text-center  w-20'
+    class: 'text-slate-500 text-sm w-[50px] text-center',
+    rowClass: 'text-center w-20'
   },
   {
     key: 'price',
     label: 'Price',
-    class: 'text-lg text-center',
+    class: 'text-slate-500 text-sm w-[100px] text-center',
     rowClass: 'text-center w-28'
   },
   {
     key: 'action',
     label: '',
-    class: 'text-lg text-center',
+    class: 'text-slate-500 text-sm w-[50px]',
     rowClass: 'text-center w-10'
   }
 ]
@@ -161,7 +196,7 @@ const onScan = useDebounceFn(async () => {
 
   await findProduct({ barcode: barcode.value })
   barcode.value = ''
-}, 500)
+}, 100)
 
 const barcode_input = ref()
 const { focused } = useFocus(barcode_input, { initialValue: true })
