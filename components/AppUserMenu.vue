@@ -5,8 +5,10 @@
     <div class="flex items-center gap-4">
       <UAvatar alt="John Doe" size="md" />
       <div class="flex flex-col">
-        <h3 class="text-md font-semibold">John Doe</h3>
-        <span class="text-sm font-light">johndoe@gmail.com</span>
+        <!-- <h3 class="text-md font-semibold">{{ useSupabaseUser().value?.email }}</h3> -->
+        <span class="text-sm font-light">{{
+          useSupabaseUser()?.value?.email
+        }}</span>
       </div>
       <Icon name="lucide:chevron-down" />
     </div>

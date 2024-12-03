@@ -17,9 +17,13 @@ export function useCategory() {
   }
 
   async function create(payload: ICategoryFormRequest) {
+    const body = {
+      user_id: useSupabaseUser().value?.id,
+      ...payload
+    }
     const data = await http.post<ICategory, ICategoryFormRequest>(
       '/api/categories',
-      payload
+      body
     )
     list.value.unshift(data)
   }
@@ -32,7 +36,7 @@ export function useCategory() {
     list.value[selectedIndex.value] = data
   }
 
-  async function remove(id: number): Promise<void> {
+  async function remove(id: string): Promise<void> {
     await http.remove<ICategory>(`/api/categories/${id}`)
     list.value.splice(selectedIndex.value, 1)
   }
