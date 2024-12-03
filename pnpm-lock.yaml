@@ -48,6 +48,9 @@ importers:
       '@iconify-json/heroicons':
         specifier: ^1.2.1
         version: 1.2.1
+      '@iconify-json/lucide':
+        specifier: ^1.2.17
+        version: 1.2.17
       '@types/xmldom':
         specifier: ^0.1.34
         version: 0.1.34
@@ -520,6 +523,9 @@ packages:
 
   '@iconify-json/heroicons@1.2.1':
     resolution: {integrity: sha512-TkKfS5U27kE5MXmSGLzPoz95BP5VA9xEJXwJFwmPMVLX+xyWq0OkoiWTUXB0uAoQODpb8BaRpzSydItrq9fIRA==}
+
+  '@iconify-json/lucide@1.2.17':
+    resolution: {integrity: sha512-y+4P1DxD2h4d4fGYxikUdMf0o21DD0GIE/YIgixEBIXKbE90LTOFqmoxkGyPpaGk3vT2qE2w/28+sdmBMFsd5w==}
 
   '@iconify/collections@1.0.484':
     resolution: {integrity: sha512-b/6PlgO0BDx8ElxiceLtYigSQcKAXFPNAU8d4rOLtRvdkda1HOnAsPIqCSeuYHe3H5d9n9tdukLXM9Yv9bkgfA==}
@@ -4220,6 +4226,10 @@ snapshots:
       vue: 3.5.13(typescript@5.6.3)
 
   '@iconify-json/heroicons@1.2.1':
+    dependencies:
+      '@iconify/types': 2.0.0
+
+  '@iconify-json/lucide@1.2.17':
     dependencies:
       '@iconify/types': 2.0.0
 

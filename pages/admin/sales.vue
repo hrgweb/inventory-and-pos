@@ -6,8 +6,6 @@
       </div>
     </div>
 
-    <pre>{{ list }}</pre>
-
     <SalesTable />
   </div>
 </template>
@@ -18,6 +16,6 @@ definePageMeta({ middleware: 'auth' })
 const { list, fetchSales } = useSales()
 
 onBeforeMount(async () => {
-  // await fetchSales()
+  await fetchSales()
 })
 </script>

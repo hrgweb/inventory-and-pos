@@ -1,35 +1,52 @@
 <template>
   <UCard>
-    <UTable :rows="items" :columns="columns" :ui="{ td: { padding: 'py-2' } }">
-      <template #transaction_no-data="{ row }">
-        <span>{{ row.transactions.transaction_no }}</span>
-      </template>
-      <template #name-data="{ row }">
-        <span>{{ row.name }}</span>
-      </template>
-      <template #barcode-data="{ row }">
-        <span>{{ row.barcode }}</span>
+    <UTable
+      v-model:expand="expand"
+      :rows="items"
+      :columns="columns"
+      :ui="{ td: { padding: 'py-2' } }"
+      @update:expand="handleExpand"
+    >
+      <template #transaction_no-data="{ row: item }">
+        <span class="font-semibold text-slate-600">{{
+          item.transactions.transaction_no
+        }}</span>
       </template>
 
-      <template #cost_price-data="{ row }">
-        <span>{{ row.cost_price_formatted }}</span>
+      <template #created_at-data="{ row: item }">
+        <span>{{ format(item.transactions.created_at, 'PP') }}</span>
       </template>
-      <template #selling_price-data="{ row }">
-        <span>{{ row.selling_price_formatted }}</span>
-      </template>
-      <template #subtotal-data="{ row }">
-        <span>{{ row.subtotal_formatted }}</span>
-      </template>
-      <template #reorder_level-data="{ row }">
-        <span
-          class="block"
-          :class="[
-            +row.stock_qty <= +row.reorder_level
-              ? 'bg-red-500 text-white p-1 rounded'
-              : ''
-          ]"
-          >{{ row.reorder_level }}</span
-        >
+
+      <!-- Expanded -->
+      <template #expand="{ row: sub_item }">
+        <div class="p-4">
+          <div class="flex gap-3 items-center">
+            <h3 class="text-sm font-medium">Purchased Products</h3>
+            <UBadge color="blue" variant="solid">{{
+              sub_item.orders.length
+            }}</UBadge>
+          </div>
+
+          <UTable
+            :rows="sub_item.orders"
+            :columns="expandColumns"
+            :ui="{ td: { padding: 'py-2' } }"
+          >
+            <template #product_name-data="{ row }">
+              <span>{{ row.products.name }}</span>
+            </template>
+            <template #barcode-data="{ row }">
+              <span>{{ row.products.barcode }}</span>
+            </template>
+
+            <template #selling_price-data="{ row }">
+              <span>{{ formatNumber(row.products.selling_price) }}</span>
+            </template>
+            <template #subtotal-data="{ row }">
+              <span>{{ formatNumber(row.subtotal) }}</span>
+            </template>
+          </UTable>
+        </div>
       </template>
     </UTable>
 
@@ -44,6 +61,10 @@
 </template>
 
 <script setup lang="ts">
+import { format } from 'date-fns'
+import type { IOrderResponse, ISales } from '~/types'
+import { formatNumber } from '~/utils'
+
 const { list: items, page, listCount: list_count } = useSales()
 
 const columns = [
@@ -52,6 +73,14 @@ const columns = [
     label: 'Transaction No',
     class: 'text-slate-500 text-xs'
   },
+  {
+    key: 'created_at',
+    label: 'Date Created',
+    class: 'text-slate-500 text-xs'
+  }
+]
+
+const expandColumns = [
   {
     key: 'product_name',
     label: 'Product Name',
@@ -63,39 +92,35 @@ const columns = [
     class: 'text-slate-500 text-xs'
   },
   {
-    key: 'product_name',
-    label: 'Product Name',
-    class: 'text-slate-500 text-xs'
-  },
-  {
-    key: 'product_name',
-    label: 'Product Name',
-    class: 'text-slate-500 text-xs'
-  },
-  {
-    key: 'cost_price',
-    label: 'Cost Price',
-    class: 'text-slate-500 text-xs'
-  },
-  {
     key: 'selling_price',
-    label: 'Selling Price',
+    label: 'Price',
     class: 'text-slate-500 text-xs'
   },
   {
-    key: 'reorder_level',
-    label: 'Reorder Level',
+    key: 'qty',
+    label: 'Qty',
     class: 'text-slate-500 text-xs'
   },
   {
-    key: 'stock_qty',
-    label: 'Stock Qty',
-    class: 'text-slate-500 text-xs'
-  },
-  {
-    key: 'actions',
-    label: 'Actions',
+    key: 'subtotal',
+    label: 'Subtotal',
     class: 'text-slate-500 text-xs'
   }
 ]
+
+const expand = ref({
+  openedRows: [],
+  row: {}
+})
+
+function handleExpand({
+  openedRows,
+  row
+}: {
+  openedRows: ISales[]
+  row: ISales
+}) {
+  // console.log('opened Rows:', openedRows)
+  // console.log('Row Data:', row)
+}
 </script>
