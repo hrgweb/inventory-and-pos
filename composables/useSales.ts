@@ -29,13 +29,6 @@ export function useSales() {
 
   function mapSale(item: ISales): ISales {
     let newObj = mapItem(item) as ISales
-    // newObj['cost_price_formatted'] = item.cost_price
-    //   ? formatNumber(item.cost_price)
-    //   : '0'
-    // newObj['selling_price_formatted'] = item.selling_price
-    //   ? formatNumber(item.selling_price)
-    //   : '0'
-    // newObj['reorder_level'] = item.reorder_level || 0
     return newObj
   }
 

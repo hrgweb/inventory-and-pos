@@ -139,7 +139,7 @@ const notification = useNotification()
 
 async function onDelete(product: IProduct, index: number, close: () => void) {
   selectedIndex.value = index
-  await remove(+product?.id)
+  await remove(product?.id)
   notification.error({ title: 'Product removed successfully' })
   close()
 }

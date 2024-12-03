@@ -1,10 +1,14 @@
 <template>
-  <div class="flex items-center gap-2 cursor-pointer relative text-slate-800">
+  <div
+    class="flex items-center gap-2 cursor-pointer relative text-slate-800 z-10"
+  >
     <div class="flex items-center gap-4">
       <UAvatar alt="John Doe" size="md" />
       <div class="flex flex-col">
-        <h3 class="text-md font-semibold">John Doe</h3>
-        <span class="text-sm font-light">johndoe@gmail.com</span>
+        <!-- <h3 class="text-md font-semibold">{{ useSupabaseUser().value?.email }}</h3> -->
+        <span class="text-sm font-light">{{
+          useSupabaseUser()?.value?.email
+        }}</span>
       </div>
       <Icon name="lucide:chevron-down" />
     </div>
@@ -38,7 +42,7 @@ const nav_options = [
     name: 'logout',
     label: 'Logout',
     icon: '',
-    to: null
+    to: ''
   }
 ] as INavigationOptions[]
 
@@ -55,10 +59,8 @@ const { signOut } = useAuth()
 
 async function onNavClick(nav: INavigationOptions) {
   if (nav.name === 'logout') {
-    const result = await signOut()
-    if (result) {
-      return navigateTo('/login')
-    }
+    await signOut()
+    return navigateTo('/login')
   }
 }
 </script>

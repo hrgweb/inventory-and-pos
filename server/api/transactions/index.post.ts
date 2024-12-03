@@ -3,6 +3,8 @@ import { ITransaction, TransactionStatus } from '~/types'
 import { generateHash } from '~/utils'
 
 export default defineEventHandler(async (event) => {
+  const body = await readBody(event)
+
   async function getOne(): Promise<ITransaction> {
     const { data, error } = await client
       .from('transactions')
@@ -14,7 +16,10 @@ export default defineEventHandler(async (event) => {
 
   // TODO: update the types
   async function create(): Promise<any> {
-    const payload = { transaction_no: generateHash(22) } as never
+    const payload = {
+      transaction_no: generateHash(22),
+      user_id: body.user_id
+    } as never
 
     const { data, error } = await client
       .from('transactions')

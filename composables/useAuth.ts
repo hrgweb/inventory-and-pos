@@ -23,6 +23,8 @@ export function useAuth() {
     email: string
     password: string
   }) {
+    _error.value = null
+
     const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password

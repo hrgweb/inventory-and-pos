@@ -11,7 +11,7 @@ export interface ISocialLink {
 }
 
 export interface IProduct {
-  id: number
+  id: string
   name: string
   description: string
   cost_price: number

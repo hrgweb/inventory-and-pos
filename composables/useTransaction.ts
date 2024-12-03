@@ -17,7 +17,8 @@ export function useTransaction() {
   const { items, item, qty } = useOrder()
 
   async function getOrCreateTransaction() {
-    const data = await http.post<ITransaction, null>('/api/transactions', null)
+    const body = { user_id: useSupabaseUser().value?.id }
+    const data = await http.post<ITransaction, null>('/api/transactions', body)
 
     if (!data) return null
 
@@ -28,6 +29,7 @@ export function useTransaction() {
 
   async function findProduct({ barcode }: { barcode: string }) {
     const body = {
+      user_id: useSupabaseUser().value?.id,
       barcode,
       transaction_no: transaction.value?.transaction_no
     }
@@ -51,6 +53,7 @@ export function useTransaction() {
     const _change = getChange.value
 
     const payload = {
+      user_id: useSupabaseUser().value?.id,
       transaction_no,
       amount: _amount,
       total: _total,

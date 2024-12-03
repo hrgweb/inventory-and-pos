@@ -25,11 +25,15 @@ export function useProduct() {
   async function create(
     payload: IProductFormRequest
   ): Promise<IProduct | null> {
+    const body = {
+      user_id: useSupabaseUser().value?.id,
+      ...payload
+    }
     try {
-      const data = await $fetch<IProduct>('/api/products', {
-        method: 'POST',
-        body: JSON.stringify(payload)
-      })
+      const data = await http.post<IProduct, IProductFormRequest>(
+        '/api/products',
+        body
+      )
       list.value.unshift(mapProduct(data))
     } catch (error) {
       console.log(error)
@@ -72,7 +76,7 @@ export function useProduct() {
     listCount.value = data.total
   }
 
-  async function remove(id: number): Promise<void> {
+  async function remove(id: string): Promise<void> {
     await http.remove<IProduct>(`/api/products/${id}`)
     list.value.splice(selectedIndex.value, 1)
   }

@@ -1,5 +1,5 @@
 export default defineNuxtRouteMiddleware(async (to) => {
-  const user = useSupabaseUser()
+  const user = useSupabaseSession()
 
   //   Not authenticated
   if (!user.value && to.path !== '/login') {

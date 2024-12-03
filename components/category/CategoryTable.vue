@@ -76,7 +76,7 @@ const notification = useNotification()
 
 async function onDelete(category: ICategory, index: number, close: () => void) {
   selectedIndex.value = index
-  await remove(+category?.id)
+  await remove(category?.id)
   notification.error({ title: 'Category removed successfully' })
   close()
 }
