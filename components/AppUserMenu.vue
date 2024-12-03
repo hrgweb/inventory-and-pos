@@ -1,5 +1,7 @@
 <template>
-  <div class="flex items-center gap-2 cursor-pointer relative text-slate-800">
+  <div
+    class="flex items-center gap-2 cursor-pointer relative text-slate-800 z-10"
+  >
     <div class="flex items-center gap-4">
       <UAvatar alt="John Doe" size="md" />
       <div class="flex flex-col">
