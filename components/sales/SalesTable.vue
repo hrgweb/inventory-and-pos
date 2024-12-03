@@ -1,6 +1,7 @@
 <template>
   <UCard>
     <UTable
+      :loading="is_loading"
       v-model:expand="expand"
       :rows="items"
       :columns="columns"
@@ -130,4 +131,6 @@ function handleExpand({
   // console.log('opened Rows:', openedRows)
   // console.log('Row Data:', row)
 }
+
+const { isLoading: is_loading } = useHttp()
 </script>

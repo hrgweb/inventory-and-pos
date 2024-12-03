@@ -1,6 +1,11 @@
 <template>
   <UCard>
-    <UTable :rows="items" :columns="columns" :ui="{ td: { padding: 'py-2' } }">
+    <UTable
+      :loading="is_loading"
+      :rows="items"
+      :columns="columns"
+      :ui="{ td: { padding: 'py-2' } }"
+    >
       <template #barcode-data="{ row }">
         <span>{{ row.barcode }}</span>
       </template>
@@ -143,4 +148,6 @@ async function onDelete(product: IProduct, index: number, close: () => void) {
   notification.error({ title: 'Product removed successfully' })
   close()
 }
+
+const { isLoading: is_loading } = useHttp()
 </script>
