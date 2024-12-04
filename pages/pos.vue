@@ -82,15 +82,17 @@
             :ui="{ base: 'w-full', td: { padding: 'py-1' } }"
           >
             <template #item-data="{ row }">
-              <span class="text-lg">{{ row.product.name }}</span>
+              <span class="text-lg">{{ row.product?.name }}</span>
             </template>
             <template #qty-data="{ row }">
               <span class="text-lg">{{ row.qty }}</span>
             </template>
             <template #price-data="{ row }">
-              <span class="text-lg">{{
-                formatNumber(row.product.selling_price)
-              }}</span>
+              <span
+                class="text-lg"
+                v-if="row.product && row.product.selling_price"
+                >{{ formatNumber(row.product?.selling_price) }}</span
+              >
             </template>
             <template #action-data="{ row, index }">
               <Icon
