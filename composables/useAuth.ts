@@ -5,6 +5,7 @@ interface ILoginError {
 
 export function useAuth() {
   const _error = useState<ILoginError | null>('auth_error', () => null)
+  const aboutToSignout = useState('about_to_signout', () => false)
 
   const supabase = useSupabaseClient()
 
@@ -49,5 +50,5 @@ export function useAuth() {
     return true
   }
 
-  return { signIn, signOut, register, _error }
+  return { signIn, signOut, register, _error, aboutToSignout }
 }

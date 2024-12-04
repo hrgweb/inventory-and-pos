@@ -1,9 +1,7 @@
 <template>
   <div>
     <div class="flex items-center justify-between pb-6">
-      <div class="flex justify-between items-center gap-4">
-        <AppPageTitle title="Products" />
-      </div>
+      <AppPageTitle title="Products" />
     </div>
 
     <UTabs :items="items" class="w-full">
@@ -69,14 +67,12 @@ const items = [
   {
     label: 'All',
     key: 'all',
-    icon: '',
-    content: 'This is the content shown for Tab1'
+    icon: ''
   },
   {
     label: 'Categories',
     key: 'categories',
-    icon: '',
-    content: 'And, this is the content for Tab2'
+    icon: ''
   }
 ]
 

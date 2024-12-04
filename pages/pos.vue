@@ -1,11 +1,11 @@
 <template>
   <div class="flex flex-col w-full h-screen p-3 space-y-3">
     <div
-      class="flex bg-slate-50 items-center justify-between rounded-lg p-3 shadow w-full gap-6 px-6"
+      class="flex flex-col bg-slate-50 items-center justify-between rounded-lg p-3 shadow w-full gap-6 px-6"
     >
       <h2 class="font-medium text-xl">Awesome Store</h2>
 
-      <div class="relative w-[500px]">
+      <div class="relative w-full">
         <Icon
           name="lucide:scan-barcode"
           class="absolute z-10 w-5 h-5 left-5 top-3.5 text-gray-400"
@@ -14,7 +14,7 @@
           v-model="barcode"
           type="text"
           placeholder="Scan product barcode here "
-          class="w-[500px] relative block w-full disabled:cursor-not-allowed disabled:opacity-75 focus:outline-none border-0 form-input placeholder-gray-400 dark:placeholder-gray-500 text-xl px-2.5 pl-12 py-2.5 shadow-sm bg-white dark:bg-gray-900 text-gray-900 dark:text-white ring-1 ring-inset ring-gray-300 dark:ring-gray-700 focus:ring-2 focus:ring-gray-300 dark:focus:ring-gray-400 ps-9 rounded-full"
+          class="relative block w-full disabled:cursor-not-allowed disabled:opacity-75 focus:outline-none border-0 form-input placeholder-gray-400 dark:placeholder-gray-500 text-xl px-2.5 pl-12 py-2.5 shadow-sm bg-white dark:bg-gray-900 text-gray-900 dark:text-white ring-1 ring-inset ring-gray-300 dark:ring-gray-700 focus:ring-2 focus:ring-gray-300 dark:focus:ring-gray-400 ps-9 rounded-full"
           :style="{ paddingLeft: '50px !important' }"
           ref="barcode_input"
           @input="onScan"
@@ -32,13 +32,38 @@
         />
 
         <!-- Signout -->
-        <UButton
-          icon="lucide:log-out"
-          color="blue"
-          variant="soft"
-          class="rounded-full px-3 py-[.6rem]"
-          @click="onSignOut"
-        />
+        <UPopover>
+          <UButton
+            icon="lucide:log-out"
+            color="blue"
+            variant="soft"
+            class="rounded-full px-3 py-[.6rem]"
+            @click="about_to_signout = true"
+          />
+
+          <template #panel>
+            <div class="p-4">
+              <p class="pb-3">Are you sure you want to sign out?</p>
+
+              <div class="flex gap-2">
+                <UButton
+                  label="Yes"
+                  color="blue"
+                  variant="solid"
+                  class="px-3 py-[.6rem]"
+                  @click="onSignOut"
+                />
+                <UButton
+                  label="No"
+                  color="white"
+                  variant="soft"
+                  class="rounded-full px-3 py-[.6rem]"
+                  @click="about_to_signout = false"
+                />
+              </div>
+            </div>
+          </template>
+        </UPopover>
       </div>
     </div>
 
@@ -63,7 +88,9 @@
               <span class="text-lg">{{ row.qty }}</span>
             </template>
             <template #price-data="{ row }">
-              <span class="text-lg">{{ row.product.selling_price }}</span>
+              <span class="text-lg">{{
+                formatNumber(row.product.selling_price)
+              }}</span>
             </template>
             <template #action-data="{ row, index }">
               <Icon
@@ -76,13 +103,24 @@
           </UTable>
         </UCard>
 
+        <div v-if="items.length">
+          <UButton
+            label="Pay Now"
+            class="w-full text-2xl text-center"
+            variant="solid"
+            color="blue"
+            size="xl"
+            @click="onAboutToPay"
+          />
+        </div>
+
         <UCard
           class="flex flex-1 bg-slate-50 shrink-0"
           :ui="{
             body: { base: 'w-full ', padding: 'p-0' }
           }"
         >
-          <div>
+          <div class="p-3">
             <div
               class="flex justify-between items-center border-b border-slate-300 pb-4 text-slate-500"
             >
@@ -105,7 +143,9 @@
         </UCard>
       </div>
 
-      <div class="shadow space-y-6 w-[400px] shrink-0 bg-zinc-200 rounded-lg">
+      <div
+        class="hidden shadow space-y-6 w-[400px] shrink-0 bg-zinc-200 rounded-lg"
+      >
         <UCard v-if="false" class="basis-0 overflow-y-auto">
           <div class="flex justify-between items-end">
             <span class="uppercase text-xl w-[150px] text-right pr-4"
@@ -150,7 +190,7 @@
       </div>
     </div>
 
-    <UModal v-model="show_modal">
+    <UModal v-model="show_modal" :ui="{ container: 'items-center' }">
       <component :is="component_to_use" @close="modal = 'none'" />
     </UModal>
   </div>
@@ -162,6 +202,7 @@ import TenderAmount from '~/components/transaction/TransactionTenderAmount.vue'
 import Completed from '~/components/transaction/TransactionCompleted.vue'
 import PriceLookup from '~/components/transaction/TransactionPriceLookup.vue'
 import type { IOrderResponse, ModalValue } from '~/types'
+import { formatNumber } from '~/utils'
 
 definePageMeta({ layout: 'none', middleware: 'auth' })
 
@@ -297,7 +338,7 @@ function focusToBarcoceInput() {
   focused.value = true
 }
 
-const { signOut } = useAuth()
+const { signOut, aboutToSignout: about_to_signout } = useAuth()
 
 async function onSignOut() {
   await signOut()
@@ -305,4 +346,9 @@ async function onSignOut() {
 }
 
 const { isLoading: is_loading } = useHttp()
+
+function onAboutToPay() {
+  aboutToPay.value = true
+  modal.value = 'form'
+}
 </script>
