@@ -26,6 +26,7 @@
         <label for="amount" class="text-xl pb-1 block"> Amount</label>
         <input
           v-model.number="tender_amount"
+          :disabled="is_loading"
           id="amount"
           ref="amountInput"
           type="text"
@@ -112,4 +113,6 @@ async function onPay(): Promise<void> {
     emit('close')
   }
 }
+
+const { isLoading: is_loading } = useHttp()
 </script>

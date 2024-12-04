@@ -22,7 +22,7 @@
           <UInput v-model="state.password" type="password" />
         </UFormGroup>
         <div class="pt-2">
-          <UButton type="submit"> Submit </UButton>
+          <UButton type="submit" :loading="is_loading"> Submit </UButton>
           <!-- <UButton
               type="button"
               variant="soft"
@@ -69,4 +69,6 @@ async function onSignIn(event: FormSubmitEvent<Schema>) {
     await navigateTo('/admin')
   }
 }
+
+const { isLoading: is_loading } = useHttp()
 </script>

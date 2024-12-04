@@ -41,6 +41,14 @@ export function useCategory() {
     list.value.splice(selectedIndex.value, 1)
   }
 
+  function reset() {
+    isAdd.value = false
+    selected.value = null
+    list.value = []
+    listCount.value = 0
+    selectedIndex.value = 0
+  }
+
   const search = useDebounceFn(async (q: string) => {
     list.value = []
     await fetchCategories({ search: q })
@@ -56,6 +64,7 @@ export function useCategory() {
     listCount,
     selectedIndex,
     remove,
-    search
+    search,
+    reset
   }
 }

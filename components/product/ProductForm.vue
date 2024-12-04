@@ -67,6 +67,7 @@
           size="lg"
           :label="`${isAdd ? 'Save' : 'Update'} Record`"
           :color="`${isAdd ? 'green' : 'orange'}`"
+          :loading="is_loading"
         />
         <UButton
           type="button"
@@ -210,4 +211,6 @@ function onBarcodeGenerate() {
   state.barcode = barcode.value as string
   editState.barcode = barcode.value as string
 }
+
+const { isLoading: is_loading } = useHttp()
 </script>
