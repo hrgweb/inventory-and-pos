@@ -1,5 +1,20 @@
 <template>
   <UCard class="bg-slate-50">
+    <template #header>
+      <div class="flex justify-between items-center">
+        <AppPageTitle title="Pay Now" />
+
+        <UButton
+          icon="heroicons:x-mark"
+          class="rounded-full"
+          variant="soft"
+          color="white"
+          size="xl"
+          @click="$emit('close')"
+        />
+      </div>
+    </template>
+
     <UAlert
       v-if="error_msg"
       icon="i-heroicons-exclamation-triangle"

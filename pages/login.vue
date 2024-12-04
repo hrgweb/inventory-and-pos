@@ -1,6 +1,6 @@
 <template>
-  <div class="h-screen pt-24">
-    <UCard class="w-[400px] p-6 m-auto shadow-2xl bg-slate-50">
+  <div class="flex justify-center h-screen p-3 items-center">
+    <UCard class="p-6 m-auto shadow-2xl bg-slate-50 w-full">
       <h3 class="text-2xl font-medium pb-6 text-slate-800">Sign In</h3>
       <UAlert
         v-if="_error"
