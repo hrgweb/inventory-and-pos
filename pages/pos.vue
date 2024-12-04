@@ -5,22 +5,22 @@
     >
       <h2 class="font-medium text-xl">Awesome Store</h2>
 
-      <div class="relative w-[50%]">
+      <div class="relative w-[500px]">
         <Icon
           name="lucide:scan-barcode"
-          class="absolute z-10 w-5 h-5 left-[20px] top-3.5 text-gray-400"
+          class="absolute z-10 w-5 h-5 left-5 top-3.5 text-gray-400"
         />
         <input
           v-model="barcode"
           type="text"
           placeholder="Scan product barcode here "
-          class="w-[500px] relative block w-full disabled:cursor-not-allowed disabled:opacity-75 focus:outline-none border-0 form-input placeholder-gray-400 dark:placeholder-gray-500 text-xl px-2.5 pl-[50px] py-2.5 shadow-sm bg-white dark:bg-gray-900 text-gray-900 dark:text-white ring-1 ring-inset ring-gray-300 dark:ring-gray-700 focus:ring-2 focus:ring-gray-300 dark:focus:ring-gray-400 ps-9 rounded-full"
+          class="w-[500px] relative block w-full disabled:cursor-not-allowed disabled:opacity-75 focus:outline-none border-0 form-input placeholder-gray-400 dark:placeholder-gray-500 text-xl px-2.5 pl-12 py-2.5 shadow-sm bg-white dark:bg-gray-900 text-gray-900 dark:text-white ring-1 ring-inset ring-gray-300 dark:ring-gray-700 focus:ring-2 focus:ring-gray-300 dark:focus:ring-gray-400 ps-9 rounded-full"
           ref="barcode_input"
           @input="onScan"
         />
       </div>
 
-      <div>
+      <div class="flex gap-2">
         <!-- Go to admin -->
         <UButton
           icon="lucide:layout-dashboard"
@@ -148,13 +148,11 @@
         </UCard>
       </div>
     </div>
-  </div>
 
-  <Teleport to="body">
     <UModal v-model="show_modal">
       <component :is="component_to_use" @close="modal = 'none'" />
     </UModal>
-  </Teleport>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -219,7 +217,7 @@ const onScan = useDebounceFn(async () => {
 
   await findProduct({ barcode: barcode.value })
   barcode.value = ''
-}, 100)
+}, 50)
 
 const barcode_input = ref()
 const { focused } = useFocus(barcode_input, { initialValue: true })

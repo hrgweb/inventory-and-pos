@@ -16,6 +16,12 @@
       <template #total-data="{ row: item }">
         <span>{{ formatNumber(item.total) }}</span>
       </template>
+      <template #amount-data="{ row: item }">
+        <span>{{ formatNumber(item.amount) }}</span>
+      </template>
+      <template #change-data="{ row: item }">
+        <span>{{ formatNumber(item.change) }}</span>
+      </template>
       <template #created_at-data="{ row: item }">
         <span>{{ format(item.transactions.created_at, 'PP') }}</span>
       </template>
@@ -79,6 +85,16 @@ const columns = [
   {
     key: 'total',
     label: 'Total',
+    class: 'text-slate-500 text-xs'
+  },
+  {
+    key: 'amount',
+    label: 'Amount',
+    class: 'text-slate-500 text-xs'
+  },
+  {
+    key: 'change',
+    label: 'Change',
     class: 'text-slate-500 text-xs'
   },
   {
