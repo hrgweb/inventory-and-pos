@@ -14,6 +14,7 @@ export function useSales() {
     if (!_page) return null
 
     const query = {
+      user_id: useSupabaseUser()?.value?.id,
       page: toValue(_page)
     }
     const data = await http.getCustom<IItemResponse<ISales>>(
@@ -32,5 +33,11 @@ export function useSales() {
     return newObj
   }
 
-  return { fetchSales, list, listCount, page }
+  function reset() {
+    list.value = []
+    listCount.value = 0
+    page.value = 1
+  }
+
+  return { fetchSales, list, listCount, page, reset }
 }

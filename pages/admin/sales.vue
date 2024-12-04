@@ -14,9 +14,11 @@
 <script setup lang="ts">
 definePageMeta({ middleware: 'auth' })
 
-const { list: sales, fetchSales } = useSales()
+const { list: sales, fetchSales, reset } = useSales()
 
 onBeforeMount(async () => {
   await fetchSales()
 })
+
+onUnmounted(() => reset())
 </script>

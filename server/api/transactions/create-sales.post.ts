@@ -58,8 +58,6 @@ export default defineEventHandler(async (event) => {
         .eq('id', product.id)
 
       if (updateStockError) throw updateStockError
-
-      console.log('product id: ', product.id)
     }
 
     return true
