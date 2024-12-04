@@ -28,18 +28,18 @@ const nav_options = [
     icon: 'lucide:briefcase-business',
     to: '/admin/products'
   },
-  // {
-  //   name: 'orders',
-  //   label: 'Orders',
-  //   icon: 'lucide:shopping-cart',
-  //   to: '/admin/orders'
-  // },
   {
     name: 'sales',
     label: 'Sales',
     icon: 'lucide:dollar-sign',
     to: '/admin/sales'
   },
+  {
+    name: 'inventory',
+    label: 'Inventory',
+    icon: 'lucide:file-terminal',
+    to: '/admin/inventory'
+  }
 
   // {
   //   name: 'all_products',
@@ -65,12 +65,12 @@ const nav_options = [
   //   icon: '',
   //   to: '/admin/insights'
   // },
-  {
-    name: 'settings',
-    label: 'Settings',
-    icon: 'lucide:settings',
-    to: '/admin/settings'
-  }
+  // {
+  //   name: 'settings',
+  //   label: 'Settings',
+  //   icon: 'lucide:settings',
+  //   to: '/admin/settings'
+  // }
   // {
   //   name: 'personal',
   //   label: 'Personal',

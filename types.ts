@@ -20,6 +20,10 @@ export interface IProduct {
   barcode: string
   stock_qty: number
   reorder_level: number
+  uom: string
+  weight: number
+  volume: number
+  length: number
 }
 
 export type ProductSortBy = 'Latest Added' | 'Product Name'
@@ -124,4 +128,11 @@ export interface ISales {
   amount: number
   total: number
   change: number
+}
+
+export enum InventoryType {
+  REORDER_PRODUCT = 'reorder_product',
+  RETURNED_PRODUCT = 'returned_product',
+  EXPIRED_PRODUCT = 'expired_product',
+  DAMAGED_PRODUCT = 'damaged_product'
 }

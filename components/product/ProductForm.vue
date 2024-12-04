@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="flex justify-between items-center pb-6">
-      <AppPageTitle title="New Product" />
+      <AppPageTitle :title="`${isAdd ? 'New' : 'Edit'}  Product`" />
 
       <UButton
         class="rounded-full"
@@ -38,7 +38,7 @@
         <UInput v-model="form.description" size="xl" />
       </UFormGroup>
       <UFormGroup label="Category" name="category_id">
-        <USelect
+        <USelectMenu
           v-model="form.category_id"
           :options="categories"
           size="xl"
@@ -47,19 +47,46 @@
           placeholder="Select category"
         />
       </UFormGroup>
-      <UFormGroup label="Cost Price" name="cost_price">
-        <UInput v-model.number="form.cost_price" size="xl" />
-      </UFormGroup>
-      <UFormGroup label="Selling Price" name="selling_price">
-        <UInput v-model.number="form.selling_price" size="xl" />
-      </UFormGroup>
 
-      <UFormGroup label="Stock Qty" name="stock_qty">
-        <UInput v-model.number="form.stock_qty" size="xl" />
-      </UFormGroup>
-      <UFormGroup label="Reorder Level" name="reorder_level">
-        <UInput v-model.number="form.reorder_level" size="xl" />
-      </UFormGroup>
+      <div class="flex gap-3">
+        <UFormGroup label="Cost Price" name="cost_price" class="flex-1">
+          <UInput v-model.number="form.cost_price" size="xl" />
+        </UFormGroup>
+        <UFormGroup label="Selling Price" name="selling_price" class="flex-1">
+          <UInput v-model.number="form.selling_price" size="xl" />
+        </UFormGroup>
+      </div>
+
+      <div class="flex gap-3">
+        <UFormGroup label="Reorder Level" name="reorder_level" class="flex-1">
+          <UInput v-model.number="form.reorder_level" size="xl" />
+        </UFormGroup>
+      </div>
+
+      <div class="flex gap-3">
+        <UFormGroup label="Unit of measurement" name="uom" class="flex-1">
+          <USelectMenu
+            v-model="form.uom"
+            :options="basic_units"
+            size="xl"
+            option-attribute="label_formatted"
+            value-attribute="abbr"
+            placeholder="Select category"
+          />
+        </UFormGroup>
+        <UFormGroup label=" Qty" name="stock_qty" class="flex-1">
+          <UInput v-model.number="form.stock_qty" size="xl" />
+        </UFormGroup>
+      </div>
+
+      <div class="flex gap-3">
+        <UFormGroup label="Weight" name="weight" class="flex-1">
+          <UInput v-model.number="form.weight" size="xl" />
+        </UFormGroup>
+        <UFormGroup label="Volume" name="volume" class="flex-1">
+          <UInput v-model.number="form.volume" size="xl" />
+        </UFormGroup>
+      </div>
 
       <div class="text-left space-x-3 pt-6">
         <UButton
@@ -99,7 +126,10 @@ const schema = z.object({
   cost_price: z.number().min(1, { message: 'Cost price is required' }),
   selling_price: z.number().min(1, { message: 'Selling price is required' }),
   stock_qty: z.number().min(1, { message: 'Stock qty is required' }),
-  reorder_level: z.number().min(1, { message: 'Reorder Level is required' })
+  reorder_level: z.number().min(1, { message: 'Reorder level is required' }),
+  uom: z.string().min(1, { message: 'Unit of measurement is required' }),
+  weight: z.number(),
+  volume: z.number()
 })
 
 type Schema = z.output<typeof schema>
@@ -113,7 +143,10 @@ const state = reactive<IProductFormRequest>({
   reorder_level: 0,
   category_id: '',
   barcode: '',
-  barcode_img: null
+  barcode_img: null,
+  uom: 'pc',
+  weight: 0,
+  volume: 0
 })
 
 const editState = reactive<IProductFormRequest>({
@@ -126,7 +159,10 @@ const editState = reactive<IProductFormRequest>({
   reorder_level: 0,
   category_id: '',
   barcode: '',
-  barcode_img: null
+  barcode_img: null,
+  uom: 'pc',
+  weight: 0,
+  volume: 0
 })
 
 function reset() {
@@ -182,6 +218,9 @@ watchEffect(() => {
   editState.reorder_level = product?.reorder_level
   editState.category_id = product?.category_id
   editState.stock_qty = product?.stock_qty
+  editState.uom = product?.uom
+  editState.weight = product?.weight
+  editState.volume = product?.volume
 })
 
 async function onSubmit(event: FormSubmitEvent<Schema>) {
@@ -213,4 +252,5 @@ function onBarcodeGenerate() {
 }
 
 const { isLoading: is_loading } = useHttp()
+const { getBasicUnits: basic_units } = useUom()
 </script>
