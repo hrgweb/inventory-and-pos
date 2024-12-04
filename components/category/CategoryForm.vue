@@ -23,6 +23,7 @@
           size="lg"
           :label="`${isAdd ? 'Save' : 'Update'} Record`"
           :color="`${isAdd ? 'green' : 'orange'}`"
+          :loading="is_loading"
         />
         <UButton
           type="button"
@@ -109,4 +110,6 @@ watchEffect(() => {
   editState.id = category?.id
   editState.name = category?.name
 })
+
+const { isLoading: is_loading } = useHttp()
 </script>
