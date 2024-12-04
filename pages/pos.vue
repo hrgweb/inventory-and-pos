@@ -1,11 +1,11 @@
 <template>
   <div class="flex flex-col w-full h-screen p-3 space-y-3">
     <div
-      class="flex flex-col bg-slate-50 items-center justify-between rounded-lg p-3 shadow w-full gap-6 px-6"
+      class="flex flex-col sm:flex-row md:flex-row lg:flex-row bg-slate-50 items-center justify-between rounded-lg p-3 shadow w-full gap-6 px-6"
     >
       <h2 class="font-medium text-xl">Awesome Store</h2>
 
-      <div class="relative w-full">
+      <div class="relative w-full lg:w-1/2">
         <Icon
           name="lucide:scan-barcode"
           class="absolute z-10 w-5 h-5 left-5 top-3.5 text-gray-400"
@@ -105,7 +105,7 @@
           </UTable>
         </UCard>
 
-        <div v-if="items.length">
+        <div v-if="items.length" class="lg:hidden">
           <UButton
             label="Pay Now"
             class="w-full text-2xl text-center"
@@ -146,46 +146,23 @@
       </div>
 
       <div
-        class="hidden shadow space-y-6 w-[400px] shrink-0 bg-zinc-200 rounded-lg"
+        class="hidden lg:block shadow space-y-6 w-[400px] shrink-0 bg-zinc-200 rounded-lg"
       >
-        <UCard v-if="false" class="basis-0 overflow-y-auto">
-          <div class="flex justify-between items-end">
-            <span class="uppercase text-xl w-[150px] text-right pr-4"
-              >item</span
-            >
-            <input
-              v-model="barcode"
-              class="uppercase text-4xl bg-slate-800 text-white p-4 text-right w-full h-[70px]"
-              type="text"
-              ref="barcode_input"
-              @input="onScan"
-            />
-          </div>
-          <div class="flex justify-between items-end">
-            <span class="uppercase text-xl w-[150px] text-right pr-4"
-              >barcode</span
-            >
-            <span
-              class="uppercase text-4xl bg-slate-800 text-white p-4 text-right w-full h-[70px]"
-              >{{ getProduct?.barcode }}</span
-            >
-          </div>
-          <div class="flex justify-between items-end">
-            <span class="uppercase text-xl w-[150px] text-right pr-4">qty</span>
-            <span
-              class="uppercase text-4xl bg-slate-800 text-white p-3 text-right w-full h-[70px]"
-              >{{ qty }}</span
-            >
-          </div>
-          <div class="flex justify-between items-end">
-            <span class="uppercase text-xl w-[150px] text-right pr-4"
-              >price</span
-            >
+        <UCard
+          v-if="true"
+          class="flex h-full bg-slate-50"
+          :ui="{ body: { base: 'w-full' } }"
+        >
+          <div class="flex flex-col h-full w-full">
+            <div class="flex-1"></div>
 
-            <SharedDisplayNumber
-              :value="getProduct?.selling_price?.toString() || '0'"
-              :show-currency="false"
-              class="text-4xl bg-slate-800 text-white p-3 w-full text-right h-[70px]"
+            <UButton
+              label="Pay Now"
+              class="w-full text-2xl text-center"
+              variant="solid"
+              color="blue"
+              size="xl"
+              @click="onAboutToPay"
             />
           </div>
         </UCard>
@@ -321,8 +298,6 @@ async function onRemove(order: IOrderResponse, index: number): Promise<void> {
     items.value.splice(selectedIndex.value, 1)
   }
 }
-
-const getProduct = computed(() => item.value?.product)
 
 watch(transaction_completed, () => {
   focused.value = true
