@@ -32,13 +32,38 @@
         />
 
         <!-- Signout -->
-        <UButton
-          icon="lucide:log-out"
-          color="blue"
-          variant="soft"
-          class="rounded-full px-3 py-[.6rem]"
-          @click="onSignOut"
-        />
+        <UPopover>
+          <UButton
+            icon="lucide:log-out"
+            color="blue"
+            variant="soft"
+            class="rounded-full px-3 py-[.6rem]"
+            @click="about_to_signout = true"
+          />
+
+          <template #panel>
+            <div class="p-4">
+              <p class="pb-3">Are you sure you want to sign out?</p>
+
+              <div class="flex gap-2">
+                <UButton
+                  label="Yes"
+                  color="blue"
+                  variant="solid"
+                  class="px-3 py-[.6rem]"
+                  @click="onSignOut"
+                />
+                <UButton
+                  label="No"
+                  color="white"
+                  variant="soft"
+                  class="rounded-full px-3 py-[.6rem]"
+                  @click="about_to_signout = false"
+                />
+              </div>
+            </div>
+          </template>
+        </UPopover>
       </div>
     </div>
 
@@ -297,7 +322,7 @@ function focusToBarcoceInput() {
   focused.value = true
 }
 
-const { signOut } = useAuth()
+const { signOut, aboutToSignout: about_to_signout } = useAuth()
 
 async function onSignOut() {
   await signOut()
