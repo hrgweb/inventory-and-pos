@@ -93,6 +93,15 @@ export function useProduct() {
     return newObj
   }
 
+  function reset() {
+    list.value = []
+    isAdd.value = false
+    selected.value = null
+    listCount.value = 0
+    page.value = 1
+    selectedIndex.value = 0
+  }
+
   const getProducts = computed<IProductMapped[]>(() => {
     if (!list.value || list.value.length === 0) {
       return []
@@ -113,6 +122,7 @@ export function useProduct() {
     page,
     selectedIndex,
     remove,
-    search
+    search,
+    reset
   }
 }

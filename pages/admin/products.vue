@@ -85,13 +85,15 @@ const {
   selected,
   fetchProducts,
   list,
-  search: productSearch
+  search: productSearch,
+  reset: productReset
 } = useProduct()
 const {
   search: categorySearch,
   fetchCategories,
   isAdd: is_add_category,
-  selected: category_selected
+  selected: category_selected,
+  reset: categoryReset
 } = useCategory()
 
 type ModalValue = 'none' | 'form' | 'category-form'
@@ -140,5 +142,10 @@ onBeforeMount(async () => {
 watchEffect(() => {
   list.value = []
   fetchProducts({ search: '' })
+})
+
+onUnmounted(() => {
+  productReset()
+  categoryReset()
 })
 </script>
