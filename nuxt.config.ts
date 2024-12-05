@@ -2,7 +2,7 @@
 export default defineNuxtConfig({
   compatibilityDate: '2024-04-03',
   devtools: { enabled: true },
-  modules: ['@nuxt/ui', '@vueuse/nuxt', '@nuxtjs/supabase'],
+  modules: ['@nuxt/ui', '@vueuse/nuxt', '@nuxtjs/supabase', 'nuxt-gtag'],
   supabase: {
     url: process.env.SUPABASEL_URL,
     key: process.env.SUPABASE_KEY,
@@ -20,4 +20,7 @@ export default defineNuxtConfig({
     preference: 'light',
     fallback: 'light'
   }
+  // gtag: {
+  //   enabled: process.env.NODE_ENV === 'production'
+  // }
 })

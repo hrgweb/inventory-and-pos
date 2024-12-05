@@ -17,6 +17,7 @@
     "date-fns": "^4.1.0",
     "jsbarcode": "^3.11.6",
     "nuxt": "^3.14.159",
+    "nuxt-gtag": "3.0.2",
     "quagga": "^0.12.1",
     "v-calendar": "^3.1.2",
     "vue": "latest",
