@@ -1,10 +1,14 @@
 <template>
   <NuxtLayout>
     <NuxtPage />
-
-    <UNotifications />
   </NuxtLayout>
 
+  <!-- Notification -->
+  <Teleport to="body">
+    <UNotifications />
+  </Teleport>
+
+  <!-- Trial Period Alert -->
   <Teleport to="body">
     <TrialPeriodAlert
       v-if="tenDaysBeforeExpiry && !expired"

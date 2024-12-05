@@ -105,10 +105,21 @@
           </UTable>
         </UCard>
 
-        <div v-if="items.length" class="lg:hidden">
+        <div v-if="items.length" class="lg:hidden space-y-3">
           <UButton
-            label="Pay Now"
+            icon="lucide:search"
+            label="Product Lookup"
             class="w-full text-2xl text-center"
+            variant="solid"
+            color="green"
+            size="xl"
+            @click="onProductLookup"
+          />
+
+          <UButton
+            icon="lucide:dollar-sign"
+            label="Pay Now"
+            class="w-full text-3xl font-semibold text-center"
             variant="solid"
             color="blue"
             size="xl"
@@ -327,5 +338,9 @@ const { isLoading: is_loading } = useHttp()
 function onAboutToPay() {
   aboutToPay.value = true
   modal.value = 'form'
+}
+
+function onProductLookup() {
+  modal.value = 'lookup'
 }
 </script>

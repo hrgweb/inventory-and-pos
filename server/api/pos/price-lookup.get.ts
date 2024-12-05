@@ -2,13 +2,20 @@ import { serverSupabaseClient } from '#supabase/server'
 
 export default defineEventHandler(async (event) => {
   const supabase = await serverSupabaseClient(event)
-  const { barcode: _barcode } = getQuery(event)
+  const { search } = getQuery(event)
 
-  async function findProduct(barcode: string) {
+  try {
+    // Find the product by barcode
+    return await findProduct(search as string)
+  } catch (error) {
+    throw error
+  }
+
+  async function findProduct(search: string) {
     const { data, error } = await supabase
       .from('products')
       .select('id, name, selling_price, barcode')
-      .like('barcode', barcode)
+      .or(`name.ilike.${search}%,barcode.eq.${search}`)
 
     if (error) throw error
 
@@ -20,24 +27,6 @@ export default defineEventHandler(async (event) => {
       })
     }
 
-    // Check if data is an array
-    if (Array.isArray(data)) {
-      return data[0]
-    }
-
-    // Else object
     return data
-  }
-
-  try {
-    // Find the product by barcode
-    const product = await findProduct(_barcode as string)
-
-    // No product found return null
-    if (!product) return null
-
-    return product
-  } catch (error) {
-    throw error
   }
 })
