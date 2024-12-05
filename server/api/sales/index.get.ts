@@ -11,15 +11,11 @@ export default defineEventHandler(async (event) => {
   let totalCount = 0
   const userId = query?.user_id as string
 
-  console.log('user: ', userId)
-
   // First, get total count for pagination
   const { count } = await supabase
     .from('sales')
     .select('*', { count: 'exact', head: true })
     .eq('user_id', userId)
-
-  console.log('count: ', count)
 
   const { data, error } = await supabase
     .from('sales')
@@ -37,7 +33,7 @@ change
     `
     )
     .eq('user_id', userId)
-    .order('id', { ascending: false })
+    .order('created_at', { ascending: true })
     .range((page - 1) * itemsPerPage, page * itemsPerPage - 1)
 
   if (error) throw error

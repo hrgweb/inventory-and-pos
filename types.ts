@@ -73,6 +73,7 @@ export interface ITransaction {
   transaction_no: string
   status: TransactionStatus
   created_at: Date
+  user_id: string
 }
 
 export interface ITransactionFormRequest extends Partial<ITransaction> {}

@@ -42,14 +42,16 @@
             :ui="{ td: { padding: 'py-2' } }"
           >
             <template #product_name-data="{ row }">
-              <span>{{ row.products.name }}</span>
+              <span>{{ row.products?.name }}</span>
             </template>
             <template #barcode-data="{ row }">
-              <span>{{ row.products.barcode }}</span>
+              <span>{{ row.products?.barcode }}</span>
             </template>
 
             <template #selling_price-data="{ row }">
-              <span>{{ formatNumber(row.products.selling_price) }}</span>
+              <span v-if="row.products">{{
+                formatNumber(row.products?.selling_price)
+              }}</span>
             </template>
             <template #subtotal-data="{ row }">
               <span>{{ formatNumber(row.subtotal) }}</span>
