@@ -1,5 +1,5 @@
 <template>
-  <div class="space-y-3">
+  <div>
     <div class="flex items-center justify-between pb-6">
       <div class="flex justify-between items-center gap-3">
         <AppPageTitle title="Sales" />
@@ -7,7 +7,7 @@
       </div>
     </div>
 
-    <SalesDate />
+    <SalesDate class="mb-6" />
     <SalesTable />
   </div>
 </template>
