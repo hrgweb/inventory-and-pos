@@ -50,7 +50,11 @@
 <script setup lang="ts">
 import { format, subDays, subMonths, subYears } from 'date-fns'
 
-const { fetchSales } = useSales()
+const { fetchSales, selectedDate: selected_date } = useSales()
+
+watch(selected_date, (d) => {
+  display_date.value = format(d!, 'd MMM, yyy')
+})
 
 const loading_daily = ref(false)
 const loading_weekly = ref(false)
