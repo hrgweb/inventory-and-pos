@@ -1,9 +1,9 @@
 <template>
-  <div class="bg-slate-800 min-h-screen flex items-center justify-center">
-    <p class="text-2xl tracking-wider text-white">Coming Soon!</p>
-  </div>
+  <p class="p-6">Redireting...</p>
 </template>
 
 <script setup lang="ts">
 definePageMeta({ layout: 'none', middleware: 'auth' })
+
+onMounted(async () => await navigateTo('/pos'))
 </script>
