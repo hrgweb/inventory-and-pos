@@ -7,7 +7,9 @@
       </div>
     </div>
 
-    <SalesTable />
+    <SalesDate />
+
+    <!-- <SalesTable /> -->
   </div>
 </template>
 
