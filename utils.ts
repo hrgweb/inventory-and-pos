@@ -57,3 +57,13 @@ export const DATA_SERIALIZER = {
     write: (v: any) => JSON.stringify(v)
   }
 }
+
+export function getCurrentDateRange(date: Date) {
+  const startOfDay = new Date(date)
+  startOfDay.setHours(0, 0, 0, 0) // Set to start of the day (00:00:00)
+
+  const endOfDay = new Date(date)
+  endOfDay.setHours(23, 59, 59, 999) // Set to end of the day (23:59:59.999)
+
+  return { startOfDay, endOfDay }
+}

@@ -5,18 +5,41 @@ export function useSales() {
   const list = useState<ISales[]>('sales', () => [])
   const listCount = ref(0)
   const page = useState('sales_page', () => 1)
+  const selectedDate = useState<Date | undefined>('sales_date', () => undefined)
 
   const http = useHttp()
 
-  async function fetchSales() {
+  async function fetchSales({
+    day,
+    range
+  }: {
+    day?: Date | undefined
+    range?: { start: Date; end: Date }
+  }) {
+    reset()
+
     const _page = page.value
 
     if (!_page) return null
 
-    const query = {
+    let query = {
       user_id: useSupabaseUser()?.value?.id,
       page: toValue(_page)
+    } as Record<string, any>
+
+    // Filter a day
+    if (day) {
+      query.day = day.toISOString()
     }
+
+    // Filter a week or month or yearly
+    if (range) {
+      query.range = {
+        start: range.start.toISOString(),
+        end: range.end.toISOString()
+      }
+    }
+
     const data = await http.getCustom<IItemResponse<ISales>>(
       '/api/sales',
       query
@@ -39,5 +62,5 @@ export function useSales() {
     page.value = 1
   }
 
-  return { fetchSales, list, listCount, page, reset }
+  return { fetchSales, list, listCount, page, reset, selectedDate }
 }

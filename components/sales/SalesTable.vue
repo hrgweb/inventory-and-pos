@@ -23,7 +23,7 @@
         <span>{{ formatNumber(item.change) }}</span>
       </template>
       <template #created_at-data="{ row: item }">
-        <span>{{ format(item.transactions.created_at, 'PP') }}</span>
+        <span>{{ format(item.created_at, 'PP') }}</span>
       </template>
 
       <!-- Expanded -->

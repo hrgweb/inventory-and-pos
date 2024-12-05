@@ -7,6 +7,7 @@
       </div>
     </div>
 
+    <SalesFilter class="mb-4" />
     <SalesTable />
   </div>
 </template>
@@ -17,7 +18,7 @@ definePageMeta({ middleware: 'auth' })
 const { list: sales, fetchSales, reset: salesReset } = useSales()
 
 onBeforeMount(async () => {
-  await fetchSales()
+  await fetchSales({ day: undefined })
 })
 
 onUnmounted(() => salesReset())
