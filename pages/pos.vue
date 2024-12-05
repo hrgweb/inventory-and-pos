@@ -157,7 +157,7 @@
       </div>
 
       <div
-        class="hidden lg:block shadow space-y-6 w-[400px] shrink-0 bg-zinc-200 rounded-lg"
+        class="hidden lg:block shadow space-y-6 w-[300px] shrink-0 bg-zinc-200 rounded-lg"
       >
         <UCard
           v-if="true"
