@@ -33,13 +33,13 @@ const nav_options = [
     label: 'Sales',
     icon: 'lucide:dollar-sign',
     to: '/admin/sales'
-  },
-  {
-    name: 'inventory',
-    label: 'Inventory',
-    icon: 'lucide:file-terminal',
-    to: '/admin/inventory'
   }
+  // {
+  //   name: 'inventory',
+  //   label: 'Inventory',
+  //   icon: 'lucide:file-terminal',
+  //   to: '/admin/inventory'
+  // }
 
   // {
   //   name: 'all_products',

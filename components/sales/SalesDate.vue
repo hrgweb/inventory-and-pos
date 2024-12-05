@@ -1,24 +1,23 @@
 <template>
-  <UCard class="w-full">
-    <UPopover :popper="{ placement: 'bottom-start' }" class="w-[250px]">
-      <div class="flex gap-3 items-center">
-        <span>Filter by date:</span>
-        <UButton
-          icon="i-heroicons-calendar-days-20-solid"
-          :label="getDayLabel"
-        />
-      </div>
+  <UPopover :popper="{ placement: 'bottom-start' }" class="w-[250px]">
+    <div class="flex gap-3 items-center">
+      <span>Filter by date:</span>
+      <UButton
+        icon="i-heroicons-calendar-days-20-solid"
+        color="blue"
+        :label="getDayLabel"
+      />
+    </div>
 
-      <template #panel="{ close }">
-        <AppDatePicker
-          v-model="selected_date"
-          is-required
-          @close="close"
-          @update:model-value="onDayClick"
-        />
-      </template>
-    </UPopover>
-  </UCard>
+    <template #panel="{ close }">
+      <AppDatePicker
+        v-model="selected_date"
+        is-required
+        @close="close"
+        @update:model-value="onDayClick"
+      />
+    </template>
+  </UPopover>
 </template>
 
 <script setup lang="ts">

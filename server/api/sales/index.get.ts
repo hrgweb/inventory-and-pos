@@ -11,6 +11,7 @@ export default defineEventHandler(async (event) => {
   let totalCount = 0
   const userId = query?.user_id as string
   const day = query?.day as Date
+  const range = query?.range as { start: Date; end: Date }
 
   // Sql query to get total count.
   let sqlGetCount = supabase
@@ -23,6 +24,13 @@ export default defineEventHandler(async (event) => {
     sqlGetCount = sqlGetCount
       .gte('created_at', getCurrentDateRange(day).startOfDay.toISOString())
       .lte('created_at', getCurrentDateRange(day).endOfDay.toISOString())
+  }
+
+  // Filer a week or month or yearly
+  if (range) {
+    sqlGetCount = sqlGetCount
+      .gte('created_at', range.start)
+      .lte('created_at', range.end)
   }
 
   const { data: _sqlGetCount, count } = await sqlGetCount
@@ -48,10 +56,18 @@ created_at
     .order('created_at', { ascending: true })
     .range((page - 1) * itemsPerPage, page * itemsPerPage - 1)
 
+  // Filter a day
   if (day) {
     sqlGetSales
       .gte('created_at', getCurrentDateRange(day).startOfDay.toISOString())
       .lte('created_at', getCurrentDateRange(day).endOfDay.toISOString())
+  }
+
+  // Filer a week or month or yearly
+  if (range) {
+    sqlGetCount = sqlGetCount
+      .gte('created_at', range.start)
+      .lte('created_at', range.end)
   }
 
   const { data, error } = await sqlGetSales

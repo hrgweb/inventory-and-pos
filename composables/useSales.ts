@@ -9,7 +9,13 @@ export function useSales() {
 
   const http = useHttp()
 
-  async function fetchSales({ day }: { day?: Date | undefined }) {
+  async function fetchSales({
+    day,
+    range
+  }: {
+    day?: Date | undefined
+    range?: { start: Date; end: Date }
+  }) {
     reset()
 
     const _page = page.value
@@ -24,6 +30,14 @@ export function useSales() {
     // Filter a day
     if (day) {
       query.day = day.toISOString()
+    }
+
+    // Filter a week or month or yearly
+    if (range) {
+      query.range = {
+        start: range.start.toISOString(),
+        end: range.end.toISOString()
+      }
     }
 
     const data = await http.getCustom<IItemResponse<ISales>>(

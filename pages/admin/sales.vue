@@ -7,7 +7,7 @@
       </div>
     </div>
 
-    <SalesDate class="mb-6" />
+    <SalesFilter class="mb-4" />
     <SalesTable />
   </div>
 </template>
