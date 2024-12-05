@@ -82,7 +82,9 @@
             :ui="{ base: 'w-full', td: { padding: 'py-1' } }"
           >
             <template #item-data="{ row }">
-              <span class="text-lg">{{ row.product?.name }}</span>
+              <span class="text-lg truncate block">{{
+                row.product?.name
+              }}</span>
             </template>
             <template #qty-data="{ row }">
               <span class="text-lg">{{ row.qty }}</span>
@@ -109,7 +111,7 @@
           <UButton
             icon="lucide:search"
             label="Product Lookup"
-            class="w-full text-2xl text-center"
+            class="w-full text-xl text-center"
             variant="solid"
             color="green"
             size="xl"
@@ -117,9 +119,9 @@
           />
 
           <UButton
-            icon="lucide:dollar-sign"
+            icon="lucide:banknote"
             label="Pay Now"
-            class="w-full text-3xl font-semibold text-center"
+            class="w-full text-2xl font-semibold text-center"
             variant="solid"
             color="blue"
             size="xl"
@@ -165,9 +167,21 @@
           :ui="{ body: { base: 'w-full' } }"
         >
           <div class="flex flex-col h-full w-full">
-            <div class="flex-1"></div>
+            <div class="flex-1">
+              <UButton
+                icon="lucide:search"
+                label="Product Lookup"
+                class="w-full text-xl text-center"
+                variant="solid"
+                color="green"
+                size="xl"
+                @click="onProductLookup"
+              />
+            </div>
 
             <UButton
+              v-if="items.length"
+              icon="lucide:banknote"
               label="Pay Now"
               class="w-full text-2xl text-center"
               variant="solid"
