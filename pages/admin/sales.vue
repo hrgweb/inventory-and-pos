@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="space-y-3">
     <div class="flex items-center justify-between pb-6">
       <div class="flex justify-between items-center gap-3">
         <AppPageTitle title="Sales" />
@@ -8,8 +8,7 @@
     </div>
 
     <SalesDate />
-
-    <!-- <SalesTable /> -->
+    <SalesTable />
   </div>
 </template>
 
@@ -19,7 +18,7 @@ definePageMeta({ middleware: 'auth' })
 const { list: sales, fetchSales, reset: salesReset } = useSales()
 
 onBeforeMount(async () => {
-  await fetchSales()
+  await fetchSales({ day: undefined })
 })
 
 onUnmounted(() => salesReset())

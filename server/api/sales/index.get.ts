@@ -1,6 +1,6 @@
 import { serverSupabaseClient } from '#supabase/server'
-import { IOrderResponse, ISales, ITransaction } from '~/types'
-import { mapItem } from '~/utils'
+import { ISales, ITransaction } from '~/types'
+import { mapItem, getCurrentDateRange } from '~/utils'
 
 export default defineEventHandler(async (event) => {
   const supabase = await serverSupabaseClient(event)
@@ -10,14 +10,25 @@ export default defineEventHandler(async (event) => {
   let itemsPerPage = 15
   let totalCount = 0
   const userId = query?.user_id as string
+  const day = query?.day as Date
 
-  // First, get total count for pagination
-  const { count } = await supabase
+  // Sql query to get total count.
+  let sqlGetCount = supabase
     .from('sales')
     .select('*', { count: 'exact', head: true })
     .eq('user_id', userId)
 
-  const { data, error } = await supabase
+  // Filter a day
+  if (day) {
+    sqlGetCount = sqlGetCount
+      .gte('created_at', getCurrentDateRange(day).startOfDay.toISOString())
+      .lte('created_at', getCurrentDateRange(day).endOfDay.toISOString())
+  }
+
+  const { data: _sqlGetCount, count } = await sqlGetCount
+
+  // Sql query to filter sales
+  const sqlGetSales = supabase
     .from('sales')
     .select(
       `
@@ -29,12 +40,21 @@ transactions(
 ),
 amount,
 total,
-change
+change,
+created_at
     `
     )
     .eq('user_id', userId)
     .order('created_at', { ascending: true })
     .range((page - 1) * itemsPerPage, page * itemsPerPage - 1)
+
+  if (day) {
+    sqlGetSales
+      .gte('created_at', getCurrentDateRange(day).startOfDay.toISOString())
+      .lte('created_at', getCurrentDateRange(day).endOfDay.toISOString())
+  }
+
+  const { data, error } = await sqlGetSales
 
   if (error) throw error
 
