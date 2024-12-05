@@ -1,5 +1,5 @@
 <template>
-  <div class="flex justify-center h-screen p-3 items-center">
+  <div class="login flex justify-center h-screen p-3 items-center">
     <UCard class="p-6 m-auto shadow-2xl bg-slate-50 w-full">
       <h3 class="text-2xl font-medium pb-6 text-slate-800">Sign In</h3>
       <UAlert
@@ -72,3 +72,11 @@ async function onSignIn(event: FormSubmitEvent<Schema>) {
 
 const { isLoading: is_loading } = useHttp()
 </script>
+
+<style scoped>
+@media (min-width: 450px) {
+  .login {
+    @apply w-[450px] m-auto;
+  }
+}
+</style>
