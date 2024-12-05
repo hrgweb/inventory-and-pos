@@ -10,6 +10,8 @@ export function useSales() {
   const http = useHttp()
 
   async function fetchSales({ day }: { day?: Date | undefined }) {
+    reset()
+
     const _page = page.value
 
     if (!_page) return null
