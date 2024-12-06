@@ -8,6 +8,7 @@ export function useAuth() {
   const aboutToSignout = useState('about_to_signout', () => false)
 
   const supabase = useSupabaseClient()
+  const log = useLog()
 
   async function register(payload: { email: string; password: string }) {
     let { data, error } = await supabase.auth.signUp(payload)
@@ -32,6 +33,9 @@ export function useAuth() {
     })
 
     if (error) throw createError(error)
+
+    // Logger
+    await log.create('sign_in', `${email} has signed in`)
 
     return data
   }

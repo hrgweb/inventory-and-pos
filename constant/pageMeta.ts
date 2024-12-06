@@ -1,5 +1,5 @@
 // Meta
-export const TITTLE = 'Pos and Inventory'
+export const TITTLE = 'Pos and Inventory Management System'
 
 // Pages - Public
 export const INDEX = `Home - ${TITTLE}`
