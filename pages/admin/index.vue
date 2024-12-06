@@ -6,8 +6,8 @@
 
 <script setup lang="ts">
 import AppPageTitle from '~/components/AppPageTitle.vue'
+import * as Page from '~/constant/pageMeta.js'
 
-definePageMeta({
-  middleware: 'auth'
-})
+useHead({ title: Page.ADMIN })
+definePageMeta({ middleware: 'auth' })
 </script>
