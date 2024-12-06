@@ -72,7 +72,7 @@ created_at
 
   const { data, error } = await sqlGetSales
 
-  if (error) throw error
+  if (error) throw createError(error)
 
   const result = (await Promise.all(
     data.map(async (item) => {
@@ -104,7 +104,7 @@ subtotal
       )
       .eq('transaction_no', transaction_no)
 
-    if (error) throw error
+    if (error) throw createError(error)
 
     return data
   }

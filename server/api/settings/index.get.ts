@@ -5,7 +5,7 @@ export default defineEventHandler(async (event) => {
 
   const { data, error } = await client.from('settings').select('*').limit(1)
 
-  if (error) throw error
+  if (error) throw createError(error)
 
   return data && data.length ? data[0] : data
 })

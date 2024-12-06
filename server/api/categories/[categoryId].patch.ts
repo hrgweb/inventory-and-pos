@@ -11,7 +11,7 @@ export default defineEventHandler(async (event) => {
     .eq('id', id)
     .select()
 
-  if (error) throw error
+  if (error) throw createError(error)
 
   return data && data.length ? data[0] : data
 })

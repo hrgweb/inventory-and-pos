@@ -10,7 +10,7 @@ export default defineEventHandler(async (event) => {
       .from('transactions')
       .select()
       .eq('status', TransactionStatus.PENDING)
-    if (error) throw error
+    if (error) throw createError(error)
     return data[0]
   }
 
@@ -25,7 +25,7 @@ export default defineEventHandler(async (event) => {
       .from('transactions')
       .insert(payload)
       .select()
-    if (error) throw error
+    if (error) throw createError(error)
     return data[0]
   }
 

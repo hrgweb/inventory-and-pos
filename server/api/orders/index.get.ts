@@ -30,7 +30,7 @@ export default defineEventHandler(async (event) => {
     )
     .eq('transaction_no', transaction_no)
 
-  if (error) throw error
+  if (error) throw createError(error)
 
   const formmattedData = data.map((item) => {
     return {
