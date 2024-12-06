@@ -154,6 +154,10 @@ async function onCreateOrder(product: IProduct) {
     product
   }
   await orderCreate(payload)
+  await log.create(
+    'pos_product_lookup_add_to_order',
+    `add the product to the order from product lookup`
+  )
   emit('close')
 }
 </script>

@@ -169,6 +169,7 @@ export type LogAction =
   | 'pos_product_lookup'
   | 'pos_sales_completed'
   | 'pos_product_lookup'
+  | 'pos_product_lookup_add_to_order'
 
 export interface ILog {
   user_id: string
