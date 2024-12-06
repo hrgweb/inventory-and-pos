@@ -10,14 +10,14 @@
         <span>{{ row.name }}</span>
       </template>
       <template #actions-data="{ row, index }">
-        <div class="flex gap-3">
+        <div class="flex gap-3 justify-center">
           <Icon
-            class="cursor-pointer text-xl text-zinc-400"
+            class="cursor-pointer text-xl text-zinc-400 bg-orange-500"
             name="lucide:pencil"
             @click="onEdit(row, index)"
           />
 
-          <UPopover>
+          <!-- <UPopover>
             <Icon
               class="cursor-pointer text-xl text-orange-400"
               name="lucide:trash"
@@ -44,7 +44,7 @@
                 </div>
               </div>
             </template>
-          </UPopover>
+          </UPopover> -->
         </div>
       </template>
     </UTable>
@@ -64,7 +64,7 @@ const columns = [
   {
     key: 'actions',
     label: 'Actions',
-    class: 'w-[100px]'
+    class: 'w-[100px] text-center'
   }
 ]
 
