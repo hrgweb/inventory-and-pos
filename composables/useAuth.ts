@@ -35,7 +35,7 @@ export function useAuth() {
     if (error) throw createError(error)
 
     // Logger
-    await log.create('sign_in', `${email} has signed in`)
+    await log.create('sign_in', 'has signed in')
 
     return data
   }
