@@ -74,12 +74,16 @@
             placeholder="Select category"
           />
         </UFormGroup>
-        <UFormGroup label=" Qty" name="stock_qty" class="flex-1">
+        <UFormGroup
+          :label="`Qty (${form?.uom})`"
+          name="stock_qty"
+          class="flex-1"
+        >
           <UInput v-model.number="form.stock_qty" size="xl" />
         </UFormGroup>
       </div>
 
-      <div class="flex gap-3">
+      <div v-if="false" class="flex gap-3">
         <UFormGroup label="Weight" name="weight" class="flex-1">
           <UInput v-model.number="form.weight" size="xl" />
         </UFormGroup>
