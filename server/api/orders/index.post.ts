@@ -15,6 +15,9 @@ export default defineEventHandler(async (event) => {
     }
     return order
   } catch (error) {
+    if (error instanceof Error) {
+      throw createError(error)
+    }
     throw error
   }
 })

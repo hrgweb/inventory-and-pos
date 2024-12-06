@@ -49,7 +49,7 @@ export async function helperHandler(event: H3Event<EventHandlerRequest>) {
     subtotal
         `)
 
-    if (error) throw error
+    if (error) throw createError(error)
 
     const formmattedData = data.map((item) => {
       return {

@@ -137,3 +137,40 @@ export enum InventoryType {
   EXPIRED_PRODUCT = 'expired_product',
   DAMAGED_PRODUCT = 'damaged_product'
 }
+
+export type LogAction =
+  // Admin
+  | 'signed_in'
+  | 'signed_out'
+  | 'create_product'
+  | 'update_product'
+  | 'delete_product'
+  | 'search_on_products'
+  | 'fetch_products'
+  | 'create_category'
+  | 'update_category'
+  | 'delete_category'
+  | 'search_on_categories'
+  | 'fetch_categories'
+  | 'fetch_sales'
+  | 'create_sales'
+  | 'filter_sales_by_date'
+  | 'filter_sales_by_daily'
+  | 'filter_sales_by_weekly'
+  | 'filter_sales_by_monthly'
+  | 'filter_sales_by_yearly'
+  // Pos
+  | 'pos_fetch_orders'
+  | 'pos_scan_barcode'
+  | 'pos_create_order'
+  | 'pos_delete_order'
+  | 'pos_init_transaction'
+  | 'pos_delete_transaction'
+  | 'pos_product_lookup'
+  | 'pos_sales_completed'
+
+export interface ILog {
+  user_id: string
+  action: LogAction
+  description?: string
+}

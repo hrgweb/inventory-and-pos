@@ -9,10 +9,12 @@ export function useCategory() {
   const selectedIndex = useState('category_selected_index', () => 0)
 
   const http = useHttp()
+  const log = useLog()
 
   async function fetchCategories({ search }: { search: string }) {
     const data = await http.get<ICategory>('/api/categories', { search })
     list.value = data
+    await log.create('fetch_categories', `fetching categories`)
     return data
   }
 
@@ -26,6 +28,7 @@ export function useCategory() {
       body
     )
     list.value.unshift(data)
+    await log.create('create_category', 'created new category')
   }
 
   async function update(payload: ICategoryFormRequest) {
@@ -34,11 +37,13 @@ export function useCategory() {
       payload
     )
     list.value[selectedIndex.value] = data
+    await log.create('update_category', `updated category '${payload.id}'`)
   }
 
   async function remove(id: string): Promise<void> {
     await http.remove<ICategory>(`/api/categories/${id}`)
     list.value.splice(selectedIndex.value, 1)
+    await log.create('delete_category', `removed category ${id}`)
   }
 
   function reset() {

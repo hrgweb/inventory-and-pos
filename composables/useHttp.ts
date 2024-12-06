@@ -34,6 +34,9 @@ export function useHttp() {
 
       return data as T
     } catch (error) {
+      if (error instanceof Error) {
+        throw createError(error)
+      }
       throw error
     } finally {
       isLoading.value = false
@@ -60,6 +63,9 @@ export function useHttp() {
 
       return data as T[]
     } catch (error) {
+      if (error instanceof Error) {
+        throw createError(error)
+      }
       throw error
     } finally {
       isLoading.value = false
@@ -76,6 +82,9 @@ export function useHttp() {
       const data = await $fetch<T[]>(url, { method: 'GET', query })
       return data as T
     } catch (error) {
+      if (error instanceof Error) {
+        throw createError(error)
+      }
       throw error
     } finally {
       isLoading.value = false
@@ -106,6 +115,9 @@ export function useHttp() {
         statusMessage: 'Response must be an array or object'
       })
     } catch (error) {
+      if (error instanceof Error) {
+        throw createError(error)
+      }
       throw error
     } finally {
       isLoading.value = false
@@ -125,6 +137,9 @@ export function useHttp() {
       const data = await $fetch<T>(url, { method: 'DELETE' })
       return data as T
     } catch (error) {
+      if (error instanceof Error) {
+        throw createError(error)
+      }
       throw error
     }
   }

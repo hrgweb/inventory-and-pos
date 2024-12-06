@@ -23,7 +23,7 @@ export default defineEventHandler(async (event) => {
     .order('id', { ascending: false })
     .range((page - 1) * itemsPerPage, page * itemsPerPage - 1)
 
-  if (error) throw error
+  if (error) throw createError(error)
 
   totalCount = count || 0
 

@@ -58,7 +58,9 @@
 import ProductForm from '~/components/product/ProductForm.vue'
 import CategoryForm from '~/components/category/CategoryForm.vue'
 import type { ICategory, IProduct } from '~/types'
+import * as Page from '~/constant/pageMeta'
 
+useHead({ title: Page.ADMIN_PRODUCTS })
 definePageMeta({ middleware: 'auth' })
 
 const search = ref('')

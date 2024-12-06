@@ -43,7 +43,7 @@ export default defineEventHandler(async (event) => {
         .select('stock_qty')
         .eq('id', product.id!)
 
-      if (getStockError) throw getStockError
+      if (getStockError) throw createError(getStockError)
 
       // Deduct stock qty
       const _data = (data && data.length ? data[0] : data) as {
@@ -57,7 +57,7 @@ export default defineEventHandler(async (event) => {
         .update({ stock_qty: stockQty } as never)
         .eq('id', product.id)
 
-      if (updateStockError) throw updateStockError
+      if (updateStockError) throw createError(updateStockError)
     }
 
     return true
@@ -74,7 +74,7 @@ export default defineEventHandler(async (event) => {
       .eq('status', TransactionStatus.PENDING)
 
     // Transaction fails
-    if (transactionError) throw transactionError
+    if (transactionError) throw createError(transactionError)
 
     const salesPayload = {
       user_id,
@@ -91,7 +91,7 @@ export default defineEventHandler(async (event) => {
       .select()
 
     // Sales fails
-    if (salesError) throw salesError
+    if (salesError) throw createError(salesError)
 
     // Adjust stock qty of each product
     const _items = mapItems(orders)

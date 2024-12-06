@@ -13,6 +13,9 @@
 </template>
 
 <script setup lang="ts">
+import * as Page from '~/constant/pageMeta'
+
+useHead({ title: Page.ADMIN_SALES })
 definePageMeta({ middleware: 'auth' })
 
 const { list: sales, fetchSales, reset: salesReset } = useSales()

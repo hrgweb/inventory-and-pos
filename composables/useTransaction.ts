@@ -13,6 +13,7 @@ export function useTransaction() {
   const change = useState('transaction_change', () => 0)
   const completed = useState('transaction_completed', () => false)
 
+  const log = useLog()
   const http = useHttp()
   const { items, item, qty } = useOrder()
 
@@ -23,6 +24,10 @@ export function useTransaction() {
     if (!data) return null
 
     transaction.value = data as ITransaction
+    await log.create(
+      'pos_init_transaction',
+      `initializing or getting the transaction`
+    )
 
     return data
   }
@@ -43,6 +48,7 @@ export function useTransaction() {
       item.value = data
       items.value.push(data)
       qty.value = 1
+      await log.create('pos_scan_barcode', `scan the product barcode`)
     }
   }
 
@@ -65,6 +71,10 @@ export function useTransaction() {
       '/api/transactions/create-sales',
       payload
     )
+    await log.create(
+      'pos_sales_completed',
+      `transaction completed and made sales`
+    )
     return data as boolean
   }
 
@@ -79,6 +89,7 @@ export function useTransaction() {
 
   async function remove(orderId: number): Promise<boolean> {
     await http.remove<IOrderResponse>(`/api/orders/${orderId}`)
+    await log.create('pos_delete_order', `removed pos order ${orderId}`)
     return true
   }
 
@@ -86,6 +97,7 @@ export function useTransaction() {
     const query = { transaction_no: transaction.value?.transaction_no }
     const data = await http.get<IOrderResponse>('/api/orders', query)
     items.value = data as IOrderResponse[]
+    await log.create('pos_fetch_orders', `fetching pos orders`)
   }
 
   const getTotal = computed<number>(() => {

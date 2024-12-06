@@ -4,12 +4,8 @@ export default defineEventHandler(async (event) => {
   const supabase = await serverSupabaseClient(event)
   const { search } = getQuery(event)
 
-  try {
-    // Find the product by barcode
-    return await findProduct(search as string)
-  } catch (error) {
-    throw error
-  }
+  // Find the product by barcode
+  return await findProduct(search as string)
 
   async function findProduct(search: string) {
     const { data, error } = await supabase
@@ -17,7 +13,7 @@ export default defineEventHandler(async (event) => {
       .select('id, name, selling_price, barcode')
       .or(`name.ilike.${search}%,barcode.eq.${search}`)
 
-    if (error) throw error
+    if (error) throw createError(error)
 
     // No product found by barcode
     if (!data || data.length === 0) {

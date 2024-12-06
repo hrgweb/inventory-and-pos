@@ -7,45 +7,23 @@ export async function crudHandler(event: H3Event<EventHandlerRequest>) {
   async function create<T>(table: string): Promise<T | null> {
     const body = await readBody(event)
 
-    try {
-      const { data, error } = await client.from(table).insert(body).select()
+    const { data, error } = await client.from(table).insert(body).select()
 
-      if (error) {
-        throw createError({
-          statusCode: 500,
-          statusMessage: error.message
-        })
-      }
+    if (error) throw createError(error)
 
-      const result = data && data.length ? data[0] : data
-      return result as T
-    } catch (error) {
-      throw error
-    }
+    const result = data && data.length ? data[0] : data
+    return result as T
   }
 
   async function createMany<T>(table: string): Promise<T[]> {
     const body = await readBody(event)
     const items = body.items
 
-    console.log('items: ', items)
+    const { data, error } = await client.from(table).insert(items).select()
 
-    try {
-      const { data, error } = await client.from(table).insert(items).select()
+    if (error) throw createError(error)
 
-      console.log('data: ', data)
-
-      if (error) {
-        throw createError({
-          statusCode: 500,
-          statusMessage: error.message
-        })
-      }
-
-      return data as T[]
-    } catch (error) {
-      throw error
-    }
+    return data as T[]
   }
 
   async function findAll<T>(
@@ -60,30 +38,26 @@ export async function crudHandler(event: H3Event<EventHandlerRequest>) {
     let totalCount = 0
     const search = query?.search || ''
 
-    try {
-      // First, get total count for pagination
-      const { count } = await client
-        .from('products')
-        .select('*', { count: 'exact', head: true })
-        .ilike(columnToFilter, `${search}%`)
+    // First, get total count for pagination
+    const { count } = await client
+      .from('products')
+      .select('*', { count: 'exact', head: true })
+      .ilike(columnToFilter, `${search}%`)
 
-      const { data, error } = await client
-        .from(table)
-        .select(select)
-        .ilike('name', `${search}%`)
-        .order('id', { ascending: false })
-        .range((page - 1) * itemsPerPage, page * itemsPerPage - 1)
+    const { data, error } = await client
+      .from(table)
+      .select(select)
+      .ilike('name', `${search}%`)
+      .order('id', { ascending: false })
+      .range((page - 1) * itemsPerPage, page * itemsPerPage - 1)
 
-      if (error) throw error
+    if (error) throw createError(error)
 
-      totalCount = count || 0
+    totalCount = count || 0
 
-      return {
-        items: data as T[],
-        total: totalCount
-      }
-    } catch (error) {
-      throw error
+    return {
+      items: data as T[],
+      total: totalCount
     }
   }
 
@@ -99,19 +73,15 @@ export async function crudHandler(event: H3Event<EventHandlerRequest>) {
     const query = getQuery(event)
     const search = query?.search || ''
 
-    try {
-      const { data, error } = await client
-        .from(table)
-        .select(select)
-        .ilike(columnToFilter, `${search}%`)
-        .order(column, { ascending: order === 'asc' ? true : false })
+    const { data, error } = await client
+      .from(table)
+      .select(select)
+      .ilike(columnToFilter, `${search}%`)
+      .order(column, { ascending: order === 'asc' ? true : false })
 
-      if (error) throw error
+    if (error) throw createError(error)
 
-      return data as T[]
-    } catch (error) {
-      throw error
-    }
+    return data as T[]
   }
 
   async function update<T>(
@@ -128,22 +98,16 @@ export async function crudHandler(event: H3Event<EventHandlerRequest>) {
       })
     }
 
-    try {
-      const { data, error } = await client
-        .from(table)
-        .update(body)
-        .eq('id', itemId)
-        .select()
+    const { data, error } = await client
+      .from(table)
+      .update(body)
+      .eq('id', itemId)
+      .select()
 
-      if (error) {
-        throw error
-      }
+    if (error) throw createError(error)
 
-      const result = data && data.length ? data[0] : data
-      return result as T
-    } catch (error) {
-      throw error
-    }
+    const result = data && data.length ? data[0] : data
+    return result as T
   }
 
   async function remove<T>(table: string, paramIdName: string): Promise<T> {
@@ -156,17 +120,11 @@ export async function crudHandler(event: H3Event<EventHandlerRequest>) {
       })
     }
 
-    try {
-      const { data, error } = await client.from(table).delete().eq('id', itemId)
+    const { data, error } = await client.from(table).delete().eq('id', itemId)
 
-      if (error) {
-        throw error
-      }
+    if (error) throw createError(error)
 
-      return data as T
-    } catch (error) {
-      throw error
-    }
+    return data as T
   }
 
   return { create, createMany, findAll, update, findMany, remove }

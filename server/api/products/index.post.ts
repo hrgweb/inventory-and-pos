@@ -6,7 +6,7 @@ export default defineEventHandler(async (event) => {
 
   const { data, error } = await supabase.from('products').insert(body).select()
 
-  if (error) throw error
+  if (error) throw createError(error)
 
   return data && data.length ? data[0] : data
 })

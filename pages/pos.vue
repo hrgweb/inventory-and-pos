@@ -207,7 +207,9 @@ import Completed from '~/components/transaction/TransactionCompleted.vue'
 import PriceLookup from '~/components/transaction/TransactionPriceLookup.vue'
 import type { IOrderResponse, ModalValue } from '~/types'
 import { formatNumber } from '~/utils'
+import * as Page from '~/constant/pageMeta'
 
+useHead({ title: Page.TITTLE })
 definePageMeta({ layout: 'none', middleware: 'auth' })
 
 const {

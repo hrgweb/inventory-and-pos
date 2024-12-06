@@ -17,6 +17,7 @@ export function useProduct() {
 
   const http = useHttp()
   const notification = useNotification()
+  const log = useLog()
 
   function addToCart() {
     notification.success({ title: 'Added to cart.' })
@@ -35,6 +36,8 @@ export function useProduct() {
         body
       )
       list.value.unshift(mapProduct(data))
+
+      await log.create('create_product', 'created new product')
     } catch (error) {
       console.log(error)
     }
@@ -48,12 +51,14 @@ export function useProduct() {
     )
     const content = mapProduct(data)
     list.value[selectedIndex.value] = content
+    await log.create('update_product', `updated product '${payload.id}'`)
   }
 
   const search = useDebounceFn(async (q: string) => {
     list.value = []
     page.value = 1
     await fetchProducts({ search: q })
+    await log.create('search_on_products', `made a search on products`)
   }, 500)
 
   async function fetchProducts({ search }: { search: string }) {
@@ -74,11 +79,13 @@ export function useProduct() {
 
     list.value = data.items.map((item) => mapProduct(item)) as IProductMapped[]
     listCount.value = data.total
+    await log.create('fetch_products', `fetching products`)
   }
 
   async function remove(id: string): Promise<void> {
     await http.remove<IProduct>(`/api/products/${id}`)
     list.value.splice(selectedIndex.value, 1)
+    await log.create('delete_product', `removed product ${id}`)
   }
 
   function mapProduct(item: IProduct): IProductMapped {

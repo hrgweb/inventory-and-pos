@@ -8,6 +8,7 @@ export function useSales() {
   const selectedDate = useState<Date | undefined>('sales_date', () => undefined)
 
   const http = useHttp()
+  const log = useLog()
 
   async function fetchSales({
     day,
@@ -49,6 +50,7 @@ export function useSales() {
 
     list.value = data.items.map((item) => mapSale(item)) as ISales[]
     listCount.value = data.total
+    await log.create('fetch_sales', `fetching sales`)
   }
 
   function mapSale(item: ISales): ISales {

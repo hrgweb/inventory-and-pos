@@ -8,11 +8,12 @@ export function useAuth() {
   const aboutToSignout = useState('about_to_signout', () => false)
 
   const supabase = useSupabaseClient()
+  const log = useLog()
 
   async function register(payload: { email: string; password: string }) {
     let { data, error } = await supabase.auth.signUp(payload)
 
-    if (error) throw error
+    if (error) throw createError(error)
 
     return data
   }
@@ -31,13 +32,10 @@ export function useAuth() {
       password
     })
 
-    if (error) {
-      _error.value = {
-        code: error.code || 'unknown',
-        message: error.message || 'An error occured'
-      }
-      throw error
-    }
+    if (error) throw createError(error)
+
+    // Logger
+    await log.create('sign_in', 'has signed in')
 
     return data
   }
@@ -45,7 +43,7 @@ export function useAuth() {
   async function signOut() {
     let { error } = await supabase.auth.signOut()
 
-    if (error) throw error
+    if (error) throw createError(error)
 
     return true
   }

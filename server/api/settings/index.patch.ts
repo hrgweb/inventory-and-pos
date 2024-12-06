@@ -10,7 +10,7 @@ export default defineEventHandler(async (event) => {
     .update(body as never)
     .eq('id', id)
 
-  if (error) throw error
+  if (error) throw createError(error)
 
   return true
 })

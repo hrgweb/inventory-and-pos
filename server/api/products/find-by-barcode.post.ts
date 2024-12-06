@@ -11,7 +11,7 @@ export default defineEventHandler(async (event) => {
       .select('id, name, selling_price, barcode')
       .like('barcode', barcode)
 
-    if (error) throw error
+    if (error) throw createError(error)
 
     // No product found by barcode
     if (!data || data.length === 0) {
@@ -74,7 +74,7 @@ qty,
 subtotal
     `)
 
-    if (error) throw error
+    if (error) throw createError(error)
 
     const formmattedData = data.map((item) => {
       return {
