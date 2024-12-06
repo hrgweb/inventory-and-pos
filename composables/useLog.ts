@@ -1,4 +1,4 @@
-import type { ILog, LogAction } from '~/types'
+import type { LogAction } from '~/types'
 
 export function useLog() {
   const client = useSupabaseClient()

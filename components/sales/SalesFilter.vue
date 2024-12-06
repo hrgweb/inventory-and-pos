@@ -51,9 +51,11 @@
 import { format, subDays, subMonths, subYears } from 'date-fns'
 
 const { fetchSales, selectedDate: selected_date } = useSales()
+const log = useLog()
 
-watch(selected_date, (d) => {
+watch(selected_date, async (d) => {
   display_date.value = format(d!, 'd MMM, yyy')
+  await log.create('filter_sales_by_date', `filtering sales by date`)
 })
 
 const loading_daily = ref(false)
@@ -102,6 +104,7 @@ async function onDaily(): Promise<void> {
   const day = new Date()
   display_date.value = getSelectedDateLabel(day)
   await fetchSales({ day })
+  await log.create('filter_sales_by_daily', `filtering sales by daily`)
   loading_daily.value = false
 }
 
@@ -112,6 +115,7 @@ async function onWeekly() {
   const end = new Date()
   display_date.value = getSelectedDateLabel(end)
   await fetchSales({ day: undefined, range: { start, end } })
+  await log.create('filter_sales_by_weekly', `filtering sales by weekly`)
   loading_daily.value = false
 }
 
@@ -124,6 +128,7 @@ async function onMonthly() {
   const end = new Date()
   display_date.value = getSelectedDateLabel(end)
   await fetchSales({ day: undefined, range: { start, end } })
+  await log.create('filter_sales_by_monthly', `filtering sales by month`)
   loading_daily.value = false
 }
 
@@ -136,6 +141,7 @@ async function onYearly() {
   const end = new Date()
   display_date.value = getSelectedDateLabel(end)
   await fetchSales({ day: undefined, range: { start, end } })
+  await log.create('filter_sales_by_yearly', `filtering sales by yearly`)
   loading_daily.value = false
 }
 </script>
