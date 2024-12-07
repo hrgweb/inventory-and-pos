@@ -19,6 +19,12 @@
       class="space-y-4"
       @submit="onSubmit"
     >
+      <!-- Barcode SVG -->
+      <div
+        v-if="barcode && isAdd"
+        class="w-full barcode-svg"
+        v-html="barcodeSvg"
+      ></div>
       <UFormGroup label="Barcode" name="barcode">
         <div class="flex">
           <UInput v-model="form.barcode" size="xl" class="w-full" />
@@ -258,3 +264,9 @@ function onBarcodeGenerate() {
 const { isLoading: is_loading } = useHttp()
 const { getBasicUnits: basic_units } = useUom()
 </script>
+
+<style>
+.barcode-svg > svg {
+  width: 100%;
+}
+</style>
