@@ -107,7 +107,7 @@
           </UTable>
         </UCard>
 
-        <div v-if="items.length" class="lg:hidden space-y-3">
+        <div class="lg:hidden space-y-3">
           <UButton
             icon="lucide:search"
             label="Product Lookup"
@@ -119,6 +119,7 @@
           />
 
           <UButton
+            v-if="items.length"
             icon="lucide:banknote"
             label="Pay Now"
             class="w-full text-2xl font-semibold text-center"
