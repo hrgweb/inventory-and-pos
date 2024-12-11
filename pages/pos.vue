@@ -11,7 +11,7 @@
           class="absolute z-10 w-5 h-5 left-5 top-3.5 text-gray-400"
         />
         <input
-          v-model="barcode"
+          v-model.trim="barcode"
           type="text"
           placeholder="Scan product barcode here "
           class="relative block w-full disabled:cursor-not-allowed disabled:opacity-75 focus:outline-none border-0 form-input placeholder-gray-400 dark:placeholder-gray-500 text-xl px-2.5 pl-12 py-2.5 shadow-sm bg-white dark:bg-gray-900 text-gray-900 dark:text-white ring-1 ring-inset ring-gray-300 dark:ring-gray-700 focus:ring-2 focus:ring-gray-300 dark:focus:ring-gray-400 ps-9 rounded-full"
@@ -208,6 +208,17 @@ import PriceLookup from '~/components/transaction/TransactionPriceLookup.vue'
 import type { IOrderResponse, ModalValue } from '~/types'
 import { formatNumber } from '~/utils'
 import * as Page from '~/constant/pageMeta'
+import { useBreakpoints } from '@vueuse/core'
+
+const breakpoints = useBreakpoints({
+  mobile: 0, // optional
+  tablet: 640,
+  laptop: 1024,
+  desktop: 1280
+})
+
+// Can be 'mobile' or 'tablet' or 'laptop' or 'desktop'
+const activeBreakpoint = breakpoints.active()
 
 useHead({ title: Page.TITTLE })
 definePageMeta({ layout: 'none', middleware: 'auth' })
@@ -339,7 +350,12 @@ onUnmounted(() => {
 })
 
 function focusToBarcoceInput() {
-  focused.value = true
+  if (
+    activeBreakpoint.value === 'laptop' ||
+    activeBreakpoint.value === 'desktop'
+  ) {
+    focused.value = true
+  }
 }
 
 const { signOut, aboutToSignout: about_to_signout } = useAuth()

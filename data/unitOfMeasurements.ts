@@ -11,32 +11,32 @@ const basicUnits = [
     label: 'Piece',
     abbr: 'pc',
     value: 'piece'
+  },
+  {
+    label: 'Box',
+    abbr: 'box',
+    value: 'box'
+  },
+  {
+    label: 'Sack',
+    abbr: 'sack',
+    value: 'sack'
+  },
+  {
+    label: 'Packet',
+    abbr: 'pkt',
+    value: 'packet'
+  },
+  {
+    label: 'Dozen',
+    abbr: 'doz',
+    value: 'dozen'
+  },
+  {
+    label: 'Case',
+    abbr: 'case',
+    value: 'case'
   }
-  // {
-  //   label: 'Box',
-  //   abbr: 'box',
-  //   value: 'box'
-  // },
-  // {
-  //   label: 'Sack',
-  //   abbr: 'sack',
-  //   value: 'sack'
-  // },
-  // {
-  //   label: 'Packet',
-  //   abbr: 'pkt',
-  //   value: 'packet'
-  // },
-  // {
-  //   label: 'Dozen',
-  //   abbr: 'doz',
-  //   value: 'dozen'
-  // },
-  // {
-  //   label: 'Case',
-  //   abbr: 'case',
-  //   value: 'case'
-  // }
 ] as IUnit[]
 
 const weightBased = [
@@ -89,16 +89,16 @@ const lengthBased = [
 ] as IUnitType[]
 
 const countBased = [
-  // {
-  //   label: 'Pack',
-  //   abbr: 'pk',
-  //   value: 'pack'
-  // },
-  // {
-  //   label: 'Roll',
-  //   abbr: 'rl',
-  //   value: 'roll'
-  // }
+  {
+    label: 'Pack',
+    abbr: 'pk',
+    value: 'pack'
+  },
+  {
+    label: 'Roll',
+    abbr: 'rl',
+    value: 'roll'
+  }
 ] as IUnitType[]
 
 export const unitOfMeasurements = [

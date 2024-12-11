@@ -15,6 +15,7 @@ export function useTransaction() {
 
   const log = useLog()
   const http = useHttp()
+  const notification = useNotification()
   const { items, item, qty } = useOrder()
 
   async function getOrCreateTransaction() {
@@ -39,16 +40,22 @@ export function useTransaction() {
       transaction_no: transaction.value?.transaction_no
     }
 
-    const data = await http.post<IOrderResponse, ITransactionFormRequest>(
-      `/api/products/find-by-barcode`,
-      body
-    )
+    try {
+      const data = await http.post<IOrderResponse, ITransactionFormRequest>(
+        `/api/products/find-by-barcode`,
+        body
+      )
 
-    if (data) {
-      item.value = data
-      items.value.push(data)
-      qty.value = 1
-      await log.create('pos_scan_barcode', `scan the product barcode`)
+      if (data) {
+        item.value = data
+        items.value.push(data)
+        qty.value = 1
+        await log.create('pos_scan_barcode', `scan the product barcode`)
+        return
+      }
+    } catch (error) {
+      notification.error({ title: 'Product not found' })
+      throw error
     }
   }
 

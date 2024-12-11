@@ -20,7 +20,7 @@
     <UForm :schema="schema" :state="state" class="space-y-4 mb-4">
       <UFormGroup label="" name="q">
         <UInput
-          v-model="state.q"
+          v-model.trim="state.q"
           ref="lookup_input"
           class="w-full"
           size="xl"
@@ -114,6 +114,8 @@ const http = useHttp()
 const products = ref<IProduct[]>([])
 
 const notification = useNotification()
+const log = useLog()
+
 const onPriceLookup = useDebounceFn(async () => {
   products.value = []
 
@@ -133,6 +135,7 @@ const onPriceLookup = useDebounceFn(async () => {
   try {
     const data = await http.get<IProduct>(`/api/pos/price-lookup`, body)
     products.value = data
+    await log.create('pos_product_lookup', `made a product lookup`)
   } catch (error: any) {
     const _error = error && error.data
     if (_error.statusCode === 404) {
@@ -151,6 +154,10 @@ async function onCreateOrder(product: IProduct) {
     product
   }
   await orderCreate(payload)
+  await log.create(
+    'pos_product_lookup_add_to_order',
+    `add the product to the order from product lookup`
+  )
   emit('close')
 }
 </script>

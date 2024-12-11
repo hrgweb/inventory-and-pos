@@ -11,10 +11,17 @@ export default defineEventHandler(async (event) => {
   const search = query?.search || ''
 
   // First, get total count for pagination
-  const { count } = await client
+  const { count, error: countError } = await client
     .from('products')
     .select('*', { count: 'exact', head: true })
     .ilike('name', `${search}%`)
+
+  if (countError) {
+    return {
+      items: [],
+      total: 0
+    }
+  }
 
   const { data, error } = await client
     .from('products')

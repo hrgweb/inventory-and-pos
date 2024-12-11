@@ -19,6 +19,12 @@
       class="space-y-4"
       @submit="onSubmit"
     >
+      <!-- Barcode SVG -->
+      <div
+        v-if="barcode && isAdd"
+        class="w-full barcode-svg"
+        v-html="barcodeSvg"
+      ></div>
       <UFormGroup label="Barcode" name="barcode">
         <div class="flex">
           <UInput v-model="form.barcode" size="xl" class="w-full" />
@@ -74,12 +80,16 @@
             placeholder="Select category"
           />
         </UFormGroup>
-        <UFormGroup label=" Qty" name="stock_qty" class="flex-1">
+        <UFormGroup
+          :label="`Qty (${form?.uom})`"
+          name="stock_qty"
+          class="flex-1"
+        >
           <UInput v-model.number="form.stock_qty" size="xl" />
         </UFormGroup>
       </div>
 
-      <div class="flex gap-3">
+      <div v-if="false" class="flex gap-3">
         <UFormGroup label="Weight" name="weight" class="flex-1">
           <UInput v-model.number="form.weight" size="xl" />
         </UFormGroup>
@@ -254,3 +264,9 @@ function onBarcodeGenerate() {
 const { isLoading: is_loading } = useHttp()
 const { getBasicUnits: basic_units } = useUom()
 </script>
+
+<style>
+.barcode-svg > svg {
+  width: 100%;
+}
+</style>
