@@ -4,7 +4,10 @@
   <UCard>
     <template #header>
       <div class="flex justify-between items-center">
-        <AppPageTitle title="Product Lookup" />
+        <div class="flex gap-3 items-center">
+          <AppPageTitle title="Product Lookup" />
+          <UBadge color="blue" variant="solid">{{ products.length }}</UBadge>
+        </div>
 
         <UButton
           icon="heroicons:x-mark"
