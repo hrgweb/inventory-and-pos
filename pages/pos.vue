@@ -208,6 +208,17 @@ import PriceLookup from '~/components/transaction/TransactionPriceLookup.vue'
 import type { IOrderResponse, ModalValue } from '~/types'
 import { formatNumber } from '~/utils'
 import * as Page from '~/constant/pageMeta'
+import { useBreakpoints } from '@vueuse/core'
+
+const breakpoints = useBreakpoints({
+  mobile: 0, // optional
+  tablet: 640,
+  laptop: 1024,
+  desktop: 1280
+})
+
+// Can be 'mobile' or 'tablet' or 'laptop' or 'desktop'
+const activeBreakpoint = breakpoints.active()
 
 useHead({ title: Page.TITTLE })
 definePageMeta({ layout: 'none', middleware: 'auth' })
@@ -339,7 +350,12 @@ onUnmounted(() => {
 })
 
 function focusToBarcoceInput() {
-  focused.value = true
+  if (
+    activeBreakpoint.value === 'laptop' ||
+    activeBreakpoint.value === 'desktop'
+  ) {
+    focused.value = true
+  }
 }
 
 const { signOut, aboutToSignout: about_to_signout } = useAuth()
