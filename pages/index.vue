@@ -1,5 +1,5 @@
 <template>
-  <p class="p-6">Redireting...</p>
+  <p class="p-3">Redireting...</p>
 </template>
 
 <script setup lang="ts">
