@@ -21,6 +21,7 @@ export interface IProduct {
   stock_qty: number
   reorder_level: number
   uom: string
+  uom_number: number
   weight: number
   volume: number
   length: number
