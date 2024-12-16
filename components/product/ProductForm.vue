@@ -70,7 +70,10 @@
       </div>
 
       <div class="flex gap-3">
-        <UFormGroup label="Unit of measurement" name="uom" class="flex-1">
+        <UFormGroup label="U/m" name="uom_number" class="flex-1">
+          <UInput v-model.number="form.uom_number" size="xl" />
+        </UFormGroup>
+        <UFormGroup label="U/m" name="uom" class="flex-1">
           <USelectMenu
             v-model="form.uom"
             :options="basic_units"
@@ -83,7 +86,7 @@
         <UFormGroup
           :label="`Qty (${form?.uom})`"
           name="stock_qty"
-          class="flex-1"
+          class="flex-[3]"
         >
           <UInput v-model.number="form.stock_qty" size="xl" />
         </UFormGroup>
@@ -138,6 +141,9 @@ const schema = z.object({
   stock_qty: z.number().min(1, { message: 'Stock qty is required' }),
   reorder_level: z.number().min(1, { message: 'Reorder level is required' }),
   uom: z.string().min(1, { message: 'Unit of measurement is required' }),
+  uom_number: z
+    .number()
+    .min(1, { message: 'Unit of measurement number is required' }),
   weight: z.number(),
   volume: z.number()
 })
@@ -154,6 +160,7 @@ const state = reactive<IProductFormRequest>({
   category_id: '',
   barcode: '',
   barcode_img: null,
+  uom_number: 0,
   uom: 'pc',
   weight: 0,
   volume: 0
@@ -229,6 +236,7 @@ watchEffect(() => {
   editState.category_id = product?.category_id
   editState.stock_qty = product?.stock_qty
   editState.uom = product?.uom
+  editState.uom_number = product?.uom_number
   editState.weight = product?.weight
   editState.volume = product?.volume
 })

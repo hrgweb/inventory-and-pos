@@ -6,6 +6,10 @@
       :columns="columns"
       :ui="{ td: { padding: 'py-2' } }"
     >
+      <template #uom_number-data="{ row }">
+        <span v-if="row.uom_number">{{ `${row.uom_number} ${row.uom}` }}</span>
+        <span v-else>&nbsp;</span>
+      </template>
       <template #barcode-data="{ row }">
         <span>{{ row.barcode }}</span>
       </template>
@@ -97,6 +101,11 @@ const columns = [
   {
     key: 'name',
     label: 'Product Name',
+    class: 'text-slate-500 text-xs'
+  },
+  {
+    key: 'uom_number',
+    label: 'U/m',
     class: 'text-slate-500 text-xs'
   },
   {
