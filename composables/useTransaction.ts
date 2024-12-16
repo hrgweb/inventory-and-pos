@@ -53,8 +53,9 @@ export function useTransaction() {
         await log.create('pos_scan_barcode', `scan the product barcode`)
         return
       }
+
+      throw createError({ statusCode: 404, statusMessage: 'Product not found' })
     } catch (error) {
-      notification.error({ title: 'Product not found' })
       throw error
     }
   }

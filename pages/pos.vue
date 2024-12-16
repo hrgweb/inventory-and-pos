@@ -270,21 +270,26 @@ const columns = [
     rowClass: 'text-center w-10'
   }
 ]
+const notification = useNotification()
 
 const onScan = useDebounceFn(async () => {
   // Check if input characters are less than 10 then return
   if (barcode.value.length < 10) return
 
-  await findProduct({ barcode: barcode.value })
-  barcode.value = ''
+  try {
+    await findProduct({ barcode: barcode.value })
+  } catch (error: any) {
+    notification.error({ title: 'Product with that barcode not found' })
+  } finally {
+    barcode.value = ''
+    focused.value = true
+  }
 }, 50)
 
 const barcode_input = ref()
 const { focused } = useFocus(barcode_input, { initialValue: true })
 
 const { ctrl, enter, f } = useMagicKeys()
-
-const notification = useNotification()
 
 // Open the pay modal
 watchEffect(() => {
