@@ -97,6 +97,7 @@ export function useProduct() {
       ? formatNumber(item.selling_price)
       : '0'
     newObj['reorder_level'] = item.reorder_level || 0
+    newObj['uom_number'] = item.uom_number || 0
     return newObj
   }
 
