@@ -79,10 +79,13 @@ subtotal
     const formmattedData = data.map((item) => {
       return {
         ...item,
-        product: item.products,
+        product: item.products as Pick<
+          IProduct,
+          'id' | 'name' | 'selling_price' | 'barcode'
+        >,
         products: undefined
       }
-    }) as IOrderResponse[]
+    }) as unknown as IOrderResponse[]
 
     return formmattedData
   }
