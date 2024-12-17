@@ -7,7 +7,7 @@
         :title="_error?.message"
         variant="solid"
         color="red"
-        class="pt-6 mb-6"
+        class="pt-4 mb-6"
       />
       <UForm
         :schema="schema"

@@ -32,10 +32,16 @@ export function useAuth() {
       password
     })
 
-    if (error) throw createError(error)
+    if (error) {
+      _error.value = {
+        code: error.code || 'unknown',
+        message: error.message || 'An error occured'
+      }
+      throw createError(error)
+    }
 
     // Logger
-    await log.create('sign_in', 'has signed in')
+    await log.create('signed_in', 'has signed in')
 
     return data
   }
