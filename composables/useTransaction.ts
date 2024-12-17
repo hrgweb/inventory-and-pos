@@ -102,6 +102,7 @@ export function useTransaction() {
   }
 
   async function fetchOrders() {
+    items.value = []
     const query = { transaction_no: transaction.value?.transaction_no }
     const data = await http.get<IOrderResponse>('/api/orders', query)
     items.value = data as IOrderResponse[]
