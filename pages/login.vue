@@ -64,10 +64,7 @@ const state = reactive({
 const { signIn, _error } = useAuth()
 
 async function onSignIn(event: FormSubmitEvent<Schema>) {
-  const data = await signIn(event.data)
-  if (data) {
-    await navigateTo('/admin')
-  }
+  await signIn(event.data)
 }
 
 const { isLoading: is_loading } = useHttp()

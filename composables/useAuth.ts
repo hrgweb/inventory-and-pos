@@ -24,7 +24,7 @@ export function useAuth() {
   }: {
     email: string
     password: string
-  }) {
+  }): Promise<void> {
     _error.value = null
 
     const { data, error } = await supabase.auth.signInWithPassword({
@@ -43,15 +43,17 @@ export function useAuth() {
     // Logger
     await log.create('signed_in', 'has signed in')
 
-    return data
+    // Redirect to admin
+    await navigateTo('/admin')
   }
 
-  async function signOut() {
+  async function signOut(): Promise<void> {
     let { error } = await supabase.auth.signOut()
 
     if (error) throw createError(error)
 
-    return true
+    // Redirect to login
+    await navigateTo('/login')
   }
 
   return { signIn, signOut, register, _error, aboutToSignout }

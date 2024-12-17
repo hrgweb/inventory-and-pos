@@ -60,7 +60,6 @@ const { signOut } = useAuth()
 async function onNavClick(nav: INavigationOptions) {
   if (nav.name === 'logout') {
     await signOut()
-    return navigateTo('/login')
   }
 }
 </script>
