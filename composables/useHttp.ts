@@ -2,6 +2,8 @@ type HttpMethod = 'GET' | 'POST' | 'PATCH' | 'PUT' | 'DELETE'
 
 export function useHttp() {
   const isLoading = useState('http_is_loading', () => false)
+  const _error = useState<any | null>('http_error', () => null)
+  const _errorMessage = useState<string>('http_error_message', () => '')
 
   async function create<T, B>(
     url: string,
@@ -9,6 +11,8 @@ export function useHttp() {
     body: B | null
   ): Promise<T> {
     isLoading.value = true
+    _error.value = null
+    _errorMessage.value = ''
 
     try {
       const config = {
@@ -33,7 +37,10 @@ export function useHttp() {
       }
 
       return data as T
-    } catch (error) {
+    } catch (error: any) {
+      _error.value = error
+      _errorMessage.value = error?.data?.message
+
       if (error instanceof Error) {
         throw createError(error)
       }
@@ -144,5 +151,15 @@ export function useHttp() {
     }
   }
 
-  return { get, getCustom, getOne, post, update, remove, isLoading }
+  return {
+    get,
+    getCustom,
+    getOne,
+    post,
+    update,
+    remove,
+    isLoading,
+    _error,
+    _errorMessage
+  }
 }
