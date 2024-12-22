@@ -6,6 +6,7 @@ import type {
 } from '~/types'
 import { formatNumber, mapItem } from '~/utils'
 import { useDebounceFn } from '@vueuse/core'
+import fuzzysort from 'fuzzysort'
 
 export function useProduct() {
   const list = useState<IProduct[] | IProductMapped[]>('products', () => [])
@@ -14,6 +15,8 @@ export function useProduct() {
   const listCount = useState('product_count', () => 0)
   const page = useState('product_page', () => 1)
   const selectedIndex = useState('product_selected_index', () => 0)
+  const searchResults = useState<any[]>('product_search_results', () => [])
+  const searched = useState('product_searched', () => false)
 
   const http = useHttp()
   const notification = useNotification()
@@ -55,13 +58,39 @@ export function useProduct() {
   }
 
   const search = useDebounceFn(async (q: string) => {
-    list.value = []
+    // list.value = []
     page.value = 1
-    await fetchProducts({ search: q })
-    await log.create('search_on_products', `made a search on products`)
+    // await fetchProducts({ search: q })
+    // await log.create('search_on_products', `made a search on products`)
+
+    searched.value = true
+
+    if (!q) {
+      console.log('no queries')
+      searched.value = false
+    }
+
+    const data = list.value
+
+    if (!data || data.length === 0) return
+
+    // tmp
+    const result = fuzzysort.go(q, data, {
+      threshold: 0, // Don't return matches worse than this
+      limit: 0, // Don't return more results than this
+      all: false, // If true, returns all results for an empty search
+
+      key: 'name' // For when targets are objects (see its example usage)
+      // keys: null,      // For when targets are objects (see its example usage)
+      // scoreFn: null,   // For use with `keys` (see its example usage)
+    })
+
+    searchResults.value = result.map((item) => item.obj as IProduct)
   }, 500)
 
   async function fetchProducts({ search }: { search: string }) {
+    list.value = []
+
     const _page = page.value
 
     if (!_page) return null
@@ -114,6 +143,11 @@ export function useProduct() {
     if (!list.value || list.value.length === 0) {
       return []
     }
+
+    if (searched.value) {
+      return searchResults.value.map((item) => mapProduct(item))
+    }
+
     return list.value.map((item) => mapProduct(item))
   })
 
@@ -131,6 +165,7 @@ export function useProduct() {
     selectedIndex,
     remove,
     search,
-    reset
+    reset,
+    searched
   }
 }

@@ -135,12 +135,12 @@ function onEditCategory(category: ICategory) {
 
 onBeforeMount(async () => {
   fetchCategories({ search: '' })
-})
-
-watchEffect(() => {
-  list.value = []
   fetchProducts({ search: '' })
 })
+
+// watchEffect(() => {
+//   fetchProducts({ search: '' })
+// })
 
 onUnmounted(() => {
   productReset()
