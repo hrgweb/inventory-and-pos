@@ -1,10 +1,18 @@
-import { crudHandler } from '~/server/utils/crud.handler'
-import type { ICategory } from '~/types'
+import { serverSupabaseClient } from '#supabase/server'
 
 export default defineEventHandler(async (event) => {
-  const { findMany } = await crudHandler(event)
-  return await findMany<ICategory>('categories', 'id, name', {
-    column: 'id',
-    order: 'desc'
-  })
+  const supabase = await serverSupabaseClient(event)
+  const query = getQuery(event)
+  const search = query?.search || ''
+
+  const { data: categories, error } = await supabase
+    .from('categories')
+    .select('id,name')
+    .eq('is_deleted', false)
+    .ilike('name', `${search}%`)
+    .order('name', { ascending: true })
+
+  if (error) throw createError(error)
+
+  return categories
 })

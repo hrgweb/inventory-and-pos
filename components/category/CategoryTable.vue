@@ -17,9 +17,9 @@
             @click="onEdit(row, index)"
           />
 
-          <!-- <UPopover>
+          <UPopover>
             <Icon
-              class="cursor-pointer text-xl text-orange-400"
+              class="cursor-pointer text-xl text-red-400"
               name="lucide:trash"
             />
 
@@ -44,7 +44,7 @@
                 </div>
               </div>
             </template>
-          </UPopover> -->
+          </UPopover>
         </div>
       </template>
     </UTable>
