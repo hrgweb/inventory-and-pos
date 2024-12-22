@@ -1,5 +1,6 @@
 import { serverSupabaseClient } from '#supabase/server'
 import type { IProduct } from '~/types'
+import * as _cache from './../../utils/cache.handler'
 
 export default defineEventHandler(async (event) => {
   const supabase = await serverSupabaseClient(event)
@@ -8,8 +9,6 @@ export default defineEventHandler(async (event) => {
     is_deleted: true
   } as Partial<IProduct>
 
-  console.log(categoryId)
-
   const { error } = await supabase
     .from('categories')
     .update(body)
@@ -17,6 +16,9 @@ export default defineEventHandler(async (event) => {
     .select()
 
   if (error) throw createError(error)
+
+  // Remove cache
+  await _cache.remove('categories')
 
   return true
 })

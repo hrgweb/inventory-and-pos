@@ -1,4 +1,5 @@
 import { serverSupabaseClient } from '#supabase/server'
+import * as _cache from './../../utils/cache.handler'
 
 export default defineEventHandler(async (event) => {
   const supabase = await serverSupabaseClient(event)
@@ -28,5 +29,8 @@ export default defineEventHandler(async (event) => {
 
   if (categoriesError) throw createError(categoriesError)
 
-  return data
+  // Remove cache
+  await _cache.remove('categories')
+
+  return data[0]
 })
