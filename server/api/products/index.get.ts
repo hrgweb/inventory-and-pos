@@ -15,6 +15,7 @@ export default defineEventHandler(async (event) => {
   const { count, error: countError } = await client
     .from('products')
     .select('*', { count: 'exact', head: true })
+    .eq('is_deleted', false)
     .ilike('name', `${search}%`)
 
   if (countError) {
@@ -45,6 +46,7 @@ export default defineEventHandler(async (event) => {
   const { data, error } = await client
     .from('products')
     .select('*')
+    .eq('is_deleted', false)
     .ilike('name', `${search}%`)
     .order('id', { ascending: false })
     .range((page - 1) * itemsPerPage, page * itemsPerPage - 1)

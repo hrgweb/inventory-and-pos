@@ -44,7 +44,7 @@
             @click="onEdit(row, index)"
           />
 
-          <!-- <UPopover>
+          <UPopover>
             <Icon
               class="cursor-pointer text-xl text-red-400"
               name="lucide:trash"
@@ -71,7 +71,7 @@
                 </div>
               </div>
             </template>
-          </UPopover> -->
+          </UPopover>
         </div>
       </template>
     </UTable>
@@ -79,9 +79,9 @@
     <UPagination
       v-model="page"
       class="pt-3"
-      :page-count="15"
+      :page-count="50"
       :total="list_count"
-      @update:model-value="page = $event"
+      @update:model-value="onPaginate"
     />
   </UCard>
 </template>
@@ -94,7 +94,9 @@ const {
   page,
   listCount: list_count,
   selectedIndex,
-  remove
+  remove,
+  fetchProducts,
+  searched
 } = useProduct()
 
 const columns = [
@@ -159,4 +161,9 @@ async function onDelete(product: IProduct, index: number, close: () => void) {
 }
 
 const { isLoading: is_loading } = useHttp()
+
+async function onPaginate(_page: number) {
+  page.value = _page
+  await fetchProducts({ search: '' })
+}
 </script>

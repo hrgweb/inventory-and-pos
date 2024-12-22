@@ -6,6 +6,13 @@ export default defineNuxtConfig({
   colorMode: {
     preference: 'light',
     fallback: 'light'
+  },
+  nitro: {
+    storage: {
+      redis: {
+        driver: 'redis'
+      }
+    }
   }
   // gtag: {
   //   enabled: process.env.NODE_ENV === 'production'
