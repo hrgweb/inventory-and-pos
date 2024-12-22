@@ -2,9 +2,11 @@
   <div class="flex flex-col bg-white shadow rounded-lg px-6 py-4 gap-4">
     <p
       v-if="display_date"
-      class="bg-slate-800 text-white text-center p-3 rounded-lg"
+      class="bg-slate-800 text-white text-center p-3 rounded-lg flex items-center justify-center gap-2"
     >
       {{ display_date }}
+
+      <span class="font-semibold uppercase text-sm">({{ date_type }})</span>
     </p>
 
     <div class="flex gap-2">
