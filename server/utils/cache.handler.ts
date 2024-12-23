@@ -21,3 +21,9 @@ export async function remove(table: string): Promise<void> {
   console.log(`${table}: cached data removed`)
   await storage.removeItem(table)
 }
+
+export function search<T>(cacheData: T[], key: keyof T, search: string) {
+  return cacheData.filter((category: T) =>
+    (category[key] as string)?.toLowerCase().includes(search?.toLowerCase())
+  )
+}
