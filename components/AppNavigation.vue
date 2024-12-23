@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col px-12 py-8 bg-blue-400 relative h-full">
+  <div class="flex flex-col px-12 py-8 relative h-full">
     <a href="/admin" class="text-2xl font-medium">Store</a>
     <br />
 
