@@ -33,14 +33,25 @@ const nav_options = [
     label: 'Sales',
     icon: 'lucide:dollar-sign',
     to: '/admin/sales'
+  },
+  {
+    name: 'suppliers',
+    label: 'Suppliers',
+    icon: 'lucide:file-terminal',
+    to: '/admin/suppliers'
+  },
+  {
+    name: 'stocks_in',
+    label: 'Stocks-In',
+    icon: 'lucide:file-terminal',
+    to: '/admin/stocks-in'
+  },
+  {
+    name: 'stocks_out',
+    label: 'Stocks-Out',
+    icon: 'lucide:file-terminal',
+    to: '/admin/stocks-out'
   }
-  // {
-  //   name: 'inventory',
-  //   label: 'Inventory',
-  //   icon: 'lucide:file-terminal',
-  //   to: '/admin/inventory'
-  // }
-
   // {
   //   name: 'all_products',
   //   label: 'All Products',

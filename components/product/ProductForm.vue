@@ -80,7 +80,7 @@
             size="xl"
             option-attribute="label_formatted"
             value-attribute="abbr"
-            placeholder="Select category"
+            placeholder="Select unit of measurement"
           />
         </UFormGroup>
         <UFormGroup
