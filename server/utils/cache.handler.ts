@@ -1,4 +1,4 @@
-const storage = useStorage('redis')
+const storage = useStorage()
 
 export async function get<T>(table: string): Promise<T | null> {
   return (await storage.getItem(table)) as T | null
