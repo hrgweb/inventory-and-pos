@@ -1,9 +1,9 @@
 import { serverSupabaseClient } from '#supabase/server'
+import { ICategory } from '~/types'
+import * as _cache from './../../utils/cache.handler'
 
 export default defineEventHandler(async (event) => {
   const client = await serverSupabaseClient(event)
-  const storage = useStorage('redis')
-
   const query = getQuery(event)
 
   let page = (query?.page as number) || 1
@@ -25,22 +25,18 @@ export default defineEventHandler(async (event) => {
     }
   }
 
-  // Clear cached once searching
-  // if (search) {
-  //   storage.removeItem('products')
-  //   console.log('product: cache cleared')
-  // }
+  // Remove cached
+  _cache.remove('products')
 
   // Check if data has cached
-  const cachedData = await storage.getItem('products')
-  if (cachedData) {
-    console.log('product: from cached')
-    return cachedData
+  const cacheData = (await _cache.get('products')) as ICategory[]
+  if (_cache.hasCached('products', cacheData)) {
+    // Search
+    // if (search) {
+    //   return _cache.search(cacheData, 'name', search)
+    // }
+    return cacheData
   }
-
-  console.log('product: not cached yet')
-
-  // Not cached yet
 
   // Fetch products
   const { data, error } = await client
@@ -60,13 +56,8 @@ export default defineEventHandler(async (event) => {
     total: totalCount
   }
 
-  // Without caching on search result
-  // if (search) {
-  //   return result
-  // }
-
   // Cache data
-  await storage.setItem('products', result)
+  await _cache.set('products', result)
 
   return result
 })
