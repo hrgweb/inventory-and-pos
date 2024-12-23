@@ -16,7 +16,7 @@
         />
       </div>
 
-      <ProductTable @edit="onEdit" />
+      <StockInTable @edit="onEdit" />
     </div>
   </div>
 
@@ -34,6 +34,7 @@ import ProductForm from '~/components/product/ProductForm.vue'
 import CategoryForm from '~/components/category/CategoryForm.vue'
 import type { ICategory, IProduct } from '~/types'
 import * as Page from '~/constant/pageMeta'
+import StockInTable from '~/components/stockin/StockInTable.vue'
 
 useHead({ title: Page.ADMIN_PRODUCTS })
 definePageMeta({ middleware: 'auth' })
