@@ -25,17 +25,6 @@
       <template #subtotal-data="{ row }">
         <span>{{ row.subtotal_formatted }}</span>
       </template>
-      <template #reorder_level-data="{ row }">
-        <span
-          class="block"
-          :class="[
-            +row.stock_qty <= +row.reorder_level
-              ? 'bg-red-500 text-white p-1 rounded'
-              : ''
-          ]"
-          >{{ row.reorder_level }}</span
-        >
-      </template>
       <template #actions-data="{ row, index }">
         <div class="flex gap-3 justify-center">
           <Icon
@@ -101,6 +90,11 @@ const {
 
 const columns = [
   {
+    key: 'supplier_name',
+    label: 'Supplier',
+    class: 'text-slate-500 text-xs'
+  },
+  {
     key: 'name',
     label: 'Product Name',
     class: 'text-slate-500 text-xs'
@@ -123,16 +117,6 @@ const columns = [
   {
     key: 'selling_price',
     label: 'Selling Price',
-    class: 'text-slate-500 text-xs'
-  },
-  {
-    key: 'reorder_level',
-    label: 'Reorder Level',
-    class: 'text-slate-500 text-xs'
-  },
-  {
-    key: 'stock_qty',
-    label: 'Stocks',
     class: 'text-slate-500 text-xs'
   },
   {

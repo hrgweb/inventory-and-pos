@@ -24,7 +24,7 @@ export function useAuth() {
   }: {
     email: string
     password: string
-  }) {
+  }): Promise<void> {
     _error.value = null
 
     const { data, error } = await supabase.auth.signInWithPassword({
@@ -32,20 +32,28 @@ export function useAuth() {
       password
     })
 
-    if (error) throw createError(error)
+    if (error) {
+      _error.value = {
+        code: error.code || 'unknown',
+        message: error.message || 'An error occured'
+      }
+      throw createError(error)
+    }
 
     // Logger
-    await log.create('sign_in', 'has signed in')
+    await log.create('signed_in', 'has signed in')
 
-    return data
+    // Redirect to admin
+    await navigateTo('/admin')
   }
 
-  async function signOut() {
+  async function signOut(): Promise<void> {
     let { error } = await supabase.auth.signOut()
 
     if (error) throw createError(error)
 
-    return true
+    // Redirect to login
+    await navigateTo('/login')
   }
 
   return { signIn, signOut, register, _error, aboutToSignout }

@@ -12,6 +12,17 @@
       />
     </div>
 
+    <!-- Error -->
+    <UAlert
+      v-if="_errorMessage"
+      icon="heroicons:exclamation-triangle"
+      :description="_errorMessage"
+      title="Error"
+      variant="solid"
+      color="red"
+      class="mb-4"
+    />
+
     <UForm :schema="schema" :state="form" class="space-y-4" @submit="onSubmit">
       <UFormGroup label="Category Name" name="name">
         <UInput v-model="form.name" size="xl" />
@@ -111,5 +122,5 @@ watchEffect(() => {
   editState.name = category?.name
 })
 
-const { isLoading: is_loading } = useHttp()
+const { isLoading: is_loading, _errorMessage } = useHttp()
 </script>

@@ -11,7 +11,9 @@ export default defineEventHandler(async (event) => {
   let totalCount = 0
   const userId = query?.user_id as string
   const day = query?.day as Date
-  const range = query?.range as { start: Date; end: Date }
+  const range = query?.range
+    ? (JSON.parse(query.range as string) as { start: Date; end: Date })
+    : undefined
 
   // Sql query to get total count.
   let sqlGetCount = supabase
@@ -28,9 +30,8 @@ export default defineEventHandler(async (event) => {
 
   // Filer a week or month or yearly
   if (range) {
-    sqlGetCount = sqlGetCount
-      .gte('created_at', range.start)
-      .lte('created_at', range.end)
+    const { start, end } = range
+    sqlGetCount = sqlGetCount.gte('created_at', start).lte('created_at', end)
   }
 
   const { data: _sqlGetCount, count } = await sqlGetCount
@@ -43,6 +44,7 @@ export default defineEventHandler(async (event) => {
 transactions(
   id,
   transaction_no,
+  user_id,
   status,
   created_at
 ),
@@ -65,9 +67,8 @@ created_at
 
   // Filer a week or month or yearly
   if (range) {
-    sqlGetCount = sqlGetCount
-      .gte('created_at', range.start)
-      .lte('created_at', range.end)
+    const { start, end } = range // JSON.parse(range) as { start: Date; end: Date }
+    sqlGetSales.gte('created_at', start).lte('created_at', end)
   }
 
   const { data, error } = await sqlGetSales
@@ -76,7 +77,8 @@ created_at
 
   const result = (await Promise.all(
     data.map(async (item) => {
-      const _transaction_no = (item.transactions as ITransaction).transaction_no
+      const _transaction_no = (item.transactions as ITransaction)
+        .transaction_no as string
       const newObj = mapItem(item) as any
       newObj['orders'] = await fetchOrders({
         transaction_no: _transaction_no

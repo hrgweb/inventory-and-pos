@@ -1,7 +1,9 @@
 <template>
   <div class="bg-slate-300 text-slate-800 min-h-screen">
     <div class="flex justify-center m-auto sm:w-full md:w-full h-screen">
-      <div class="sidebar w-[250px] shrink-0 bg-slate-50 shadow-2xl">
+      <div
+        class="sidebar w-[250px] max-w-[250px] shrink-0 bg-slate-50 shadow-2xl"
+      >
         <AppNavigation />
       </div>
 
@@ -32,7 +34,9 @@
           <AppUserMenu :is-show="is_show_menu" @click="onShow" />
         </div>
 
-        <div class="pt-8">
+        <div
+          class="pt-8 w-[calc(100vw-350px)] h-[calc(100vh-75px)] overflow-auto"
+        >
           <slot />
         </div>
       </div>

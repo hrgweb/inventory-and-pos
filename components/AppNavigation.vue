@@ -1,6 +1,6 @@
 <template>
-  <div class="flex flex-col px-12 py-8">
-    <a href="/admin" class="text-2xl font-medium">Company</a>
+  <div class="flex flex-col px-12 py-8 relative h-full">
+    <a href="/admin" class="text-2xl font-medium">Store</a>
     <br />
 
     <NuxtLink v-for="(nav, i) in nav_options" :key="i" :to="`${nav.to}`">
@@ -9,6 +9,15 @@
         <span>{{ nav.label }}</span>
       </div>
     </NuxtLink>
+
+    <!-- Developer -->
+    <div
+      class="absolute bottom-1 left-1 right-1 rounded-md bg-slate-800 text-white p-3"
+    >
+      <p class="text-[10px]">
+        Made with ❤️ by <span class="font-medium">Hergen Roque Gamayon</span>
+      </p>
+    </div>
   </div>
 </template>
 
@@ -33,14 +42,25 @@ const nav_options = [
     label: 'Sales',
     icon: 'lucide:dollar-sign',
     to: '/admin/sales'
+  },
+  {
+    name: 'suppliers',
+    label: 'Suppliers',
+    icon: 'lucide:file-terminal',
+    to: '/admin/suppliers'
+  },
+  {
+    name: 'stocks_in',
+    label: 'Stocks-In',
+    icon: 'lucide:file-terminal',
+    to: '/admin/stocks-in'
+  },
+  {
+    name: 'stocks_out',
+    label: 'Stocks-Out',
+    icon: 'lucide:file-terminal',
+    to: '/admin/stocks-out'
   }
-  // {
-  //   name: 'inventory',
-  //   label: 'Inventory',
-  //   icon: 'lucide:file-terminal',
-  //   to: '/admin/inventory'
-  // }
-
   // {
   //   name: 'all_products',
   //   label: 'All Products',

@@ -7,7 +7,7 @@
         :title="_error?.message"
         variant="solid"
         color="red"
-        class="pt-6 mb-6"
+        class="pt-4 mb-6"
       />
       <UForm
         :schema="schema"
@@ -64,10 +64,7 @@ const state = reactive({
 const { signIn, _error } = useAuth()
 
 async function onSignIn(event: FormSubmitEvent<Schema>) {
-  const data = await signIn(event.data)
-  if (data) {
-    await navigateTo('/admin')
-  }
+  await signIn(event.data)
 }
 
 const { isLoading: is_loading } = useHttp()
