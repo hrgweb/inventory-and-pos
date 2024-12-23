@@ -12,6 +12,21 @@
       />
     </div>
 
+    <!-- Error -->
+    <UAlert
+      v-if="_errorMessage"
+      icon="heroicons:exclamation-triangle"
+      :description="`${
+        _errorMessage && _errorMessage.includes('duplicate')
+          ? 'Product already exists'
+          : _errorMessage
+      }`"
+      title="Error"
+      variant="solid"
+      color="red"
+      class="mb-4"
+    />
+
     <UForm
       ref="productForm"
       :schema="schema"
@@ -160,7 +175,7 @@ const state = reactive<IProductFormRequest>({
   category_id: '',
   barcode: '',
   barcode_img: null,
-  uom_number: 0,
+  uom_number: 1,
   uom: 'pc',
   weight: 0,
   volume: 0
@@ -177,6 +192,7 @@ const editState = reactive<IProductFormRequest>({
   category_id: '',
   barcode: '',
   barcode_img: null,
+  uom_number: 1,
   uom: 'pc',
   weight: 0,
   volume: 0
@@ -246,17 +262,17 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
   if (isAdd.value) {
     const { ...body } = event.data
     await create(body)
-    notification.success({ title: '1 product created successfully' })
   }
   // Update
   else {
     const { ...body } = editState
     await update(body)
-    notification.info({ title: '1 product updated successfully' })
   }
 
-  setTimeout(() => reset(), 100)
-  onClose()
+  if (!_errorMessage.value) {
+    setTimeout(() => reset(), 100)
+    onClose()
+  }
 }
 
 function onClose() {
@@ -269,8 +285,8 @@ function onBarcodeGenerate() {
   editState.barcode = barcode.value as string
 }
 
-const { isLoading: is_loading } = useHttp()
 const { getBasicUnits: basic_units } = useUom()
+const { isLoading: is_loading, _errorMessage } = useHttp()
 </script>
 
 <style>

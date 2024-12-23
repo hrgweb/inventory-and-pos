@@ -39,7 +39,7 @@ export function useProduct() {
         body
       )
       list.value.unshift(mapProduct(data))
-
+      notification.success({ title: '1 product created successfully' })
       await log.create('create_product', 'created new product')
     } catch (error) {
       console.log(error)
@@ -54,6 +54,7 @@ export function useProduct() {
     )
     const content = mapProduct(data)
     list.value[selectedIndex.value] = content
+    notification.info({ title: '1 product updated successfully' })
     await log.create('update_product', `updated product '${payload.id}'`)
   }
 
