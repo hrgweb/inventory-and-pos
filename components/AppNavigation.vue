@@ -1,6 +1,6 @@
 <template>
-  <div class="flex flex-col px-12 py-8">
-    <a href="/admin" class="text-2xl font-medium">Company</a>
+  <div class="flex flex-col px-12 py-8 bg-blue-400 relative h-full">
+    <a href="/admin" class="text-2xl font-medium">Store</a>
     <br />
 
     <NuxtLink v-for="(nav, i) in nav_options" :key="i" :to="`${nav.to}`">
@@ -9,6 +9,15 @@
         <span>{{ nav.label }}</span>
       </div>
     </NuxtLink>
+
+    <!-- Developer -->
+    <div
+      class="absolute bottom-1 left-1 right-1 rounded-md bg-slate-800 text-white p-3"
+    >
+      <p class="text-[10px]">
+        Made with ❤️ by <span class="font-medium">Hergen Roque Gamayon</span>
+      </p>
+    </div>
   </div>
 </template>
 
