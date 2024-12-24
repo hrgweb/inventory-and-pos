@@ -6,6 +6,9 @@
       :columns="columns"
       :ui="{ td: { padding: 'py-2' } }"
     >
+      <template #supplier_name-data="{ row }">
+        <span>{{ row.suppliers?.name }}</span>
+      </template>
       <template #uom_number-data="{ row }">
         <span v-if="row.uom_number">{{ `${row.uom_number} ${row.uom}` }}</span>
         <span v-else>&nbsp;</span>

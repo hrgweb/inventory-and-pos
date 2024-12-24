@@ -25,6 +25,7 @@ export interface IProduct {
   weight: number
   volume: number
   length: number
+  supplier_id: string
 }
 
 export type ProductSortBy = 'Latest Added' | 'Product Name'
@@ -172,9 +173,23 @@ export type LogAction =
   | 'pos_sales_completed'
   | 'pos_product_lookup'
   | 'pos_product_lookup_add_to_order'
+  // Crud
+  | 'fetch_items'
+  | 'create_item'
+  | 'update_item'
+  | 'delete_item'
 
 export interface ILog {
   user_id: string
   action: LogAction
   description?: string
+}
+
+export interface ISupplier {
+  id: string
+  user_id: string
+  name: string
+  contact_person: string
+  address: string
+  contact_no: string
 }

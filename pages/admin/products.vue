@@ -9,7 +9,9 @@
         <!-- All -->
         <div v-if="item.key === 'all'">
           <div class="flex justify-between items-center pt-3 pb-6">
-            <UButton label="New Product" icon="heroicons:plus" @click="onNew" />
+            <div>
+              <!-- <UButton label="New Product" icon="heroicons:plus" @click="onNew" /> -->
+            </div>
             <UInput
               v-model="search"
               icon="i-heroicons-magnifying-glass"
@@ -93,6 +95,7 @@ const {
   selected: category_selected,
   reset: categoryReset
 } = useCategory()
+const { fetch: fetchSuppliers } = useSupplier()
 
 type ModalValue = 'none' | 'form' | 'category-form'
 
@@ -134,6 +137,7 @@ function onEditCategory(category: ICategory) {
 }
 
 onBeforeMount(async () => {
+  fetchSuppliers({ table: 'suppliers', search: '' })
   fetchCategories({ search: '' })
   fetchProducts({ search: '' })
 })

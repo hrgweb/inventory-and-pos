@@ -2,7 +2,8 @@ import type {
   IProduct,
   IProductFormRequest,
   IProductMapped,
-  IItemResponse
+  IItemResponse,
+  ISupplier
 } from '~/types'
 import { formatNumber, mapItem } from '~/utils'
 import { useDebounceFn } from '@vueuse/core'
@@ -21,6 +22,7 @@ export function useProduct() {
   const http = useHttp()
   const notification = useNotification()
   const log = useLog()
+  const supplier = useSupplier()
 
   function addToCart() {
     notification.success({ title: 'Added to cart.' })
@@ -52,8 +54,19 @@ export function useProduct() {
       `/api/products/${payload.id}`,
       payload
     )
-    const content = mapProduct(data)
-    list.value[selectedIndex.value] = content
+
+    let content = mapProduct(data)
+    const _supplier = supplier.list.value.filter(
+      (item) => item.id === payload.supplier_id
+    )?.[0] as ISupplier
+
+    const body = {
+      ...content,
+      suppliers: toRaw(_supplier),
+      supplier_id: _supplier?.id
+    }
+
+    list.value[selectedIndex.value] = body
     notification.info({ title: '1 product updated successfully' })
     await log.create('update_product', `updated product '${payload.id}'`)
   }

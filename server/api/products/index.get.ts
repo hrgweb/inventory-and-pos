@@ -41,7 +41,15 @@ export default defineEventHandler(async (event) => {
   // Fetch products
   const { data, error } = await client
     .from('products')
-    .select('*')
+    .select(
+      `
+*,
+suppliers (
+  id,
+  name
+)
+      `
+    )
     .eq('is_deleted', false)
     .ilike('name', `${search}%`)
     .order('id', { ascending: false })
