@@ -25,6 +25,7 @@ export interface IProduct {
   weight: number
   volume: number
   length: number
+  supplier_id: string
 }
 
 export type ProductSortBy = 'Latest Added' | 'Product Name'

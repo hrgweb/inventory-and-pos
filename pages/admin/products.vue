@@ -93,6 +93,7 @@ const {
   selected: category_selected,
   reset: categoryReset
 } = useCategory()
+const { fetch: fetchSuppliers } = useSupplier()
 
 type ModalValue = 'none' | 'form' | 'category-form'
 
@@ -134,6 +135,7 @@ function onEditCategory(category: ICategory) {
 }
 
 onBeforeMount(async () => {
+  fetchSuppliers({ table: 'suppliers', search: '' })
   fetchCategories({ search: '' })
   fetchProducts({ search: '' })
 })

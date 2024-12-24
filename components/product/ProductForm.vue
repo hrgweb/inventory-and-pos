@@ -18,7 +18,7 @@
       icon="heroicons:exclamation-triangle"
       :description="`${
         _errorMessage && _errorMessage.includes('duplicate')
-          ? 'Product already exists'
+          ? 'Product name already exists'
           : _errorMessage
       }`"
       title="Error"
@@ -51,6 +51,16 @@
             @click="onBarcodeGenerate"
           />
         </div>
+      </UFormGroup>
+      <UFormGroup label="Supplier Name" name="supplier_id">
+        <USelectMenu
+          v-model="form.supplier_id"
+          :options="supplier_list"
+          size="xl"
+          option-attribute="name"
+          value-attribute="id"
+          placeholder="Select supplier"
+        />
       </UFormGroup>
       <UFormGroup label="Product Name" name="name">
         <UInput v-model="form.name" size="xl" />
@@ -160,7 +170,8 @@ const schema = z.object({
     .number()
     .min(1, { message: 'Unit of measurement number is required' }),
   weight: z.number(),
-  volume: z.number()
+  volume: z.number(),
+  supplier_id: z.string().min(1, { message: 'Supplier id is required' })
 })
 
 type Schema = z.output<typeof schema>
@@ -178,7 +189,8 @@ const state = reactive<IProductFormRequest>({
   uom_number: 1,
   uom: 'pc',
   weight: 0,
-  volume: 0
+  volume: 0,
+  supplier_id: ''
 })
 
 const editState = reactive<IProductFormRequest>({
@@ -195,7 +207,8 @@ const editState = reactive<IProductFormRequest>({
   uom_number: 1,
   uom: 'pc',
   weight: 0,
-  volume: 0
+  volume: 0,
+  supplier_id: ''
 })
 
 function reset() {
@@ -287,6 +300,7 @@ function onBarcodeGenerate() {
 
 const { getBasicUnits: basic_units } = useUom()
 const { isLoading: is_loading, _errorMessage } = useHttp()
+const { list: supplier_list } = useSupplier()
 </script>
 
 <style>
