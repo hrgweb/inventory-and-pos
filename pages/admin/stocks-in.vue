@@ -45,15 +45,11 @@ const {
   isAdd: is_add_product,
   selected,
   fetchProducts,
-  list,
   search: productSearch,
   reset: productReset
 } = useProduct()
-const {
-  fetchCategories,
-  selected: category_selected,
-  reset: categoryReset
-} = useCategory()
+const { fetchCategories, reset: categoryReset } = useCategory()
+const { fetch: fetchSuppliers } = useSupplier()
 
 type ModalValue = 'none' | 'form' | 'category-form'
 
@@ -84,6 +80,7 @@ function onEdit(product: IProduct) {
 }
 
 onBeforeMount(async () => {
+  fetchSuppliers({ table: 'suppliers', search: '' })
   fetchCategories({ search: '' })
   fetchProducts({ search: '' })
 })

@@ -268,6 +268,7 @@ watchEffect(() => {
   editState.uom_number = product?.uom_number
   editState.weight = product?.weight
   editState.volume = product?.volume
+  editState.supplier_id = product?.supplier_id
 })
 
 async function onSubmit(event: FormSubmitEvent<Schema>) {
@@ -300,7 +301,7 @@ function onBarcodeGenerate() {
 
 const { getBasicUnits: basic_units } = useUom()
 const { isLoading: is_loading, _errorMessage } = useHttp()
-const { list: supplier_list } = useSupplier()
+const { list: supplier_list, selected: selected_supplier } = useSupplier()
 </script>
 
 <style>

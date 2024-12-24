@@ -9,7 +9,9 @@
         <!-- All -->
         <div v-if="item.key === 'all'">
           <div class="flex justify-between items-center pt-3 pb-6">
-            <UButton label="New Product" icon="heroicons:plus" @click="onNew" />
+            <div>
+              <!-- <UButton label="New Product" icon="heroicons:plus" @click="onNew" /> -->
+            </div>
             <UInput
               v-model="search"
               icon="i-heroicons-magnifying-glass"
