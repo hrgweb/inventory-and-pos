@@ -60,6 +60,18 @@ const nav_options = [
     label: 'Stocks-Out',
     icon: 'lucide:file-terminal',
     to: '/admin/stocks-out'
+  },
+  {
+    name: 'cashiers',
+    label: 'Cashiers',
+    icon: 'lucide:file-terminal',
+    to: '/admin/cashiers'
+  },
+  {
+    name: 'reports',
+    label: 'Reports',
+    icon: 'lucide:file-terminal',
+    to: '/admin/reports'
   }
   // {
   //   name: 'all_products',

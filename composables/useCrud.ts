@@ -3,7 +3,7 @@ import { useDebounceFn } from '@vueuse/core'
 
 export function useCrud() {
   const isAdd = useState('item_is_add', () => false)
-  const selected = useState<ICategory | null>('item_selected', () => null)
+  const selected = useState<any | null>('item_selected', () => null)
   const list = useState<any[]>('items', () => [])
   const listCount = ref(0)
   const selectedIndex = useState('item_selected_index', () => 0)
@@ -11,7 +11,7 @@ export function useCrud() {
   const http = useHttp()
   const log = useLog()
 
-  async function fetchItems<T>({
+  async function fetch<T>({
     table,
     search
   }: {
@@ -24,26 +24,28 @@ export function useCrud() {
     return data
   }
 
-  async function create<T, B>(payload: B): Promise<void> {
+  async function create<T, B>(table: string, payload: B): Promise<void> {
     const body = {
       user_id: useSupabaseUser().value?.id,
       ...payload
     }
-    const data = await http.post<T, B>('/api/items', body)
+
+    const data = await http.post<T, B>(`/api/${table}`, body)
     list.value.unshift(data)
     await log.create('create_item', 'created new item')
   }
 
-  async function update<T, B extends { id: string }>(
+  async function update<T, B extends Record<string, any>>(
+    table: string,
     payload: B
   ): Promise<void> {
-    const data = await http.update<T, B>(`/api/items/${payload.id}`, payload)
+    const data = await http.update<T, B>(`/api/${table}/${payload.id}`, payload)
     list.value[selectedIndex.value] = data
     await log.create('update_item', `updated item '${payload.id}'`)
   }
 
-  async function remove<T>(id: string): Promise<void> {
-    await http.remove<T>(`/api/items/${id}`)
+  async function remove<T>(table: string, id: string): Promise<void> {
+    await http.remove<T>(`/api/${table}/${id}`)
     list.value.splice(selectedIndex.value, 1)
     await log.create('delete_item', `removed item ${id}`)
   }
@@ -59,20 +61,20 @@ export function useCrud() {
   const search = useDebounceFn(
     async (table: string, q: string): Promise<void> => {
       list.value = []
-      await fetchItems({ table, search: q })
+      await fetch({ table, search: q })
     },
     500
   )
 
   return {
     create,
-    isAdd,
+    is_add: isAdd,
     selected,
     update,
-    fetchItems,
+    fetch,
     list,
-    listCount,
-    selectedIndex,
+    list_count: listCount,
+    selected_index: selectedIndex,
     remove,
     search,
     reset
